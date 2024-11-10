@@ -53,7 +53,7 @@ const Chat = () => {
 
   const fetchData = async () => {
     try {
-      fetch("http://localhost:3007/chat/getChats", {
+      fetch("https://timely-malasada-6db5a7.netlify.app/chat/getChats", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

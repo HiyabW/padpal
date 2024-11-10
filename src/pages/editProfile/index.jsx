@@ -49,7 +49,7 @@ const EditProfile = () => {
 
   const updateUser = () => {
     setIsLoading(true);
-    fetch("http://localhost:3007/auth/survey", {
+    fetch("https://timely-malasada-6db5a7.netlify.app/auth/survey", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -73,7 +73,7 @@ const EditProfile = () => {
 
   async function deletePreviousImages() {
     // Then POST all pictures (separate endpoint, separate fetch call)
-    fetch("http://localhost:3007/images/deleteImages", {
+    fetch("https://timely-malasada-6db5a7.netlify.app/images/deleteImages", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -100,7 +100,7 @@ const EditProfile = () => {
       myImages.push(image3);
     }
     // Then POST all pictures (separate endpoint, separate fetch call)
-    fetch("http://localhost:3007/images/addImages", {
+    fetch("https://timely-malasada-6db5a7.netlify.app/images/addImages", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -120,7 +120,7 @@ const EditProfile = () => {
     console.log("RERENDER");
     if (isLoggedIn) {
       // fetch data on currUser
-      fetch("http://localhost:3007/feed/getUser", {
+      fetch("https://timely-malasada-6db5a7.netlify.app/feed/getUser", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

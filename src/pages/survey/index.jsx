@@ -164,7 +164,7 @@ const Survey = () => {
       formData.append("file", addedUserAnswers["pictures"]);
 
       // POST new user into db!
-      fetch("http://localhost:3007/auth/survey", {
+      fetch("https://timely-malasada-6db5a7.netlify.app/auth/survey", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -199,7 +199,7 @@ const Survey = () => {
 
       async function addImages() {
         // Then POST all pictures (separate endpoint, separate fetch call)
-        fetch("http://localhost:3007/images/addImages", {
+        fetch("https://timely-malasada-6db5a7.netlify.app/images/addImages", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",

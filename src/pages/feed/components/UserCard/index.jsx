@@ -159,7 +159,7 @@ const UserCard = ({
     if (Math.abs(x.get()) > 50) {
       const isAMatch = x.get() > 0 ? true : false;
       // first POST req to /saveMatch
-      fetch("http://localhost:3007/match/saveMatch", {
+      fetch("https://timely-malasada-6db5a7.netlify.app/match/saveMatch", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -180,7 +180,7 @@ const UserCard = ({
 
       // ...then GET /getMatch to see if they've matched back. if so, call foundMatch to que match screen
       //req body should have from:userEmail, to:currUserEmail, isAMatch:isAMatch
-      fetch("http://localhost:3007/match/getMatch", {
+      fetch("https://timely-malasada-6db5a7.netlify.app/match/getMatch", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

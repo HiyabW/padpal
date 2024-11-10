@@ -22,7 +22,7 @@ const ViewProfile = () => {
 
   useEffect(() => {
     // fetch data on currUser
-    fetch("http://localhost:3007/feed/getUser", {
+    fetch("https://timely-malasada-6db5a7.netlify.app/feed/getUser", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

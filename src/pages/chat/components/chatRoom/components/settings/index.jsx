@@ -26,7 +26,7 @@ export default function Settings({user}) {
   };
 
   function unmatch() {
-    fetch("http://localhost:3007/match/unmatch", {
+    fetch("https://timely-malasada-6db5a7.netlify.app/match/unmatch", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

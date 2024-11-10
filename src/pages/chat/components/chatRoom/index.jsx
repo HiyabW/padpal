@@ -192,7 +192,7 @@ const ChatRoom = ({ user, justSent, setJustSent }) => {
 
   function sendMessage() {
     const today = new Date();
-    fetch("http://localhost:3007/chat/sendMessage", {
+    fetch("https://timely-malasada-6db5a7.netlify.app/chat/sendMessage", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -219,7 +219,7 @@ const ChatRoom = ({ user, justSent, setJustSent }) => {
 
     /* PART 2 (ONLY IF CHATTING WITH AI BOT): REQUEST A RESPONSE FROM AI BOT */
     if (user.id === "6730784af24ec4375cf95a17") {
-      fetch("http://localhost:3007/chat/chatAI", {
+      fetch("https://timely-malasada-6db5a7.netlify.app/chat/chatAI", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

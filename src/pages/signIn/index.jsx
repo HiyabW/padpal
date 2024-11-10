@@ -129,7 +129,7 @@ function SignIn() {
   };
 
   function signInUser() {
-    fetch("http://localhost:3007/auth/login", {
+    fetch("https://timely-malasada-6db5a7.netlify.app/auth/login", {
       method: "POST", // or 'POST', 'PUT', 'DELETE', etc.
       headers: {
         "Content-Type": "application/json",
@@ -166,7 +166,7 @@ function SignIn() {
   }
 
   function signUpUser() {
-    fetch("http://localhost:3007/auth/register", {
+    fetch("https://timely-malasada-6db5a7.netlify.app/auth/register", {
       method: "POST", // or 'POST', 'PUT', 'DELETE', etc.
       headers: {
         "Content-Type": "application/json",

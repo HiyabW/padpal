@@ -34,7 +34,7 @@ export default function Onboarding({ open, handleClose }) {
   const isOnboarded = () => {
     Cookies.remove("needsOnboarding");
     handleClose();
-    // fetch("http://localhost:3007/auth/onboarded", {
+    // fetch("https://timely-malasada-6db5a7.netlify.app/auth/onboarded", {
     //   method: "POST",
     //   headers: {
     //     "Content-Type": "application/json",
