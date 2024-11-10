@@ -1,0 +1,129 @@
+@import url("https://fonts.googleapis.com/icon?family=Material+Icons");
+
+.fade {
+  transition: opacity 1s ease-in-out !important;
+}
+
+.fade-in {
+  opacity: 1 !important;
+  top: 0;
+  position: absolute;
+}
+
+.fade-out {
+  opacity: 0 !important;
+  top: 0;
+  position: absolute;
+}
+
+.landingAndSignIn {
+  display: block;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+
+  .cardHeader {
+    text-align: center;
+    margin-bottom: 1vw;
+  }
+
+  h3 {
+    font-size: 3vw;
+    line-height: 5vw;
+    font-family: var(--theme-primary-font-family);
+  }
+
+  h5 {
+    font-size: 1vw;
+    font-family: var(--theme-secondary-font-family);
+  }
+
+  .welcome {
+    font-size: 11vw;
+    line-height: 13vw;
+    font-family: var(--theme-primary-font-family);
+    color: var(--theme-dark-mode-primary-text);
+  }
+  .welcomeText {
+    font-size: 2vw;
+    font-family: var(--theme-secondary-font-family);
+    color: var(--theme-dark-mode-primary-text);
+    margin-bottom: 2vw;
+  }
+
+  .learnMoreButton {
+    background-color: var(--theme-dark-mode-primary-text);
+    color: var(--theme-background-color-dark);
+  }
+}
+@keyframes gradient-animation {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+.signIn {
+  display: block;
+  min-height: 100%;
+  /* justify-content: center;
+  align-items: center; */
+  width: 100%;
+  background: linear-gradient(300deg, #0f0f14, #1d4d7c, #477bb0);
+  background-size: 180% 180%;
+  animation: gradient-animation 5s ease infinite;
+}
+
+.signInTitle {
+  font-family: var(--theme-primary-font-family);
+  font-size: 3vw;
+  margin-bottom: 0.5vw;
+}
+
+.formElements {
+  font-family: var(--theme-secondary-font-family);
+}
+
+@media screen and (max-width: 768px) {
+  .PadPalInfoGrid {
+    text-align: center;
+  }
+  .welcome {
+    margin-bottom: 0.5rem !important;
+  }
+  .learnMoreButton {
+    margin-top: 0.5rem!important;
+  }
+  .userFeedInfoDiv {
+    h2 {
+      font-size: 2rem;
+      line-height: 3rem;
+    }
+    h3 {
+      font-size: 1rem;
+      line-height: 2rem;
+    }
+    padding: 2rem;
+    height: 50%;
+    width: 100%;
+  }
+
+  .userFeedImageDiv {
+    height: 50%;
+    width: 100%;
+  }
+
+  .signInTitle {
+    font-size: 2rem;
+    margin-bottom: 1rem;
+  }
+  .signInSubtitle, .welcomeText {
+    font-size: 1rem !important;
+  }
+}

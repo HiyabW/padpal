@@ -1,0 +1,54 @@
+.Chat {
+  height: 100%;
+  padding: 1rem;
+  padding-top: 3rem;
+  background: linear-gradient(300deg,#0f0f14,#1d4d7c, #477bb0);
+  background-size: 120% 120%;
+  animation: gradient-animation 8s ease infinite;
+  color: var(--theme-dark-mode-primary-text);
+
+  .ChatRoom {
+    height: 100%;
+    padding: 3vw;
+  }
+
+  .ChatListGrid {
+    align-self: center;
+    height: 95%;
+    border-radius: 1rem;
+    background-color: var(--theme-dark-background-color-2);
+    color: #5f6387;
+
+    .ChatList {
+      height: 100%;
+      overflow-y: scroll;
+      overflow-x: hidden;
+    }
+  }
+
+  @media screen and (max-width: 768px) {
+    
+    .ChatListGrid {
+      height: 25%;
+      width: 100%;
+      margin-top: 2rem;
+      margin-bottom: 0.5rem;
+    }
+    .ChatRoomGrid {
+      height: 70%;
+      width: 100%;
+    }
+  }
+}
+
+@keyframes Chat {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}

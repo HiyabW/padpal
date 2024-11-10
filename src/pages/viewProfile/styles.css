@@ -1,0 +1,6 @@
+.editProfileButton {
+  margin-top: 3vh!important;
+  min-width: 20vw!important;
+  color: black !important;
+  background-color: var(--theme-dark-mode-primary-text)!important;
+}

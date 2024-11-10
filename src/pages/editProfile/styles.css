@@ -1,0 +1,60 @@
+.editProfile {
+  width: 100%;
+  min-height:100%!important;
+  padding: var(--standard-padding);
+  padding-top: 4rem;
+
+  h1 {
+    font-size: 4rem;
+    line-height: 5rem;
+    font-family: var(--theme-primary-font-family);
+    background: linear-gradient(to bottom, #3b72ff, #060d3c);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  h2 {
+    font-size: 1.5rem;
+    color: white;
+    text-align: center;
+  }
+
+  .pictures {
+    width: 100%;
+    height: 100%;
+  }
+
+  .verticallyAligned {
+    display: flex;
+    align-items: center;
+  }
+
+  .userProfileContents {
+    margin-top: 2rem;
+
+    .label {
+      justify-content: right;
+      text-align: right;
+      font-size: 1.5rem;
+    }
+  }
+
+  @media screen and (max-width: 768px) {
+    .userFeedCardDiv {
+      padding: 2rem;
+      justify-items: center;
+      hyphens: auto;
+    }
+    h1 {
+      font-size: 2rem;
+      line-height: 3rem;
+    }
+    .label {
+      font-size: 0.9rem!important;
+    }
+
+    button {
+      -ms-transform: translateX(-50%);
+      transform: translateX(-50%);
+    }
+  }
+}

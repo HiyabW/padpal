@@ -1,0 +1,22 @@
+.buttonList {
+  width: 100%;
+
+  .buttonListItem {
+    width: 100%;
+  }
+
+  .buttonListElement {
+    width: 50%;
+    border-radius: 5px;
+    border-style: solid;
+    border-color: var(--theme-primary-color);
+    color: var(--theme-primary-color);
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+  }
+  .selected {
+    background-color: var(--theme-primary-color);
+    color: white;
+    box-shadow: black 0px 5px;
+  }
+}

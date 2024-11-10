@@ -1,0 +1,20 @@
+.dot-progress {
+    display: flex;
+    justify-content: center;
+    position: absolute;
+    bottom:3rem;
+    width: 60%;
+  }
+  
+  .dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background-color: lightgray;
+    margin-left: 0.5rem;
+    margin-right: 0.5rem;
+  }
+  
+  .dot.active {
+    background-color: white;
+  }

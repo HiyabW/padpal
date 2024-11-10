@@ -1,0 +1,38 @@
+.navBar {
+  position: fixed;
+  top: 0;
+  width: 80%;
+  display: flex;
+  justify-content: space-between;
+  padding-top: 0.7rem;
+  padding-bottom: 0.7rem;
+  padding-left: 2.2rem;
+  padding-right: 2.2rem;
+  transform: translateX(13%);
+  color: var(--theme-light-mode-primary-text);;
+  font-size: 1.3rem;
+  z-index: 500;
+  background-color: #f2f4fca7;
+  border-bottom-left-radius: 0.5rem;
+  border-bottom-right-radius: 0.5rem;
+
+  h1 {
+    font-size: 1.7rem;
+    font-family: var(--theme-primary-font-family);
+    &:hover {
+      cursor: pointer;
+    }
+  }
+
+  h2 {
+    margin-left: 0.3rem;
+  }
+
+  .navBarOptions {
+    display: flex;
+    align-items: center;
+    &:hover {
+      cursor: pointer;
+    }
+  }
+}

@@ -1,0 +1,11 @@
+.App{
+  height: 100%;
+  overflow: auto;
+  .main-page-content{
+    height: calc(100%);
+  }
+
+  .hidden {
+    display: none;
+  }
+}

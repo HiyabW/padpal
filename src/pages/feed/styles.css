@@ -1,0 +1,142 @@
+.feed {
+  display: grid;
+  place-items: center;
+  align-items: center;
+  width: 100%;
+  min-height: 100%;
+  overflow: hidden;
+
+  .matchedScreen {
+    background-color: #68ed76;
+    display: flex;
+    justify-content: center;
+    text-align: center;
+    align-items: center;
+    color: white;
+    height: 100%;
+    width: 100%;
+    position: absolute;
+    z-index: 20000;
+
+    .matchedImg {
+      width: 20rem!important;
+      height: 20rem!important;
+      object-fit: cover;
+      border-radius: 2rem;
+      border: 0.5rem solid white
+    }
+
+    .currUserPfp {
+      margin-left: 5rem;
+    }
+
+    .userPfp {
+      margin-right: 5rem;
+    }
+
+    .matchedScreenText {
+      h1 {
+        font-size: 6rem;
+        font-weight: bold;
+      }
+  
+      h2 {
+        font-size: 2rem;
+        width: 70%;
+        margin: 0 auto;
+        margin-top: 2rem;
+      }
+      
+      .gotIt {
+        margin-top: 3rem;
+        background-color: white;
+        color: #68ed76;
+        box-shadow: none;
+        width: 40%;
+        height: 3rem;
+        font-size: 1rem;
+      }
+    }
+
+  }
+
+  h1 {
+    font-size: 1.5rem;
+    color: white;
+    text-align: center;
+  }
+
+  .switchPages {
+    position: fixed;
+    bottom: 1.5rem;
+    z-index: 10;
+
+    .icon {
+      width: 3.5rem;
+      height: 3.5rem;
+      fill: #3a74e5 !important;
+    }
+  }
+
+
+  @media screen and (max-width: 768px) {
+    .matchedScreen {
+      .matchedImg {
+        width: 10rem!important;
+        height: 10rem!important;
+      }
+
+      .currUserPfp {
+        margin-left: 0rem;
+      }
+  
+      .userPfp {
+        margin-right: 0rem;
+      }
+
+      .matchedScreenText {
+        h1 {
+          font-size: 3.5rem;
+          font-weight: bold;
+        }
+    
+        h2 {
+          font-size: 1rem;
+          line-height: 2rem;
+          width: 70%;
+          margin: 0 auto;
+          margin-top: 0.5rem;
+        }
+        
+        .gotIt {
+          margin-top: 3rem;
+          background-color: white;
+          color: #68ed76;
+          box-shadow: none;
+          width: 40%;
+          height: 3rem;
+          font-size: 1rem;
+        }
+      }
+    }
+
+  }
+}
+
+.gradient-background {
+  background: linear-gradient(228deg, #7d91b7, #3a74e5, #142e67);
+  background-size: 180% 180%;
+  animation: gradient-animation 6s ease infinite;
+}
+
+@keyframes gradient-animation {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
