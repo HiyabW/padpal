@@ -7,6 +7,7 @@ import Chat from './pages/chat';
 import NavBar from './components/navBar';
 import ViewProfile from './pages/viewProfile';
 import EditProfile from './pages/editProfile';
+import React from 'react';
 
 function App() {
 

@@ -32,9 +32,11 @@
   }
 
   .surveyIntroCard {
-    transform: translateY(50%);
-    top: 50%;
     max-width: 70%;
+    position: relative;
+    top: 50%;
+    height: 50%;
+    transform: translateY(-50%);
 
     .introIcon {
         transform: scale(10);
@@ -70,7 +72,7 @@
 
       .surveySection {
         width: 100%;
-        height: 100%;
+        /* height: 100%; */
       }
     }
     h1 {
@@ -82,9 +84,46 @@
 
     .next {
       width: 30%;
-      /* position: fixed;
-      bottom: 2.5rem */
+      position: absolute;
+      right: 0;
+      bottom: 0;
+      z-index: 1000;
     }
+  }
+  @media screen and (max-width: 768px) {
+   h1 {
+    font-size: 3rem!important;
+   }
+   h2 {
+    font-size: 2rem!important;
+    line-height: 2.5rem!important;
+   }
+   p{
+    font-size: 1rem!important;
+   }
+   .introIcon{
+    transform: scale(4)!important;
+
+   }
+   .surveyIntroCard {
+    position: relative;
+    top: 50%;
+    height: 50%;
+    transform: translateY(-50%);
+    max-width: 90%;
+   }
+
+   .surveyCard {
+    position: relative;
+    top: 50%;
+    height: 80%;
+    transform: translateY(-50%);
+    max-width: 90%;
+   }
+
+   .icon {
+    transform: scale(0.6)!important;
+   }
   }
 }
 
@@ -144,15 +183,17 @@
   justify-content: center;
   align-items: center;
   position: relative;
+  padding-bottom:1rem;
 
   .surveyPictureDivItem {
     height: 100%;
     display: flex;
-    justify-content: center;
     align-items: center;
+    justify-content: center;
     border-radius: 10px;
     border: dashed 1px gray !important;
     overflow: hidden;
+    position: relative;
 
     .surveyImage {
         width: 100%;
@@ -165,9 +206,9 @@
 
     .surveyImageCancel {
         z-index: 1000;
-        position: relative;
-        left: 13rem;
-        top: -3rem;
+        position: absolute;
+        right: 0;
+        top:0;
     }
 
     .addPicDesc {
@@ -178,58 +219,14 @@
 
   .selected {
     border: 0px !important;
-    justify-content: end;
-    align-items: normal;
-    float: right
+    
+  }
+
+  @media screen and (max-width: 768px) {
+    height: 10rem;
   }
 }
 
-.surveyPictureDiv {
-  width: 100%;
-  height: 90%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  position: relative;
-
-  .surveyPictureDivItem {
-    height: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    border-radius: 10px;
-    border: dashed 1px gray !important;
-    overflow: hidden;
-
-    .surveyImage {
-        width: 100%;
-        height: 100%;
-        object-fit:cover;
-        border-radius: 10px;
-        z-index: 1;
-        position: relative;
-    }
-
-    .surveyImageCancel {
-        z-index: 1000;
-        position: relative;
-        left: 16rem;
-        top: -4rem;
-    }
-
-    .addPicDesc {
-      font-size: 1rem;
-      margin-left: 0.5rem;
-    }
-  }
-
-  .selected {
-    border: 0px !important;
-    justify-content: end;
-    align-items: normal;
-    float: right
-  }
-}
 
 .fade {
   transition: opacity 1s ease-in-out !important;
@@ -256,12 +253,12 @@
 
   .cardHeader {
     text-align: center;
-    margin-bottom: 1rem;
+    margin-bottom: 1vw;
   }
 
   h3 {
-    font-size: 3rem;
-    line-height: 5rem;
+    font-size: 3vw;
+    line-height: 5vw;
     font-family: var(--theme-primary-font-family);
   }
 
@@ -274,15 +271,16 @@
     font-size: 11vw;
     line-height: 13vw;
     font-family: var(--theme-primary-font-family);
-    color: var(--theme-dark-mode-primary-text)
+    color: var(--theme-dark-mode-primary-text);
   }
-  .welcomeText{
+  .welcomeText {
     font-size: 2vw;
     font-family: var(--theme-secondary-font-family);
-    color: var(--theme-dark-mode-primary-text)
+    color: var(--theme-dark-mode-primary-text);
+    margin-bottom: 2vw;
   }
 
-  .learnMoreButton{
+  .learnMoreButton {
     background-color: var(--theme-dark-mode-primary-text);
     color: var(--theme-background-color-dark);
   }
@@ -304,22 +302,60 @@
   min-height: 100%;
   /* justify-content: center;
   align-items: center; */
-  width: 100%;  
-  background: linear-gradient(300deg,#0f0f14,#1d4d7c, #477bb0);
+  width: 100%;
+  background: linear-gradient(300deg, #0f0f14, #1d4d7c, #477bb0);
   background-size: 180% 180%;
   animation: gradient-animation 5s ease infinite;
 }
 
-
 .signInTitle {
   font-family: var(--theme-primary-font-family);
   font-size: 3vw;
-  margin-bottom: 0.5rem;
+  margin-bottom: 0.5vw;
 }
 
 .formElements {
   font-family: var(--theme-secondary-font-family);
 }
+
+@media screen and (max-width: 768px) {
+  .PadPalInfoGrid {
+    text-align: center;
+  }
+  .welcome {
+    margin-bottom: 0.5rem !important;
+  }
+  .learnMoreButton {
+    margin-top: 0.5rem!important;
+  }
+  .userFeedInfoDiv {
+    h2 {
+      font-size: 2rem;
+      line-height: 3rem;
+    }
+    h3 {
+      font-size: 1rem;
+      line-height: 2rem;
+    }
+    padding: 2rem;
+    height: 50%;
+    width: 100%;
+  }
+
+  .userFeedImageDiv {
+    height: 50%;
+    width: 100%;
+  }
+
+  .signInTitle {
+    font-size: 2rem;
+    margin-bottom: 1rem;
+  }
+  .signInSubtitle, .welcomeText {
+    font-size: 1rem !important;
+  }
+}
+
 .userFeedImage {
   width: 100%;
   height: 100%;
@@ -345,6 +381,11 @@
   background: var(--theme-feed-background-color);
 }
 
+.mobilePictureCaroselButtons {
+  display: none!important;
+  background-color: white!important;
+}
+
 .userFeedImageDiv {
   width: 60%;
   height: 100%;
@@ -362,11 +403,7 @@
     font-size: 4rem;
     line-height: 5rem;
     font-family: var(--theme-primary-font-family);
-    background: linear-gradient(
-      to bottom,
-      #3b72ff,
-      #060d3c
-    ); 
+    background: linear-gradient(to bottom, #3b72ff, #060d3c);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
   }
@@ -399,8 +436,6 @@
   }
 }
 
-
-
 .userFeedInfoDiv::-webkit-scrollbar {
   -webkit-appearance: none;
 }
@@ -416,9 +451,45 @@
 .userFeedInfoDiv::-webkit-scrollbar-thumb {
   border-radius: 8px;
   border: 2px solid rgb(226, 228, 239);
-  background-color: rgba(0, 0, 0, .5);
+  background-color: rgba(0, 0, 0, 0.5);
 }
 
+@media screen and (max-width: 768px) {
+  .userFeedInfoDiv {
+    h2 {
+      font-size: 2rem;
+      line-height: 3rem;
+    }
+    h3 {
+      font-size: 1rem;
+      line-height: 2rem;
+    }
+    padding: 2rem;
+    height: 50%;
+    width: 100%;
+  }
+
+  .userFeedImageDiv {
+    height: 50%;
+    width: 100%;
+  }
+
+  .dot-progress {
+    position: absolute !important;
+    top: 42%;
+    height: fit-content;
+    transform: translateY(-10%);
+    width: 100% !important;
+    display: flex!important;
+    align-items: center;
+  }
+
+  .mobilePictureCaroselButtons {
+    display: block!important;
+    width: 3rem;
+    height: 3rem;
+  }
+}
 
 .dot-progress {
     display: flex;
@@ -461,8 +532,8 @@
     z-index: 20000;
 
     .matchedImg {
-      width: 20rem;
-      height: 20rem;
+      width: 20rem!important;
+      height: 20rem!important;
       object-fit: cover;
       border-radius: 2rem;
       border: 0.5rem solid white
@@ -518,6 +589,50 @@
       height: 3.5rem;
       fill: #3a74e5 !important;
     }
+  }
+
+
+  @media screen and (max-width: 768px) {
+    .matchedScreen {
+      .matchedImg {
+        width: 10rem!important;
+        height: 10rem!important;
+      }
+
+      .currUserPfp {
+        margin-left: 0rem;
+      }
+  
+      .userPfp {
+        margin-right: 0rem;
+      }
+
+      .matchedScreenText {
+        h1 {
+          font-size: 3.5rem;
+          font-weight: bold;
+        }
+    
+        h2 {
+          font-size: 1rem;
+          line-height: 2rem;
+          width: 70%;
+          margin: 0 auto;
+          margin-top: 0.5rem;
+        }
+        
+        .gotIt {
+          margin-top: 3rem;
+          background-color: white;
+          color: #68ed76;
+          box-shadow: none;
+          width: 40%;
+          height: 3rem;
+          font-size: 1rem;
+        }
+      }
+    }
+
   }
 }
 
@@ -631,12 +746,12 @@
       padding-left: 1.2rem;
       padding-right: 1.2rem;
       order: 2;
+      min-height:47px;
     }
 
     .outgoing {
       background-color: #1967b4;
       margin-left: auto;
-      
     }
 
     .date {
@@ -648,9 +763,9 @@
     }
 
     .messageInputBox {
-      width: 64%;
+      width: 60%;
       position: fixed;
-      bottom: 1.5rem;
+      bottom: 2.3rem;
 
       .messageInput {
         color: var(--theme-dark-mode-primary-text) !important;
@@ -658,10 +773,26 @@
       }
     }
   }
+  @media screen and (max-width: 768px) {
+    h1 {
+      font-size: 1rem;
+    }
+    img {
+      width: 3rem;
+      height: 3rem;
+    }
+    .messageInputBox {
+      width: 85%!important;
+    }
+    .message {
+
+    }
+  }
 }
 
 .Chat {
   height: 100%;
+  padding: 1rem;
   padding-top: 3rem;
   background: linear-gradient(300deg,#0f0f14,#1d4d7c, #477bb0);
   background-size: 120% 120%;
@@ -670,12 +801,11 @@
 
   .ChatRoom {
     height: 100%;
-    padding: 1.5rem;
+    padding: 3vw;
   }
 
   .ChatListGrid {
     align-self: center;
-    margin: 1rem;
     height: 95%;
     border-radius: 1rem;
     background-color: var(--theme-dark-background-color-2);
@@ -684,7 +814,21 @@
     .ChatList {
       height: 100%;
       overflow-y: scroll;
+      overflow-x: hidden;
+    }
+  }
 
+  @media screen and (max-width: 768px) {
+    
+    .ChatListGrid {
+      height: 25%;
+      width: 100%;
+      margin-top: 2rem;
+      margin-bottom: 0.5rem;
+    }
+    .ChatRoomGrid {
+      height: 70%;
+      width: 100%;
     }
   }
 }
@@ -742,7 +886,7 @@
 
 .editProfileButton {
   margin-top: 3vh!important;
-  width: 20vw!important;
+  min-width: 20vw!important;
   color: black !important;
   background-color: var(--theme-dark-mode-primary-text)!important;
 }
@@ -763,6 +907,7 @@
     border-radius: 10px;
     border: dashed 1px gray !important;
     overflow: hidden;
+    position: relative;
 
     .surveyImage {
         width: 100%;
@@ -776,8 +921,8 @@
     .surveyImageCancel {
         z-index: 1000;
         position: absolute;
-        left: 22rem;
-        top:0rem
+        right: 0;
+        top:0;
     }
 
     .addPicDesc {
@@ -790,10 +935,15 @@
     border: 0px !important;
     
   }
+
+  @media screen and (max-width: 768px) {
+    height: 10rem;
+  }
 }
 
 .editProfile {
   width: 100%;
+  min-height:100%!important;
   padding: var(--standard-padding);
   padding-top: 4rem;
 
@@ -801,11 +951,7 @@
     font-size: 4rem;
     line-height: 5rem;
     font-family: var(--theme-primary-font-family);
-    background: linear-gradient(
-      to bottom,
-      #3b72ff,
-      #060d3c
-    ); 
+    background: linear-gradient(to bottom, #3b72ff, #060d3c);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
   }
@@ -830,10 +976,30 @@
 
     .label {
       justify-content: right;
+      text-align: right;
       font-size: 1.5rem;
     }
   }
 
+  @media screen and (max-width: 768px) {
+    .userFeedCardDiv {
+      padding: 2rem;
+      justify-items: center;
+      hyphens: auto;
+    }
+    h1 {
+      font-size: 2rem;
+      line-height: 3rem;
+    }
+    .label {
+      font-size: 0.9rem!important;
+    }
+
+    button {
+      -ms-transform: translateX(-50%);
+      transform: translateX(-50%);
+    }
+  }
 }
 
 
@@ -860,7 +1026,7 @@
   --theme-primary-font-family: "DM Serif Display", serif;
   --theme-secondary-font-family: "Inter", sans-serif;
   --bs-primary: #3a74e5;
-  --standard-padding: 3rem;
+  --standard-padding: 7vw;
 }
 
 .centeredDiv {

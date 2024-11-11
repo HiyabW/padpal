@@ -49,6 +49,12 @@ const config = smp.wrap({
         static: {
             directory: path.join(__dirname, 'public'),
         },
+        client: {
+            overlay: {
+                errors: false,
+                warnings: false,
+            },
+        },
         compress: true,
         port: 3000,
     },

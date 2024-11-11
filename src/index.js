@@ -6,6 +6,7 @@ import { BrowserRouter as Router } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './index.css';
 
+console.log("ROOT: ", document.getElementById('root'))
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>

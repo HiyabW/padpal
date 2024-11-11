@@ -229,7 +229,7 @@ function SignIn() {
           <Grid
             container
             spacing={10}
-            sx={{ height: "100%", alignItems: "center", padding: "10vw" }}
+            sx={{ height: "100%", alignItems: "center", padding: "10vw", position:"absolute", width:'100%' }}
           >
             <Grid className="PadPalInfoGrid" size={{ xs: 12, md: 7 }}>
               <Typography className="welcome" variant="h1">
