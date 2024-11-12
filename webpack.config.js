@@ -21,7 +21,7 @@ const stylesHandler = isProduction ? MiniCssExtractPlugin.loader : 'style-loader
 
 
 const config = smp.wrap({
-    entry: './src/index.js',
+    entry: ['./src/index.js', './src/pages/feed/index.jsx'],
     resolve: {
         extensions: ['.jsx', '.js', '.tsx']
     },
@@ -46,6 +46,7 @@ const config = smp.wrap({
         // Learn more about plugins from https://webpack.js.org/configuration/plugins/
     ],
     devServer: {
+        historyApiFallback: true,
         static: {
             directory: path.join(__dirname, 'public'),
         },
