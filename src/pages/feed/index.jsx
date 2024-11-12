@@ -31,7 +31,7 @@ const Feed = () => {
   useEffect(() => {
     if (isLoggedIn) {
       // first fetch data
-      fetch("https://timely-malasada-6db5a7.netlify.app/feed/", {
+      fetch("https://palpal-api.onrender.com/feed/", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -55,7 +55,7 @@ const Feed = () => {
         });
 
       // ... then fetch currUser Pfp
-      fetch("https://timely-malasada-6db5a7.netlify.app/feed/getUser", {
+      fetch("https://palpal-api.onrender.com/feed/getUser", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

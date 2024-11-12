@@ -164,7 +164,7 @@ const Survey = () => {
       formData.append("file", addedUserAnswers["pictures"]);
 
       // POST new user into db!
-      fetch("https://timely-malasada-6db5a7.netlify.app/auth/survey", {
+      fetch("https://palpal-api.onrender.com/auth/survey", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -199,7 +199,7 @@ const Survey = () => {
 
       async function addImages() {
         // Then POST all pictures (separate endpoint, separate fetch call)
-        fetch("https://timely-malasada-6db5a7.netlify.app/images/addImages", {
+        fetch("https://palpal-api.onrender.com/images/addImages", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",

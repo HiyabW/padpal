@@ -53,7 +53,7 @@ const Chat = () => {
 
   const fetchData = async () => {
     try {
-      fetch("https://timely-malasada-6db5a7.netlify.app/chat/getChats", {
+      fetch("https://palpal-api.onrender.com/chat/getChats", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

@@ -192,7 +192,7 @@ const ChatRoom = ({ user, justSent, setJustSent }) => {
 
   function sendMessage() {
     const today = new Date();
-    fetch("https://timely-malasada-6db5a7.netlify.app/chat/sendMessage", {
+    fetch("https://palpal-api.onrender.com/chat/sendMessage", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -219,7 +219,7 @@ const ChatRoom = ({ user, justSent, setJustSent }) => {
 
     /* PART 2 (ONLY IF CHATTING WITH AI BOT): REQUEST A RESPONSE FROM AI BOT */
     if (user.id === "6730784af24ec4375cf95a17") {
-      fetch("https://timely-malasada-6db5a7.netlify.app/chat/chatAI", {
+      fetch("https://palpal-api.onrender.com/chat/chatAI", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

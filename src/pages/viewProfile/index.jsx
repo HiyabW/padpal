@@ -22,7 +22,7 @@ const ViewProfile = () => {
 
   useEffect(() => {
     // fetch data on currUser
-    fetch("https://timely-malasada-6db5a7.netlify.app/feed/getUser", {
+    fetch("https://palpal-api.onrender.com/feed/getUser", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

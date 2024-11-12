@@ -49,7 +49,7 @@ const EditProfile = () => {
 
   const updateUser = () => {
     setIsLoading(true);
-    fetch("https://timely-malasada-6db5a7.netlify.app/auth/survey", {
+    fetch("https://palpal-api.onrender.com/auth/survey", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -73,7 +73,7 @@ const EditProfile = () => {
 
   async function deletePreviousImages() {
     // Then POST all pictures (separate endpoint, separate fetch call)
-    fetch("https://timely-malasada-6db5a7.netlify.app/images/deleteImages", {
+    fetch("https://palpal-api.onrender.com/images/deleteImages", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -100,7 +100,7 @@ const EditProfile = () => {
       myImages.push(image3);
     }
     // Then POST all pictures (separate endpoint, separate fetch call)
-    fetch("https://timely-malasada-6db5a7.netlify.app/images/addImages", {
+    fetch("https://palpal-api.onrender.com/images/addImages", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -120,7 +120,7 @@ const EditProfile = () => {
     console.log("RERENDER");
     if (isLoggedIn) {
       // fetch data on currUser
-      fetch("https://timely-malasada-6db5a7.netlify.app/feed/getUser", {
+      fetch("https://palpal-api.onrender.com/feed/getUser", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

@@ -129,7 +129,7 @@ function SignIn() {
   };
 
   function signInUser() {
-    fetch("https://timely-malasada-6db5a7.netlify.app/auth/login", {
+    fetch("https://palpal-api.onrender.com/auth/login", {
       method: "POST", // or 'POST', 'PUT', 'DELETE', etc.
       headers: {
         "Content-Type": "application/json",
@@ -166,7 +166,7 @@ function SignIn() {
   }
 
   function signUpUser() {
-    fetch("https://timely-malasada-6db5a7.netlify.app/auth/register", {
+    fetch("https://palpal-api.onrender.com/auth/register", {
       method: "POST", // or 'POST', 'PUT', 'DELETE', etc.
       headers: {
         "Content-Type": "application/json",
