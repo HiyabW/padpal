@@ -1,5 +1,5 @@
 import './App.css';
-import { Routes, Route, useLocation } from 'react-router-dom'
+import { Routes, Route, useLocation, HashRouter } from 'react-router-dom'
 import Survey from './pages/survey';
 import SignIn from './pages/signIn';
 import Feed from './pages/feed';
@@ -19,16 +19,18 @@ function App() {
         (location.pathname !== "/" && location.pathname !== "/survey") &&
         <NavBar />
       }
-      <Routes>
-        <Route index exact path='/' element={<SignIn />} />
-        <Route index exact path='/survey' element={<Survey />} />
-        <Route index exact path='/feed' element={<Feed />} />
-        <Route index exact path='/chat' element={<Chat />} />
-        <Route index exact path='/viewProfile' element={<ViewProfile />} />
-        <Route index exact path='/editProfile' element={<EditProfile />} />
-        <Route path="*" element={<h2>Page Not Found</h2>} />
-      </Routes>
-      </>
+      <HashRouter>
+        <Routes>
+          <Route index exact path='/' element={<SignIn />} />
+          <Route index exact path='/survey' element={<Survey />} />
+          <Route index exact path='/feed' element={<Feed />} />
+          <Route index exact path='/chat' element={<Chat />} />
+          <Route index exact path='/viewProfile' element={<ViewProfile />} />
+          <Route index exact path='/editProfile' element={<EditProfile />} />
+          <Route path="*" element={<h2>Page Not Found</h2>} />
+        </Routes>
+      </HashRouter>
+    </>
   );
 }
 
