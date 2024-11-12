@@ -28,7 +28,6 @@ const config = smp.wrap({
         extensions: ['.jsx', '.js', '.tsx']
     },
     output: {
-        publicPath: '/',
         path: path.resolve(__dirname, 'dist'),
     },
     devServer: {

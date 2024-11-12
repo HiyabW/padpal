@@ -19,17 +19,14 @@ function App() {
         (location.pathname !== "/" && location.pathname !== "/survey") &&
         <NavBar />
       }
-      <HashRouter>
         <Routes>
-          <Route index exact path='/' element={<SignIn />} />
-          <Route index exact path='/survey' element={<Survey />} />
-          <Route index exact path='/feed' element={<Feed />} />
-          <Route index exact path='/chat' element={<Chat />} />
-          <Route index exact path='/viewProfile' element={<ViewProfile />} />
-          <Route index exact path='/editProfile' element={<EditProfile />} />
-          <Route path="*" element={<h2>Page Not Found</h2>} />
+          <Route exact path='/' element={<SignIn />} />
+          <Route exact path='/survey' element={<Survey />} />
+          <Route exact path='/feed' element={<Feed />} />
+          <Route exact path='/chat' element={<Chat />} />
+          <Route exact path='/viewProfile' element={<ViewProfile />} />
+          <Route exact path='/editProfile' element={<EditProfile />} />
         </Routes>
-      </HashRouter>
     </>
   );
 }
