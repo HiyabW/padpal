@@ -26,10 +26,9 @@ function App() {
         <Route index exact path='/chat' element={<Chat />} />
         <Route index exact path='/viewProfile' element={<ViewProfile />} />
         <Route index exact path='/editProfile' element={<EditProfile />} />
-        <Route path="*">
-          <h2>Page Not Found</h2>
-        </Route>
-      </Routes></>
+        <Route path="*" element={<h2>Page Not Found</h2>} />
+      </Routes>
+      </>
   );
 }
 
