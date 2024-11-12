@@ -7,6 +7,8 @@ const SpeedMeasurePlugin = require("speed-measure-webpack-plugin");
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 const TerserPlugin = require('terser-webpack-plugin');
 
+const webpack = require('webpack')
+
 
 const smp = new SpeedMeasurePlugin({
     outputFormat: "humanVerbose",
@@ -39,6 +41,9 @@ const config = smp.wrap({
     plugins: [
         new HtmlWebpackPlugin({
             template: 'index.html',
+        }),
+        new webpack.DefinePlugin({
+            'process.env': JSON.stringify(process.env), // Define all process.env variables
         }),
         // new BundleAnalyzerPlugin(),
 
