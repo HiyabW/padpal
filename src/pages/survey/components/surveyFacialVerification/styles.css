@@ -1,0 +1,15 @@
+@media screen and (max-width: 994px) {
+    video {
+        width: 20rem;
+    }
+
+    .addImageIcon {
+        transform: scale(0.8);
+    }
+
+    .addPicDesc {
+        margin: 0;
+        margin-left: 0!important;
+        font-size: 0.6rem!important;
+    }
+}

@@ -112,7 +112,7 @@ const SurveyOptionsPictures = ({
             variant="contained"
             tabIndex={-1}
           >
-            <AddCircleOutlineIcon fontSize="large" />
+            <AddCircleOutlineIcon className="addImageIcon" fontSize="large" />
             <VisuallyHiddenInput
               type="file"
               onChange={(e) => updateAnswer(e, 1)}
@@ -147,7 +147,7 @@ const SurveyOptionsPictures = ({
             variant="contained"
             tabIndex={-1}
           >
-            <AddCircleOutlineIcon fontSize="large" />
+            <AddCircleOutlineIcon className="addImageIcon" fontSize="large" />
             <VisuallyHiddenInput
               type="file"
               onChange={(e) => updateAnswer(e, 2)}
@@ -182,7 +182,7 @@ const SurveyOptionsPictures = ({
             variant="contained"
             tabIndex={-1}
           >
-            <AddCircleOutlineIcon fontSize="large" />
+            <AddCircleOutlineIcon className="addImageIcon" fontSize="large" />
             <VisuallyHiddenInput
               type="file"
               onChange={(e) => updateAnswer(e, 3)}

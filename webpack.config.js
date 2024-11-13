@@ -43,7 +43,8 @@ const config = smp.wrap({
             template: 'index.html',
         }),
         new webpack.DefinePlugin({
-            'process.env': JSON.stringify(process.env), // Define all process.env variables
+            // 'process.env': JSON.stringify(process.env), // Define all process.env variables
+            'process.env.PUBLIC_URL': process.env.PUBLIC_URL,
         }),
         // new BundleAnalyzerPlugin(),
 

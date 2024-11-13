@@ -230,7 +230,7 @@ const Survey = () => {
     setFacialVerificationLoading(true);
     if (!realTimePhoto || !identificationPhoto) return 0;
 
-    const MODEL_URL = process.env.PUBLIC_URL + "/models";
+    const MODEL_URL = "/models";
     await faceapi.nets.faceRecognitionNet.loadFromUri(MODEL_URL);
     await faceapi.nets.faceLandmark68Net.loadFromUri(MODEL_URL);
     await faceapi.nets.ssdMobilenetv1.loadFromUri(MODEL_URL);
@@ -395,12 +395,12 @@ const Survey = () => {
                         <h1 className="mb-3">Q{index + 1}</h1>
                         <h2>{question?.text}</h2>
                         {question?.subtext && (
-                          <h3 className="mt-3">{question?.subtext}</h3>
+                          <p className="mt-3">{question?.subtext}</p>
                         )}
                         <Divider />
                       </div>
                       <br></br>
-                      <div className="surveySection">
+                      <div className="surveySection" style={{marginBottom: '2rem'}}>
                         {question?.type === "text" && (
                           <SurveyOptionsText
                             question={question}
@@ -529,7 +529,7 @@ const Survey = () => {
                     "--CircularProgress-thickness": "24px",
                   }}
                 />
-                <h2>Saving user data...</h2>
+                {/* <h1 className="loadingText">Saving user data...</h1> */}
               </div>
             </motion.div>
           )}

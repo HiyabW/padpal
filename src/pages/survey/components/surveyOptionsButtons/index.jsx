@@ -19,7 +19,7 @@ const SurveyOptionsButtons = ({
     setCurrSelectedAnswer(e.target.value);
   };
   return (
-    <ul className="buttonList">
+    <ul className="buttonList" style={{listStyleType:'none', padding:0}}>
       {question.options.map((option) => {
         return (
           <li className="buttonListItem">

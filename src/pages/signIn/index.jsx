@@ -20,6 +20,7 @@ import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import Alert from "@mui/material/Alert";
 import OutlinedInput from "@mui/material/OutlinedInput";
 import IconButton from "@mui/material/IconButton";
+import CircularProgress from "@mui/material/CircularProgress"
 
 const Card = styled(MuiCard)(({ theme }) => ({
   display: "flex",
@@ -52,6 +53,7 @@ function SignIn() {
   const [openLearnMore, setOpenLearnMore] = React.useState(false);
   const [isSignIn, setIsSignIn] = React.useState(true);
   const [showPassword, setShowPassword] = React.useState(false);
+  const [isLoading, setIsLoading] = React.useState(false)
 
   // Before doing anything, if user is logged in already redirect them to feed page
   const isLoggedIn = Cookies.get("isLoggedIn");
@@ -129,6 +131,7 @@ function SignIn() {
   };
 
   function signInUser() {
+    setIsLoading(true)
     fetch("https://palpal-api.onrender.com/auth/login", {
       method: "POST", // or 'POST', 'PUT', 'DELETE', etc.
       headers: {
@@ -158,14 +161,17 @@ function SignIn() {
         } else {
           console.log(data.error.message);
           setError(data.error.message);
+          setIsLoading(false)
         }
       })
       .catch((error) => {
         console.error("Error:", error);
+        setIsLoading(false)
       });
   }
 
   function signUpUser() {
+    setIsLoading(true)
     fetch("https://palpal-api.onrender.com/auth/register", {
       method: "POST", // or 'POST', 'PUT', 'DELETE', etc.
       headers: {
@@ -195,10 +201,12 @@ function SignIn() {
         } else {
           console.log(data.error.message);
           setError(data.error.message);
+          setIsLoading(false)
         }
       })
       .catch((error) => {
         console.error("Error:", error);
+        setIsLoading(false)
       });
   }
 
@@ -229,7 +237,7 @@ function SignIn() {
           <Grid
             container
             spacing={10}
-            sx={{ height: "100%", alignItems: "center", padding: "10vw", position:"absolute", width:'100%' }}
+            sx={{ height: "100%", alignItems: "center", padding: "10vw", position: "absolute", width: '100%' }}
           >
             <Grid className="PadPalInfoGrid" size={{ xs: 12, md: 7 }}>
               <Typography className="welcome" variant="h1">
@@ -269,265 +277,279 @@ function SignIn() {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5, delay: 0.6, ease: "easeInOut" }}
+                style={{ justifyItems: 'center' }}
               >
-                <Card variant="outlined" className="signInCard">
-                  {error && (
-                    <div sx={{ width: "50%" }}>
-                      <Alert severity="error">{error}</Alert>
-                    </div>
-                  )}
-                  <Box className="cardHeader">
-                    <h1 className="signInTitle">
-                      {isSignIn ? "Sign In" : "Sign Up"}
-                    </h1>
-                    <Typography className="signInSubtitle" variant="h5">
-                      {isSignIn
-                        ? "Please enter your email and password."
-                        : "Please fill out the provided form."}
-                    </Typography>
-                  </Box>
-                  <Box
-                    component="form"
-                    onSubmit={handleSubmit}
-                    noValidate
-                    sx={{
-                      display: "flex",
-                      flexDirection: "column",
-                      width: "100%",
-                      gap: 2,
-                    }}
-                  >
-                    {!isSignIn && (
-                      <>
-                        <FormControl className="formElements">
-                          <FormLabel htmlFor="name">First Name</FormLabel>
-                          <TextField
-                            onChange={handleNameChange}
-                            error={nameError}
-                            helperText={nameErrorMessage}
-                            id="name"
-                            type="name"
-                            name="name"
-                            placeholder="John Doe"
-                            autoComplete="name"
-                            autoFocus
-                            required
-                            fullWidth
-                            variant="outlined"
-                            color={emailError ? "error" : "primary"}
-                            sx={{ ariaLabel: "name" }}
-                          />
-                        </FormControl>
-                        <FormControl className="formElements">
-                          <FormLabel htmlFor="phone">Phone Number</FormLabel>
-                          <TextField
-                            onChange={handlePhoneChange}
-                            error={phoneError}
-                            helperText={phoneErrorMessage}
-                            id="phone"
-                            type="phone"
-                            name="phone"
-                            placeholder="6617542995"
-                            autoComplete="phone"
-                            required
-                            fullWidth
-                            variant="outlined"
-                            color={emailError ? "error" : "primary"}
-                            sx={{ ariaLabel: "email" }}
-                          />
-                        </FormControl>
+                {isLoading &&
 
-                        <FormControl className="formElements">
-                          <FormLabel htmlFor="email">Email</FormLabel>
-                          <TextField
-                            onChange={handleEmailChange}
-                            error={emailError}
-                            helperText={emailErrorMessage}
-                            id="email"
-                            type="email"
-                            name="email"
-                            placeholder="your@email.com"
-                            autoComplete="email"
-                            autoFocus
-                            required
-                            fullWidth
-                            variant="outlined"
-                            color={emailError ? "error" : "primary"}
-                            sx={{ ariaLabel: "email" }}
-                            value={email}
-                          />
-                        </FormControl>
-                        <FormControl>
-                          <Box
-                            sx={{
-                              display: "flex",
-                              justifyContent: "space-between",
-                            }}
-                          >
-                            <FormLabel htmlFor="password">Password</FormLabel>
-                          </Box>
-                          <OutlinedInput
-                            onChange={handlePasswordChange}
-                            error={passwordError}
-                            helperText={passwordErrorMessage}
-                            name="password"
-                            placeholder="password"
-                            type={showPassword ? "text" : "password"}
-                            endAdornment={
-                              <IconButton
-                                aria-label={
-                                  showPassword
-                                    ? "hide the password"
-                                    : "display the password"
-                                }
-                                onClick={handleClickShowPassword}
-                                onMouseDown={handleMouseDownPassword}
-                                onMouseUp={handleMouseUpPassword}
-                                edge="end"
-                              >
-                                {showPassword ? (
-                                  <VisibilityOff />
-                                ) : (
-                                  <Visibility />
-                                )}
-                              </IconButton>
-                            }
-                            id="password"
-                            autoComplete="new-password"
-                            autoFocus
-                            required
-                            fullWidth
-                            variant="outlined"
-                            color={passwordError ? "error" : "primary"}
-                          />
-                        </FormControl>
-                        <FormControlLabel
-                          control={
-                            <Checkbox value="remember" color="primary" />
-                          }
-                          label="Remember me"
-                        />
-                      </>
+                  <CircularProgress
+                    size="10rem"
+                    style={{ color: "white", marginBottom: "2rem" }}
+                    sx={{
+                      "--CircularProgress-thickness": "24px",
+                    }}
+                  />
+
+                }
+                {
+                  !isLoading && <Card variant="outlined" className="signInCard">
+                    {error && (
+                      <div sx={{ width: "50%" }}>
+                        <Alert severity="error">{error}</Alert>
+                      </div>
                     )}
-                    {/* <ForgotPassword open={open} handleClose={handleClose} /> */}
-                    {isSignIn && (
-                      <>
-                        <FormControl className="formElements">
-                          <FormLabel htmlFor="email">Email</FormLabel>
-                          <TextField
-                            onChange={handleEmailChange}
-                            error={emailError}
-                            helperText={emailErrorMessage}
-                            id="email"
-                            type="email"
-                            name="email"
-                            placeholder="your@email.com"
-                            autoComplete="email"
-                            autoFocus
-                            required
-                            fullWidth
-                            variant="outlined"
-                            color={emailError ? "error" : "primary"}
-                            sx={{ ariaLabel: "email" }}
-                            value={email}
-                          />
-                        </FormControl>
-                        <FormControl>
-                          <Box
-                            sx={{
-                              display: "flex",
-                              justifyContent: "space-between",
-                            }}
-                          >
-                            <FormLabel htmlFor="password">Password</FormLabel>
-                          </Box>
-                          <OutlinedInput
-                            onChange={handlePasswordChange}
-                            error={passwordError}
-                            helperText={passwordErrorMessage}
-                            name="password"
-                            placeholder="password"
-                            type={showPassword ? "text" : "password"}
-                            endAdornment={
-                              <IconButton
-                                aria-label={
-                                  showPassword
-                                    ? "hide the password"
-                                    : "display the password"
-                                }
-                                onClick={handleClickShowPassword}
-                                onMouseDown={handleMouseDownPassword}
-                                onMouseUp={handleMouseUpPassword}
-                                edge="end"
-                              >
-                                {showPassword ? (
-                                  <VisibilityOff />
-                                ) : (
-                                  <Visibility />
-                                )}
-                              </IconButton>
-                            }
-                            id="password"
-                            autoComplete="current-password"
-                            autoFocus
-                            required
-                            fullWidth
-                            variant="outlined"
-                            color={passwordError ? "error" : "primary"}
-                          />
-                        </FormControl>
-                        <FormControlLabel
-                          control={
-                            <Checkbox value="remember" color="primary" />
-                          }
-                          label="Remember me"
-                        />
-                        <Button
-                          fullWidth
-                          variant="contained"
-                          onClick={validateInputs}
-                        >
-                          Sign in
-                        </Button>
-                        <Typography sx={{ textAlign: "center" }}>
-                          Don&apos;t have an account?{" "}
-                          <span>
-                            <Link
-                              onClick={toggleIsSignIn}
-                              variant="body2"
-                              sx={{ alignSelf: "center" }}
+                    <Box className="cardHeader">
+                      <h1 className="signInTitle">
+                        {isSignIn ? "Sign In" : "Sign Up"}
+                      </h1>
+                      <Typography className="signInSubtitle" variant="h5">
+                        {isSignIn
+                          ? "Please enter your email and password."
+                          : "Please fill out the provided form."}
+                      </Typography>
+                    </Box>
+                    <Box
+                      component="form"
+                      onSubmit={handleSubmit}
+                      noValidate
+                      sx={{
+                        display: "flex",
+                        flexDirection: "column",
+                        width: "100%",
+                        gap: 2,
+                      }}
+                    >
+                      {!isSignIn && (
+                        <>
+                          <FormControl className="formElements">
+                            <FormLabel htmlFor="name">First Name</FormLabel>
+                            <TextField
+                              onChange={handleNameChange}
+                              error={nameError}
+                              helperText={nameErrorMessage}
+                              id="name"
+                              type="name"
+                              name="name"
+                              placeholder="John Doe"
+                              autoComplete="name"
+                              autoFocus
+                              required
+                              fullWidth
+                              variant="outlined"
+                              color={emailError ? "error" : "primary"}
+                              sx={{ ariaLabel: "name" }}
+                            />
+                          </FormControl>
+                          <FormControl className="formElements">
+                            <FormLabel htmlFor="phone">Phone Number</FormLabel>
+                            <TextField
+                              onChange={handlePhoneChange}
+                              error={phoneError}
+                              helperText={phoneErrorMessage}
+                              id="phone"
+                              type="phone"
+                              name="phone"
+                              placeholder="6617542995"
+                              autoComplete="phone"
+                              required
+                              fullWidth
+                              variant="outlined"
+                              color={emailError ? "error" : "primary"}
+                              sx={{ ariaLabel: "email" }}
+                            />
+                          </FormControl>
+
+                          <FormControl className="formElements">
+                            <FormLabel htmlFor="email">Email</FormLabel>
+                            <TextField
+                              onChange={handleEmailChange}
+                              error={emailError}
+                              helperText={emailErrorMessage}
+                              id="email"
+                              type="email"
+                              name="email"
+                              placeholder="your@email.com"
+                              autoComplete="email"
+                              autoFocus
+                              required
+                              fullWidth
+                              variant="outlined"
+                              color={emailError ? "error" : "primary"}
+                              sx={{ ariaLabel: "email" }}
+                              value={email}
+                            />
+                          </FormControl>
+                          <FormControl>
+                            <Box
+                              sx={{
+                                display: "flex",
+                                justifyContent: "space-between",
+                              }}
                             >
-                              Sign up
-                            </Link>
-                          </span>
-                        </Typography>
-                      </>
-                    )}
-                    {!isSignIn && (
-                      <>
-                        <Button
-                          fullWidth
-                          variant="contained"
-                          onClick={validateInputs}
-                        >
-                          Sign up
-                        </Button>
-                        <Typography sx={{ textAlign: "center" }}>
-                          Already have an account?{" "}
-                          <span>
-                            <Link
-                              onClick={toggleIsSignIn}
-                              variant="body2"
-                              sx={{ alignSelf: "center" }}
+                              <FormLabel htmlFor="password">Password</FormLabel>
+                            </Box>
+                            <OutlinedInput
+                              onChange={handlePasswordChange}
+                              error={passwordError}
+                              helperText={passwordErrorMessage}
+                              name="password"
+                              placeholder="password"
+                              type={showPassword ? "text" : "password"}
+                              endAdornment={
+                                <IconButton
+                                  aria-label={
+                                    showPassword
+                                      ? "hide the password"
+                                      : "display the password"
+                                  }
+                                  onClick={handleClickShowPassword}
+                                  onMouseDown={handleMouseDownPassword}
+                                  onMouseUp={handleMouseUpPassword}
+                                  edge="end"
+                                >
+                                  {showPassword ? (
+                                    <VisibilityOff />
+                                  ) : (
+                                    <Visibility />
+                                  )}
+                                </IconButton>
+                              }
+                              id="password"
+                              autoComplete="new-password"
+                              autoFocus
+                              required
+                              fullWidth
+                              variant="outlined"
+                              color={passwordError ? "error" : "primary"}
+                            />
+                          </FormControl>
+                          <FormControlLabel
+                            control={
+                              <Checkbox value="remember" color="primary" />
+                            }
+                            label="Remember me"
+                          />
+                        </>
+                      )}
+                      {/* <ForgotPassword open={open} handleClose={handleClose} /> */}
+                      {isSignIn && (
+                        <>
+                          <FormControl className="formElements">
+                            <FormLabel htmlFor="email">Email</FormLabel>
+                            <TextField
+                              onChange={handleEmailChange}
+                              error={emailError}
+                              helperText={emailErrorMessage}
+                              id="email"
+                              type="email"
+                              name="email"
+                              placeholder="your@email.com"
+                              autoComplete="email"
+                              autoFocus
+                              required
+                              fullWidth
+                              variant="outlined"
+                              color={emailError ? "error" : "primary"}
+                              sx={{ ariaLabel: "email" }}
+                              value={email}
+                            />
+                          </FormControl>
+                          <FormControl>
+                            <Box
+                              sx={{
+                                display: "flex",
+                                justifyContent: "space-between",
+                              }}
                             >
-                              Sign in
-                            </Link>
-                          </span>
-                        </Typography>
-                      </>
-                    )}
-                  </Box>
-                </Card>
+                              <FormLabel htmlFor="password">Password</FormLabel>
+                            </Box>
+                            <OutlinedInput
+                              onChange={handlePasswordChange}
+                              error={passwordError}
+                              helperText={passwordErrorMessage}
+                              name="password"
+                              placeholder="password"
+                              type={showPassword ? "text" : "password"}
+                              endAdornment={
+                                <IconButton
+                                  aria-label={
+                                    showPassword
+                                      ? "hide the password"
+                                      : "display the password"
+                                  }
+                                  onClick={handleClickShowPassword}
+                                  onMouseDown={handleMouseDownPassword}
+                                  onMouseUp={handleMouseUpPassword}
+                                  edge="end"
+                                >
+                                  {showPassword ? (
+                                    <VisibilityOff />
+                                  ) : (
+                                    <Visibility />
+                                  )}
+                                </IconButton>
+                              }
+                              id="password"
+                              autoComplete="current-password"
+                              autoFocus
+                              required
+                              fullWidth
+                              variant="outlined"
+                              color={passwordError ? "error" : "primary"}
+                            />
+                          </FormControl>
+                          <FormControlLabel
+                            control={
+                              <Checkbox value="remember" color="primary" />
+                            }
+                            label="Remember me"
+                          />
+                          <Button
+                            fullWidth
+                            variant="contained"
+                            onClick={validateInputs}
+                          >
+                            Sign in
+                          </Button>
+                          <Typography sx={{ textAlign: "center" }}>
+                            Don&apos;t have an account?{" "}
+                            <span>
+                              <Link
+                                onClick={toggleIsSignIn}
+                                variant="body2"
+                                sx={{ alignSelf: "center" }}
+                              >
+                                Sign up
+                              </Link>
+                            </span>
+                          </Typography>
+                        </>
+                      )}
+                      {!isSignIn && (
+                        <>
+                          <Button
+                            fullWidth
+                            variant="contained"
+                            onClick={validateInputs}
+                          >
+                            Sign up
+                          </Button>
+                          <Typography sx={{ textAlign: "center" }}>
+                            Already have an account?{" "}
+                            <span>
+                              <Link
+                                onClick={toggleIsSignIn}
+                                variant="body2"
+                                sx={{ alignSelf: "center" }}
+                              >
+                                Sign in
+                              </Link>
+                            </span>
+                          </Typography>
+                        </>
+                      )}
+                    </Box>
+                  </Card>
+                }
               </motion.div>
             </Grid>
           </Grid>

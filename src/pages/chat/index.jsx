@@ -16,41 +16,6 @@ const Chat = () => {
   const [justSent, setJustSent] = React.useState(null);
   const [apiKey, setApiKey] = React.useState(null);
 
-  /// AI TEST
-  useEffect(() => {
-    fetch(process.env.PUBLIC_URL + "/config.json")
-      .then((response) => response.json())
-      .then((data) => {
-        console.log(data);
-        setApiKey(data["OPENAI_API_KEY"]);
-      });
-  }, []);
-
-  async function askAi(prompt) {
-    const requestOptions = {
-      method: "POST",
-
-      headers: {
-        "Content-Type": "application/json",
-
-        Authorization: `Bearer ${apiKey}`,
-      },
-
-      body: JSON.stringify({ prompt: prompt }),
-    };
-
-    const response = await fetch(
-      "https://api.openai.com/v1/chat/completions",
-      requestOptions
-    );
-  }
-
-  if (apiKey) {
-    askAi("Tell me a joke");
-  }
-
-  /////
-
   const fetchData = async () => {
     try {
       fetch("https://palpal-api.onrender.com/chat/getChats", {

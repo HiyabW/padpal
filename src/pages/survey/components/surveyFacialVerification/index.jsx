@@ -144,7 +144,7 @@ const SurveyFacialVerification = ({
                 tabIndex={-1}
                 onClick={() => setModalShow(true)}
               >
-                <AddCircleOutlineIcon fontSize="large" />
+                <AddCircleOutlineIcon className="addImageIcon" fontSize="large" />
               </IconButton>
               <p className="addPicDesc" style={{color:'#757575'}}>Take live photo</p>
             </>
@@ -180,7 +180,7 @@ const SurveyFacialVerification = ({
               variant="contained"
               tabIndex={-1}
             >
-              <AddCircleOutlineIcon fontSize="large" />
+              <AddCircleOutlineIcon className="addImageIcon" fontSize="large" />
               <VisuallyHiddenInput
                 type="file"
                 onChange={(e) => updateAnswer(e, 2)}
