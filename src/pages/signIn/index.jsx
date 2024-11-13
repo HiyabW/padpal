@@ -331,7 +331,6 @@ function SignIn() {
                               name="name"
                               placeholder="John Doe"
                               autoComplete="name"
-                              autoFocus
                               required
                               fullWidth
                               variant="outlined"
@@ -369,7 +368,6 @@ function SignIn() {
                               name="email"
                               placeholder="your@email.com"
                               autoComplete="email"
-                              autoFocus
                               required
                               fullWidth
                               variant="outlined"
@@ -415,7 +413,6 @@ function SignIn() {
                               }
                               id="password"
                               autoComplete="new-password"
-                              autoFocus
                               required
                               fullWidth
                               variant="outlined"
@@ -444,7 +441,6 @@ function SignIn() {
                               name="email"
                               placeholder="your@email.com"
                               autoComplete="email"
-                              autoFocus
                               required
                               fullWidth
                               variant="outlined"
@@ -490,7 +486,6 @@ function SignIn() {
                               }
                               id="password"
                               autoComplete="current-password"
-                              autoFocus
                               required
                               fullWidth
                               variant="outlined"
