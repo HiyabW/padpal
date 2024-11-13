@@ -40,6 +40,13 @@
       padding-left: 1.2rem;
       padding-right: 1.2rem;
       order: 2;
+
+      p {
+        margin-bottom: 0!important;
+      }
+    }
+
+    .isEmpty {
       min-height:47px;
     }
 

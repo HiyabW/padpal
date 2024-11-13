@@ -3,6 +3,7 @@
   min-height:100%!important;
   padding: var(--standard-padding);
   padding-top: 4rem;
+  display: flex;
 
   h1 {
     font-size: 4rem;

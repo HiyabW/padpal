@@ -1,3 +1,4 @@
+import "./styles.css";
 import React, { useEffect } from "react";
 import ChatPreview from "./components/chatPreview";
 import ChatRoom from "./components/chatRoom";
@@ -5,7 +6,6 @@ import Cookies from "js-cookie";
 import CircularProgress from "@mui/material/CircularProgress";
 import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid2";
-import "./styles.css";
 import { motion } from "framer-motion";
 
 const Chat = () => {
@@ -83,7 +83,7 @@ const Chat = () => {
   }, []);
 
   return (
-    <Grid container className="Chat">
+    <Grid container className="Chat gradient-background2">
       {!isLoaded && isLoggedIn && (
         <motion.div
           initial={{ opacity: 0, y: 50 }}

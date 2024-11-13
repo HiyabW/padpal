@@ -25,7 +25,7 @@ const EditProfile = () => {
   const [agePreferences, setAgePreferences] = React.useState(null);
   const [budget, setBudgetPreferences] = React.useState(null);
   const [genderPreferences, setGenderPreferences] = React.useState([]);
-  const [isLoading, setIsLoading] = React.useState(null);
+  const [isLoading, setIsLoading] = React.useState(true);
 
   const id = Cookies.get("id");
 
@@ -155,6 +155,8 @@ const EditProfile = () => {
           // genderPreferences.current = data["user"].genderPreferences
           setGenderPreferences(data["user"].genderPreferences);
           console.log(genderPreferences);
+
+          setIsLoading(false)
         })
         .catch((err) => {
           console.log(err);
@@ -311,9 +313,6 @@ const EditProfile = () => {
                 "--CircularProgress-thickness": "24px",
               }}
             />
-            <h2>
-              Saving user changes<br></br>This may take some time...
-            </h2>
           </div>
         </motion.div>
       )}

@@ -39,7 +39,7 @@ const NavBar = () => {
       </h1>
       <Box className="navBarOptions">
         {chatOrFeedButton === "chat" && (
-          <Box display={"flex"} onClick={redirectToChat}>
+          <Box display={"flex"} marginLeft={"1rem"} onClick={redirectToChat}>
             <Tooltip title="Chat">
               <ChatBubbleIcon sx={{ marginTop: "0.1rem" }} />
             </Tooltip>
@@ -47,7 +47,7 @@ const NavBar = () => {
         )}
 
         {chatOrFeedButton !== "chat" && (
-          <Box display={"flex"} marginLeft={"2rem"} onClick={redirectToFeed}>
+          <Box display={"flex"} marginLeft={"1rem"} onClick={redirectToFeed}>
             <Tooltip title="Feed">
               <GroupsIcon />
             </Tooltip>

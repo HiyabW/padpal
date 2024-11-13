@@ -2,10 +2,13 @@
   height: 100%;
   padding: 1rem;
   padding-top: 3rem;
-  background: linear-gradient(300deg,#0f0f14,#1d4d7c, #477bb0);
-  background-size: 120% 120%;
-  animation: gradient-animation 8s ease infinite;
   color: var(--theme-dark-mode-primary-text);
+
+  h1 {
+    font-size: 1.5rem;
+    color: white;
+    text-align: center;
+  }
 
   .ChatRoom {
     height: 100%;
@@ -38,17 +41,5 @@
       height: 70%;
       width: 100%;
     }
-  }
-}
-
-@keyframes Chat {
-  0% {
-    background-position: 0% 50%;
-  }
-  50% {
-    background-position: 100% 50%;
-  }
-  100% {
-    background-position: 0% 50%;
   }
 }

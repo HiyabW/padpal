@@ -24,6 +24,7 @@ const ChatRoom = ({ user, justSent, setJustSent }) => {
   const [currMessage, setCurrMessage] = React.useState("");
   const currDate = useRef(null);
   let index = -1;
+  const regExp = /[a-zA-Z]/g;
 
   /**** Util functions -- mainly pertaining to date *****/
 
@@ -74,9 +75,8 @@ const ChatRoom = ({ user, justSent, setJustSent }) => {
     const day = date.getDate().toString().padStart(2, "0"); // add leading zero if needed
     const year = date.getFullYear();
 
-    const formattedDate = `${fullMonth} ${day}${
-      today.getFullYear() !== year ? `, ${year}` : ""
-    }`;
+    const formattedDate = `${fullMonth} ${day}${today.getFullYear() !== year ? `, ${year}` : ""
+      }`;
     return formattedDate;
   }
 
@@ -167,7 +167,9 @@ const ChatRoom = ({ user, justSent, setJustSent }) => {
           </p>
         </Box>
       );
+
     }
+
     return (
       <>
         {!isLastItem && dateObj}
@@ -181,7 +183,7 @@ const ChatRoom = ({ user, justSent, setJustSent }) => {
             outgoingOrIncoming === "outgoing" ? "right-start" : "left-start"
           }
         >
-          <Box className={`message ${outgoingOrIncoming}`}>
+          <Box className={`message ${outgoingOrIncoming} ${regExp.test(message) ? '' : 'isEmpty'}`}>
             <p>{message}</p>
           </Box>
         </Tooltip>
@@ -265,7 +267,7 @@ const ChatRoom = ({ user, justSent, setJustSent }) => {
           let date = new Date(user.SortedMessages[key]["date"]);
           const isLastItem =
             Object.keys(user.SortedMessages)[user.SortedMessages.length - 1] ===
-            key
+              key
               ? true
               : false;
 
