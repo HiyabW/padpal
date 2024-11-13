@@ -279,7 +279,7 @@ function SignIn() {
                 transition={{ duration: 0.5, delay: 0.6, ease: "easeInOut" }}
                 style={{ justifyItems: 'center' }}
               >
-                {!isLoading &&
+                {isLoading &&
 
                   <CircularProgress
                     size="10rem"
