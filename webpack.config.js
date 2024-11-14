@@ -69,6 +69,13 @@ const config = smp.wrap({
     module: {
         rules: [
             {
+                test: /\.(bin|wasm|weights)$/,
+                type: 'asset/resource',
+                generator: {
+                    filename: '[hash][ext][query]'
+                }
+            },
+            {
                 test: /\.css$/i,
                 use: [stylesHandler, 'css-loader'],
             },
