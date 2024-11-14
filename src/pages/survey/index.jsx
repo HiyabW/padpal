@@ -228,15 +228,24 @@ const Survey = () => {
 
   const compareFaces = async () => {
     setFacialVerificationLoading(true);
+    
+    console.log(0, realTimePhoto, identificationPhoto)
+
     if (!realTimePhoto || !identificationPhoto) return 0;
+
+    console.log(1)
 
     const MODEL_URL = "/models";
     await faceapi.nets.faceRecognitionNet.loadFromUri(MODEL_URL);
     await faceapi.nets.faceLandmark68Net.loadFromUri(MODEL_URL);
     await faceapi.nets.ssdMobilenetv1.loadFromUri(MODEL_URL);
 
+    console.log(2)
+
     const img1 = await faceapi.fetchImage(realTimePhoto);
     const img2 = await faceapi.fetchImage(identificationPhoto);
+
+    console.log(3)
 
     const detections1 = await faceapi
       .detectAllFaces(img1)
@@ -368,9 +377,8 @@ const Survey = () => {
                     <div className="iconDiv">
                       <ArrowBackIosNewIcon
                         onClick={back}
-                        className={`icon surveyBackArrow ${
-                          index > 0 ? "" : "invisible"
-                        }`}
+                        className={`icon surveyBackArrow ${index > 0 ? "" : "invisible"
+                          }`}
                         fontSize="large"
                       />
                       <HelpOutlineIcon
@@ -400,7 +408,7 @@ const Survey = () => {
                         <Divider />
                       </div>
                       <br></br>
-                      <div className="surveySection" style={{marginBottom: '2rem'}}>
+                      <div className="surveySection" style={{ marginBottom: '2rem' }}>
                         {question?.type === "text" && (
                           <SurveyOptionsText
                             question={question}
@@ -507,7 +515,7 @@ const Survey = () => {
               </motion.div>
             </>
           )}
-          {progress===100 && (
+          {progress === 100 && (
             <motion.div
               initial={{ opacity: 0, y: 50 }}
               animate={{ opacity: 1, y: 0 }}

@@ -120,7 +120,7 @@
     .surveyCard {
       position: relative;
       top: 50%;
-      height: 80%;
+      height: 100%;
       transform: translateY(-50%);
       max-width: 90%;
     }
@@ -156,7 +156,7 @@
     .surveyIntroCard {
       position: relative;
       top: 50%;
-      height: 50%;
+      height: 60%;
       transform: translateY(-50%);
       max-width: 90%;
 
@@ -169,7 +169,7 @@
     .surveyCard {
       position: relative;
       top: 50%;
-      height: 90%;
+      height: 100%;
       transform: translateY(-50%);
       max-width: 90%;
     }
