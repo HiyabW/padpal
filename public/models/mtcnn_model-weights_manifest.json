@@ -1,7 +1,7 @@
 [
     {
         "paths": [
-            "mtcnn_model-shard1.shard"
+            "mtcnn_model-shard1.bin"
         ],
         "weights": [
             {

@@ -612,7 +612,7 @@
             }
         ],
         "paths": [
-            "age_gender_model-shard1.shard"
+            "age_gender_model-shard1.bin"
         ]
     }
 ]

@@ -600,7 +600,7 @@
             }
         ],
         "paths": [
-            "face_expression_model-shard1.shard"
+            "face_expression_model-shard1.bin"
         ]
     }
 ]
