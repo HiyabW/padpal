@@ -234,6 +234,8 @@ function SignIn() {
         transition={{ duration: 0.2, ease: "easeInOut" }}
       >
         <div className={`signIn`}>
+        <img src={process.env.PUBLIC_URL + "/logo192.png"} alt="W3Schools.com" />
+            
           <Grid
             container
             spacing={10}
