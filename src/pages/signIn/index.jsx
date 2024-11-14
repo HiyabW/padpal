@@ -228,7 +228,7 @@ function SignIn() {
   } else {
     return (
       <motion.div
-        className="landingAndSignIn gradient-background2"
+        className={`landingAndSignIn gradient-background2 ${isLoading ? 'loadingLandingAndSignIn' : ''}`}
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 0.2, ease: "easeInOut" }}
@@ -278,11 +278,11 @@ function SignIn() {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5, delay: 0.6, ease: "easeInOut" }}
                 style={{ justifyItems: 'center' }}
-                class="text-center"
               >
                 {isLoading &&
 
                   <CircularProgress
+                    className="text-center"
                     size="10rem"
                     style={{ color: "white", marginBottom: "2rem" }}
                     sx={{

@@ -20,6 +20,7 @@ const isProduction = process.env.NODE_ENV == 'production';
 
 const stylesHandler = isProduction ? MiniCssExtractPlugin.loader : 'style-loader';
 
+const PUBLIC_URL = process.env.PUBLIC_URL || '';
 
 
 const config = smp.wrap({
@@ -44,7 +45,7 @@ const config = smp.wrap({
         }),
         new webpack.DefinePlugin({
             // 'process.env': JSON.stringify(process.env), // Define all process.env variables
-            'process.env.PUBLIC_URL': process.env.PUBLIC_URL,
+            'process.env.PUBLIC_URL': JSON.stringify(PUBLIC_URL),
         }),
         // new BundleAnalyzerPlugin(),
 
