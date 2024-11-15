@@ -52,7 +52,8 @@ export const surveyQuestions = [
   },
   {
     id: 10,
-    "text": "What city(ies) are you looking to move to?\nHINT: Include Los Angeles in your selection to match with our sample dataset.",
+    "text": "What city(ies) are you looking to move to?",
+    subtext: "HINT: Include Los Angeles in your selection to match with our sample dataset.",
     label: "city",
     type: "select"
   },
