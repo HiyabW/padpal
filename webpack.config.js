@@ -6,6 +6,7 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const SpeedMeasurePlugin = require("speed-measure-webpack-plugin");
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 const TerserPlugin = require('terser-webpack-plugin');
+const CopyWebpackPlugin = require('copy-webpack-plugin');
 
 const webpack = require('webpack')
 
@@ -47,7 +48,11 @@ const config = smp.wrap({
             // 'process.env': JSON.stringify(process.env), // Define all process.env variables
             'process.env.PUBLIC_URL': JSON.stringify(PUBLIC_URL),
         }),
-        // new BundleAnalyzerPlugin(),
+        new CopyWebpackPlugin({
+            patterns: [
+                { from: 'public' }
+            ]
+        })
 
         // Add your plugins here
         // Learn more about plugins from https://webpack.js.org/configuration/plugins/

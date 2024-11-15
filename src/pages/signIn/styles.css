@@ -25,7 +25,12 @@
   justify-content: center;
   align-items: center;
   width: 100%;
-  min-height:200%!important;
+  overflow: scroll;
+  min-height:100%!important;
+  
+  .PadPalInfoGrid {
+    margin-bottom: 1rem;
+  }
 
   .cardHeader {
     text-align: center;

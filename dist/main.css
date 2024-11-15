@@ -20,7 +20,7 @@
   /* padding-left: 20rem;
   padding-right: 20rem; */
   overflow: scroll;
-  
+
   .x {
     justify-content: center;
     align-items: center;
@@ -39,16 +39,18 @@
     transform: translateY(-50%);
 
     .introIcon {
-        transform: scale(10);
+      transform: scale(10);
     }
   }
 
   .iconDiv {
     display: flex;
     justify-content: space-between;
+
     .invisible {
       opacity: 0;
     }
+
     .icon {
       &:hover {
         cursor: pointer;
@@ -75,12 +77,23 @@
         /* height: 100%; */
       }
     }
+
     h1 {
       font-size: 5rem;
       color: var(--theme-secondary-color);
       font-weight: 550;
     }
-    
+
+    .loadingText {
+      font-size: 1.5rem;
+      text-align: center;
+      font-family: var(--theme-secondary-font-family);
+    }
+
+    p {
+      font-size: 1.2rem;
+    }
+
 
     .next {
       width: 30%;
@@ -90,61 +103,97 @@
       z-index: 1000;
     }
   }
+
   @media screen and (max-width: 768px) {
-   h1 {
-    font-size: 3rem!important;
-   }
-   h2 {
-    font-size: 2rem!important;
-    line-height: 2.5rem!important;
-   }
-   p{
-    font-size: 1rem!important;
-   }
-   .introIcon{
-    transform: scale(4)!important;
+    h1 {
+      font-size: 3rem !important;
+    }
 
-   }
-   .surveyIntroCard {
-    position: relative;
-    top: 50%;
-    height: 50%;
-    transform: translateY(-50%);
-    max-width: 90%;
-   }
+    h2 {
+      font-size: 2rem !important;
+      line-height: 2.5rem !important;
+    }
 
-   .surveyCard {
-    position: relative;
-    top: 50%;
-    height: 80%;
-    transform: translateY(-50%);
-    max-width: 90%;
-   }
+    p {
+      font-size: 1rem !important;
+    }
 
-   .icon {
-    transform: scale(0.6)!important;
-   }
+    .introIcon {
+      transform: scale(4) !important;
+
+    }
+
+    .surveyIntroCard {
+      position: relative;
+      top: 50%;
+      height: 50%;
+      transform: translateY(-50%);
+      max-width: 90%;
+    }
+
+    .surveyCard {
+      position: relative;
+      top: 50%;
+      height: 100%;
+      transform: translateY(-50%);
+      max-width: 90%;
+    }
+
+    .icon {
+      transform: scale(0.6) !important;
+    }
   }
+
+  @media screen and (max-width: 400px) {
+    h1 {
+      font-size: 2rem !important;
+    }
+
+    h2 {
+      font-size: 1.5rem !important;
+      line-height: 1.6rem !important;
+    }
+
+    h3 {
+      font-size: 1rem;
+    }
+
+    p {
+      font-size: 0.8rem !important;
+    }
+
+    .introIcon {
+      transform: scale(3) !important;
+
+    }
+
+    .surveyIntroCard {
+      position: relative;
+      top: 50%;
+      height: 60%;
+      transform: translateY(-50%);
+      max-width: 90%;
+
+      button {
+        width: 9rem;
+        font-size: 0.8rem;
+      }
+    }
+
+    .surveyCard {
+      position: relative;
+      top: 50%;
+      height: 100%;
+      transform: translateY(-50%);
+      max-width: 90%;
+    }
+
+    .icon {
+      transform: scale(0.6) !important;
+    }
+  }
+
 }
-
-.gradient-background {
-  background: linear-gradient(228deg, #7d91b7, #3a74e5, #142e67);
-  background-size: 180% 180%;
-  animation: gradient-animation 10s ease infinite;
-}
-
-@keyframes gradient-animation {
-  0% {
-    background-position: 0% 50%;
-  }
-  50% {
-    background-position: 100% 50%;
-  }
-  100% {
-    background-position: 0% 50%;
-  }
-}
-
 .buttonList {
   width: 100%;
 
@@ -153,7 +202,7 @@
   }
 
   .buttonListElement {
-    width: 50%;
+    min-width: 50%;
     border-radius: 5px;
     border-style: solid;
     border-color: var(--theme-primary-color);
@@ -183,7 +232,7 @@
   justify-content: center;
   align-items: center;
   position: relative;
-  padding-bottom:1rem;
+  padding-bottom: 1rem;
 
   .surveyPictureDivItem {
     height: 100%;
@@ -196,38 +245,61 @@
     position: relative;
 
     .surveyImage {
-        width: 100%;
-        height: 100%;
-        object-fit:cover;
-        border-radius: 10px;
-        z-index: 1;
-        position: relative;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: 10px;
+      z-index: 1;
+      position: relative;
     }
 
     .surveyImageCancel {
-        z-index: 1000;
-        position: absolute;
-        right: 0;
-        top:0;
+      z-index: 1000;
+      position: absolute;
+      right: 0;
+      top: 0;
     }
 
     .addPicDesc {
       font-size: 1rem;
       margin-left: 0.5rem;
+      margin: 0;
+      margin-left: 0 !important;
     }
   }
 
   .selected {
     border: 0px !important;
-    
+
   }
 
   @media screen and (max-width: 768px) {
     height: 10rem;
+
+    .addImageIcon {
+      transform: scale(0.8);
+    }
+
+    .addPicDesc {
+      font-size: 0.6rem !important;
+    }
   }
 }
+@media screen and (max-width: 994px) {
+    video {
+        width: 20rem;
+    }
 
+    .addImageIcon {
+        transform: scale(0.8);
+    }
 
+    .addPicDesc {
+        margin: 0;
+        margin-left: 0!important;
+        font-size: 0.6rem!important;
+    }
+}
 .fade {
   transition: opacity 1s ease-in-out !important;
 }
@@ -244,12 +316,16 @@
   position: absolute;
 }
 
+.loadingLandingAndSignIn {
+  min-height: 100%!important;
+}
+
 .landingAndSignIn {
   display: block;
   justify-content: center;
   align-items: center;
   width: 100%;
-  height: 100%;
+  min-height:200%!important;
 
   .cardHeader {
     text-align: center;
@@ -285,17 +361,6 @@
     color: var(--theme-background-color-dark);
   }
 }
-@keyframes gradient-animation {
-  0% {
-    background-position: 0% 50%;
-  }
-  50% {
-    background-position: 100% 50%;
-  }
-  100% {
-    background-position: 0% 50%;
-  }
-}
 
 .signIn {
   display: block;
@@ -319,7 +384,7 @@
   font-family: var(--theme-secondary-font-family);
 }
 
-@media screen and (max-width: 768px) {
+@media screen and (max-width: 900px) {
   .PadPalInfoGrid {
     text-align: center;
   }
@@ -637,30 +702,58 @@
   }
 }
 
-.gradient-background {
-  background: linear-gradient(228deg, #7d91b7, #3a74e5, #142e67);
-  background-size: 180% 180%;
-  animation: gradient-animation 6s ease infinite;
-}
-
-@keyframes gradient-animation {
-  0% {
-    background-position: 0% 50%;
-  }
-  50% {
-    background-position: 100% 50%;
-  }
-  100% {
-    background-position: 0% 50%;
-  }
-}
-
 .keyIcon {
     font-size: 10vw!important;
     border-radius: 1rem;
     color: white;
     background-color: transparent;
 }
+.Chat {
+  height: 100%;
+  padding: 1rem;
+  padding-top: 3rem;
+  color: var(--theme-dark-mode-primary-text);
+
+  h1 {
+    font-size: 1.5rem;
+    color: white;
+    text-align: center;
+  }
+
+  .ChatRoom {
+    height: 100%;
+    padding: 3vw;
+  }
+
+  .ChatListGrid {
+    align-self: center;
+    height: 95%;
+    border-radius: 1rem;
+    background-color: var(--theme-dark-background-color-2);
+    color: #5f6387;
+
+    .ChatList {
+      height: 100%;
+      overflow-y: scroll;
+      overflow-x: hidden;
+    }
+  }
+
+  @media screen and (max-width: 768px) {
+    
+    .ChatListGrid {
+      height: 25%;
+      width: 100%;
+      margin-top: 2rem;
+      margin-bottom: 0.5rem;
+    }
+    .ChatRoomGrid {
+      height: 70%;
+      width: 100%;
+    }
+  }
+}
+
 .ChatPreview {
   overflow: hidden;
   padding: 1rem;
@@ -747,6 +840,13 @@
       padding-left: 1.2rem;
       padding-right: 1.2rem;
       order: 2;
+
+      p {
+        margin-bottom: 0!important;
+      }
+    }
+
+    .isEmpty {
       min-height:47px;
     }
 
@@ -788,61 +888,6 @@
     .message {
 
     }
-  }
-}
-
-.Chat {
-  height: 100%;
-  padding: 1rem;
-  padding-top: 3rem;
-  background: linear-gradient(300deg,#0f0f14,#1d4d7c, #477bb0);
-  background-size: 120% 120%;
-  animation: gradient-animation 8s ease infinite;
-  color: var(--theme-dark-mode-primary-text);
-
-  .ChatRoom {
-    height: 100%;
-    padding: 3vw;
-  }
-
-  .ChatListGrid {
-    align-self: center;
-    height: 95%;
-    border-radius: 1rem;
-    background-color: var(--theme-dark-background-color-2);
-    color: #5f6387;
-
-    .ChatList {
-      height: 100%;
-      overflow-y: scroll;
-      overflow-x: hidden;
-    }
-  }
-
-  @media screen and (max-width: 768px) {
-    
-    .ChatListGrid {
-      height: 25%;
-      width: 100%;
-      margin-top: 2rem;
-      margin-bottom: 0.5rem;
-    }
-    .ChatRoomGrid {
-      height: 70%;
-      width: 100%;
-    }
-  }
-}
-
-@keyframes Chat {
-  0% {
-    background-position: 0% 50%;
-  }
-  50% {
-    background-position: 100% 50%;
-  }
-  100% {
-    background-position: 0% 50%;
   }
 }
 
@@ -947,6 +992,7 @@
   min-height:100%!important;
   padding: var(--standard-padding);
   padding-top: 4rem;
+  display: flex;
 
   h1 {
     font-size: 4rem;
@@ -1061,6 +1107,42 @@ body {
 
   #root {
     height: 100%;
+  }
+}
+
+.gradient-background {
+  background: linear-gradient(228deg, #7d91b7, #3a74e5, #142e67);
+  background-size: 180% 180%;
+  animation: gradient-animation 6s ease infinite;
+}
+
+@keyframes gradient-animation {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+.gradient-background2 {
+  background: linear-gradient(300deg,#0f0f14,#1d4d7c, #477bb0);
+  background-size: 180% 180%;
+  animation: gradient-animation 6s ease infinite;
+}
+
+@keyframes gradient-animation {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
   }
 }
 

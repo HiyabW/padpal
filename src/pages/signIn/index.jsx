@@ -27,6 +27,7 @@ const Card = styled(MuiCard)(({ theme }) => ({
   flexDirection: "column",
   width: "100%",
   padding: "4vw",
+  marginBottom: "1rem",
   gap: theme.spacing(2),
   boxShadow:
     "hsla(220, 30%, 5%, 0.05) 0px 5px 15px 0px, hsla(220, 25%, 10%, 0.05) 0px 15px 35px -5px",
@@ -234,7 +235,6 @@ function SignIn() {
         transition={{ duration: 0.2, ease: "easeInOut" }}
       >
         <div className={`signIn`}>
-        <img src={process.env.PUBLIC_URL + "/logo192.png"} alt="W3Schools.com" />
             
           <Grid
             container
