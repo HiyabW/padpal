@@ -29,17 +29,27 @@
     }
   }
 
+  #chatBackIcon {
+    margin-left: 0.5rem;
+    margin-bottom: 2rem;
+    margin-top: 1rem;
+    display: none;
+  }
+
   @media screen and (max-width: 768px) {
     
-    .ChatListGrid {
-      height: 25%;
+    .currViewMobile {
+      height: 90%;
       width: 100%;
-      margin-top: 2rem;
-      margin-bottom: 0.5rem;
+      display: block;
     }
-    .ChatRoomGrid {
-      height: 70%;
-      width: 100%;
+
+    .notCurrViewMobile {
+      display: none;
+    }
+
+    #chatBackIcon {
+      display: block;
     }
   }
 }

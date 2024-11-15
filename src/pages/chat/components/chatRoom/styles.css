@@ -76,11 +76,11 @@
   }
   @media screen and (max-width: 768px) {
     h1 {
-      font-size: 1rem;
+      font-size: 1.8rem;
     }
     img {
-      width: 3rem;
-      height: 3rem;
+      width: 4rem;
+      height: 4rem;
     }
     .messageInputBox {
       width: 85%!important;

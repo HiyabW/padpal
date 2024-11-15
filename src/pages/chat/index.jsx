@@ -7,6 +7,7 @@ import CircularProgress from "@mui/material/CircularProgress";
 import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid2";
 import { motion } from "framer-motion";
+import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIos";
 
 const Chat = () => {
   const isLoggedIn = Cookies.get("isLoggedIn");
@@ -15,6 +16,7 @@ const Chat = () => {
   const [isLoaded, setIsLoaded] = React.useState(false);
   const [justSent, setJustSent] = React.useState(null);
   const [apiKey, setApiKey] = React.useState(null);
+  const [currViewMobile, setCurrViewMobile] = React.useState("ChatPreview")
 
   const fetchData = async () => {
     try {
@@ -78,7 +80,7 @@ const Chat = () => {
 
       {isLoaded && isLoggedIn && (
         <>
-          <Grid size={4} className="ChatListGrid" sx={{ border: 1 }} spacing={2}>
+          <Grid size={4} className={`ChatListGrid ${currViewMobile === "ChatPreview" ? 'currViewMobile' : 'notCurrViewMobile'}`} sx={{ border: 1 }} spacing={2}>
             <Box className="ChatList">
               {Object.entries(data["Messages"]).map(([key]) => (
                 <ChatPreview
@@ -87,18 +89,24 @@ const Chat = () => {
                   justSent={justSent}
                   selectedUser={data["Messages"][selectedUser]}
                   setSelectedUser={setSelectedUser}
+                  setCurrViewMobile={setCurrViewMobile}
                 />
               ))}
             </Box>
           </Grid>
-          <Grid size={8} className="ChatRoomGrid" sx={{ height: "100%" }}>
+          <Grid size={8} className={`ChatRoomGrid ${currViewMobile === "ChatRoomGrid" ? 'currViewMobile' : 'notCurrViewMobile'}`} sx={{ height: "100%" }}>
             <Box className="ChatRoom">
               {selectedUser && (
-                <ChatRoom
-                  user={data["Messages"][selectedUser]}
-                  justSent={justSent}
-                  setJustSent={setJustSent}
-                />
+                <>
+                  <ArrowBackIosNewIcon
+                    onClick={() => setCurrViewMobile("ChatPreview")}
+                    id={`chatBackIcon`}
+                    fontSize="large" />
+                  <ChatRoom
+                    user={data["Messages"][selectedUser]}
+                    justSent={justSent}
+                    setJustSent={setJustSent} />
+                </>
               )}
               {!selectedUser && Object.keys(data["Messages"]).length > 0 && (
                 <Box

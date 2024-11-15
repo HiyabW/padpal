@@ -35,4 +35,20 @@
       cursor: pointer;
     }
   }
+
+  /* @media screen and (max-width: 768px) {
+    .currViewMobile {
+      height: 100%;
+      width: 100%;
+      display: block;
+    }
+
+    .notCurrViewMobile {
+      display: none;
+    }
+
+    #chatBackIcon {
+      display: block;
+    }
+  } */
 }

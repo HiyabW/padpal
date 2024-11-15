@@ -156,7 +156,7 @@ const UserCard = ({
   });
 
   const handleDragEnd = () => {
-    if (Math.abs(x.get()) > 50) {
+    if (Math.abs(x.get()) > 20) {
       const isAMatch = x.get() > 0 ? true : false;
       // first POST req to /saveMatch
       fetch("https://palpal-api.onrender.com/match/saveMatch", {

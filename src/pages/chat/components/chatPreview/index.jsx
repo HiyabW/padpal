@@ -4,9 +4,10 @@ import Stack from "react-bootstrap/Stack";
 import "./styles.css";
 import Grid from "@mui/material/Grid2";
 
-const ChatPreview = ({userId, user, selectedUser, justSent, setSelectedUser}) => {
+const ChatPreview = ({userId, user, selectedUser, justSent, setSelectedUser, setCurrViewMobile}) => {
   const handleClick = () => {
     setSelectedUser(user.id)
+    setCurrViewMobile("ChatRoomGrid")
   }
   return (
     <Box className="ChatPreview" onClick={handleClick}>
