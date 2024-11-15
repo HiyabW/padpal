@@ -92,9 +92,14 @@
 @media screen and (max-width: 900px) {
   .PadPalInfoGrid {
     text-align: center;
+    margin-bottom: 0;
   }
   .welcome {
     margin-bottom: 0.5rem !important;
+
+    .welcomeText {
+      font-size: 0.9rem!important;
+    }
   }
   .learnMoreButton {
     margin-top: 0.5rem!important;

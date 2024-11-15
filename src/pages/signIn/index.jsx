@@ -238,7 +238,7 @@ function SignIn() {
             
           <Grid
             container
-            spacing={10}
+            spacing={{lg:10, md:10, sm:5, xs:5}}
             sx={{ height: "100%", alignItems: "center", padding: "10vw", position: "absolute", width: '100%' }}
           >
             <Grid className="PadPalInfoGrid" size={{ xs: 12, md: 7 }}>
