@@ -12,7 +12,7 @@ const ChatPreview = ({userId, user, selectedUser, justSent, setSelectedUser, set
   return (
     <Box className="ChatPreview" onClick={handleClick}>
       <Stack direction="column">
-        <Grid container spacing={10}>
+        <Grid container spacing={4}>
           <Grid size={{lg: 2, md:2.5, sm: 2, xs: 2.5}}>
             <img src={user?.Pfp} />
           </Grid>

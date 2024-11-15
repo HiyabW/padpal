@@ -1,6 +1,7 @@
 .ChatPreview {
   overflow: hidden;
   padding: 1rem;
+  padding-bottom: 0.5rem;
   border-radius: 1rem;
   transition: all .2s ease-in-out;
 
@@ -42,8 +43,7 @@
     cursor: pointer;
   }
 
-  @media screen and (max-width: 768px) {
-
+  @media screen and (max-width: 1350px) {
     img {
       width: 4rem;
       height: 4rem;
