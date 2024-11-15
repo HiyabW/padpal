@@ -43,7 +43,7 @@ const ViewProfile = () => {
   }, []);
 
   return (
-    <div className="feed gradient-background" style={{paddingTop: '8vh'}}>
+    <div className="feed gradient-background">
       <>
         {user && (
           <Box className="centeredDiv" sx={{color:'black', flexDirection:'column'}}>
