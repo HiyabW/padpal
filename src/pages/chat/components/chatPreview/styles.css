@@ -2,12 +2,12 @@
   overflow: hidden;
   padding: 1rem;
   border-radius: 1rem;
-  transition: all .2s ease-in-out; 
+  transition: all .2s ease-in-out;
 
   img {
     border-radius: 50%;
-    width: 4rem;
-    height: 4rem;
+    width: 5rem;
+    height: 5rem;
     object-fit: cover;
   }
 
@@ -16,6 +16,7 @@
     display: flex;
     justify-content: space-between;
     color: var(--theme-dark-mode-primary-text);
+
     h1 {
       font-weight: bold;
       font-size: 1rem;
@@ -36,8 +37,16 @@
 
   &:hover {
     overflow: hidden;
-    transform: scale(1.01); 
+    transform: scale(1.01);
     background-color: rgb(50, 60, 72);
     cursor: pointer;
+  }
+
+  @media screen and (max-width: 768px) {
+
+    img {
+      width: 4rem;
+      height: 4rem;
+    }
   }
 }
