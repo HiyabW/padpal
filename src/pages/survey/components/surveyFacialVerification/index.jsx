@@ -146,7 +146,6 @@ const SurveyFacialVerification = ({
               >
                 <AddCircleOutlineIcon className="addImageIcon" fontSize="large" />
               </IconButton>
-              <p className="addPicDesc" style={{color:'#757575'}}>Take live photo</p>
             </>
           )}
         </Grid>
@@ -154,9 +153,8 @@ const SurveyFacialVerification = ({
         {/* <AllCameras /> */}
 
         <Grid
-          className={`surveyPictureDivItem ${
-            identificationPhoto ? "selected" : ""
-          }`}
+          className={`surveyPictureDivItem ${identificationPhoto ? "selected" : ""
+            }`}
           size={4}
         >
           {identificationPhoto && (
@@ -182,11 +180,12 @@ const SurveyFacialVerification = ({
             >
               <AddCircleOutlineIcon className="addImageIcon" fontSize="large" />
               <VisuallyHiddenInput
+                accept="image/png, image/gif, image/jpeg"
                 type="file"
                 onChange={(e) => updateAnswer(e, 2)}
                 label={question.placeholder}
                 className="picturesSurvey" />
-            </IconButton><p className="addPicDesc" style={{color:'#757575'}}>Upload identification</p></>
+            </IconButton></>
           )}
         </Grid>
       </Grid>

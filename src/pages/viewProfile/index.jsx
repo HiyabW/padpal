@@ -16,37 +16,41 @@ const ViewProfile = () => {
 
   const id = searchParams.get("id");
 
-  function redirectToEditProfile() {
-    window.location = "/editProfile";
-  }
-
   useEffect(() => {
-    // fetch data on currUser
-    fetch("https://palpal-api.onrender.com/feed/getUser", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        id: id,
-      }),
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        setUser(data["user"]);
-        setUsers(data["user"]);
-        setImages(data["images"]);
+    if (id=="undefined") {
+      window.location = "/"
+    }
+    else {
+
+      console.log(id)
+      // fetch data on currUser
+      fetch("https://palpal-api.onrender.com/feed/getUser", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          id: id,
+        }),
       })
-      .catch((err) => {
-        console.log(err);
-      });
+        .then((response) => response.json())
+        .then((data) => {
+          setUser(data["user"]);
+          setUsers(data["user"]);
+          setImages(data["images"]);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
   }, []);
+
 
   return (
     <div className="feed gradient-background">
       <>
         {user && (
-          <Box className="centeredDiv" sx={{color:'black', flexDirection:'column'}}>
+          <Box className="centeredDiv" sx={{ color: 'black', flexDirection: 'column' }}>
             <UserCard
               isRotated={null}
               user={user}
@@ -57,9 +61,6 @@ const ViewProfile = () => {
               images={images}
               feedOrViewProfile={'view profile'}
             />
-            { user._id === Cookies.get("id") &&
-              <Button variant="contained" className="editProfileButton" onClick={redirectToEditProfile}>Edit Profile</Button>
-            }
           </Box>
         )}
         {!user && (

@@ -81,6 +81,10 @@ function SignIn() {
     setIsSignIn(!isSignIn);
     setEmail(null);
     setPassword(null);
+    setEmailError(null)
+    setPasswordError(null)
+    setPhoneError(null)
+    setNameError(null)
   };
 
   const handleSubmit = (event) => {
@@ -89,6 +93,32 @@ function SignIn() {
   };
 
   const validateInputs = () => {
+    if (!isSignIn) {
+      if (!name || name.length < 2 || /\d/g.test(name) || /[-’/`~!#*$@_%+=.,^&(){}[\]|;:”<>?\\]/g.test(name) || /\p{Emoji}/u.test(name)) {
+        setNameError(true);
+        setNameErrorMessage("Please enter a valid name.");
+        return;
+      } else {
+        setNameError(false);
+        setNameErrorMessage("");
+      }
+
+      if (!phone || /[a-zA-Z]/.test(phone) || /[-’/`~!#*$@_%+=.,^&(){}[\]|;:”<>?\\]/g.test(phone) || /\p{Emoji}/u.test(phone) || phone.length !== 10 || phone.at(0) === '0') {
+        if (/[-’/`~!#*$@_%+=.,^&(){}[\]|;:”<>?\\]/g.test(phone)) {
+          setPhoneError(true);
+          setPhoneErrorMessage("Please only include numbers.");
+        }
+        else {
+          setPhoneError(true);
+          setPhoneErrorMessage("Please enter a valid phone number.");
+        }
+        return;
+      } else {
+        setPhoneError(false);
+        setPhoneErrorMessage("");
+      }
+    }
+
     if (!email || !/\S+@\S+\.\S+/.test(email)) {
       setEmailError(true);
       setEmailErrorMessage("Please enter a valid email address.");
@@ -98,33 +128,19 @@ function SignIn() {
       setEmailErrorMessage("");
     }
 
-    if (!password || password.value < 8) {
-      setPasswordError(true);
-      setPasswordErrorMessage("Password must be at least 8 characters long.");
+    if (!password || password.length < 5 || /\p{Emoji}/u.test(password)) {
+      if (/\p{Emoji}/u.test(password)) {
+        setPasswordError(true);
+        setPasswordErrorMessage("Password cannot contain emojis.");
+      }
+      else {
+        setPasswordError(true);
+        setPasswordErrorMessage("Password must be at least 5 characters long.");
+      }
       return;
     } else {
       setPasswordError(false);
       setPasswordErrorMessage("");
-    }
-
-    if (!isSignIn) {
-      if (!name) {
-        setNameError(true);
-        setNameErrorMessage("Please enter a valid name.");
-        return;
-      } else {
-        setPhoneError(false);
-        setPhoneErrorMessage("");
-      }
-
-      if (!phone || /[a-zA-Z]/.test(phone)) {
-        setPhoneError(true);
-        setPhoneErrorMessage("Please enter a valid phone number.");
-        return;
-      } else {
-        setPhoneError(false);
-        setPhoneErrorMessage("");
-      }
     }
 
     // either sign in or sign up user depending on isSignIn
@@ -235,10 +251,10 @@ function SignIn() {
         transition={{ duration: 0.2, ease: "easeInOut" }}
       >
         <div className={`signIn`}>
-            
+
           <Grid
             container
-            spacing={{lg:10, md:10, sm:5, xs:5}}
+            spacing={{ lg: 10, md: 10, sm: 5, xs: 5 }}
             sx={{ height: "100%", alignItems: "center", padding: "10vw", position: "absolute", width: '100%' }}
           >
             <Grid className="PadPalInfoGrid" size={{ xs: 12, md: 7 }}>
@@ -337,8 +353,9 @@ function SignIn() {
                               required
                               fullWidth
                               variant="outlined"
-                              color={emailError ? "error" : "primary"}
+                              color={nameError ? "error" : "primary"}
                               sx={{ ariaLabel: "name" }}
+                              value={name}
                             />
                           </FormControl>
                           <FormControl className="formElements">
@@ -350,13 +367,14 @@ function SignIn() {
                               id="phone"
                               type="phone"
                               name="phone"
-                              placeholder="6617542995"
+                              placeholder="6619772543"
                               autoComplete="phone"
                               required
                               fullWidth
                               variant="outlined"
-                              color={emailError ? "error" : "primary"}
+                              color={phoneError ? "error" : "primary"}
                               sx={{ ariaLabel: "email" }}
+                              value={phone}
                             />
                           </FormControl>
 
@@ -380,15 +398,8 @@ function SignIn() {
                             />
                           </FormControl>
                           <FormControl>
-                            <Box
-                              sx={{
-                                display: "flex",
-                                justifyContent: "space-between",
-                              }}
-                            >
-                              <FormLabel htmlFor="password">Password</FormLabel>
-                            </Box>
-                            <OutlinedInput
+                            <FormLabel htmlFor="password">Password</FormLabel>
+                            <TextField
                               onChange={handlePasswordChange}
                               error={passwordError}
                               helperText={passwordErrorMessage}
@@ -420,6 +431,7 @@ function SignIn() {
                               fullWidth
                               variant="outlined"
                               color={passwordError ? "error" : "primary"}
+                              value={password}
                             />
                           </FormControl>
                           <FormControlLabel
@@ -452,16 +464,9 @@ function SignIn() {
                               value={email}
                             />
                           </FormControl>
-                          <FormControl>
-                            <Box
-                              sx={{
-                                display: "flex",
-                                justifyContent: "space-between",
-                              }}
-                            >
-                              <FormLabel htmlFor="password">Password</FormLabel>
-                            </Box>
-                            <OutlinedInput
+                          <FormControl className="formElements">
+                            <FormLabel htmlFor="password">Password</FormLabel>
+                            <TextField
                               onChange={handlePasswordChange}
                               error={passwordError}
                               helperText={passwordErrorMessage}
@@ -493,6 +498,7 @@ function SignIn() {
                               fullWidth
                               variant="outlined"
                               color={passwordError ? "error" : "primary"}
+                              value={password}
                             />
                           </FormControl>
                           <FormControlLabel
@@ -505,6 +511,7 @@ function SignIn() {
                             fullWidth
                             variant="contained"
                             onClick={validateInputs}
+                            disabled={(email?.length > 0 && password?.length > 0) ? false : true}
                           >
                             Sign in
                           </Button>
@@ -528,6 +535,7 @@ function SignIn() {
                             fullWidth
                             variant="contained"
                             onClick={validateInputs}
+                            disabled={(email?.length > 0 && password?.length > 0 && phone?.length > 0 && name?.length > 0) ? false : true}
                           >
                             Sign up
                           </Button>

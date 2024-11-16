@@ -19,7 +19,7 @@ const SurveyOptionsSelect = ({
       currSelectedElement.classList.remove("selected");
     }
     // dont change currSelectedAnswer if all they did was hit the X to clear the autoselect text input
-    if (e.target.innerHTML.includes("<path")) {
+    if (e.target.innerHTML.includes("<path") || e.target.innerHTML==="") {
       return;
     }
 

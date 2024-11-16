@@ -137,6 +137,12 @@ const Survey = () => {
         );
         return;
       }
+      else if (resultOfFacialVerification === -1) {
+        setError(
+          `Face not identified in one or more photos you've uploaded. Please retake/select a different photo.`
+        );
+        return;
+      }
     }
     /////////////////////////////////////////////////////////
     /* First save answer */
@@ -227,14 +233,13 @@ const Survey = () => {
   /********************** Facial Verification Functions **********************/
 
   const compareFaces = async () => {
-    setFacialVerificationLoading(true);
-    
     console.log(0, realTimePhoto, identificationPhoto)
 
     if (!realTimePhoto || !identificationPhoto) return 0;
 
     console.log(1)
-
+    
+    setFacialVerificationLoading(true);
     const MODEL_URL = process.env.PUBLIC_URL + "/models";
     await faceapi.nets.faceRecognitionNet.loadFromUri(MODEL_URL);
     await faceapi.nets.faceLandmark68Net.loadFromUri(MODEL_URL);
@@ -256,6 +261,8 @@ const Survey = () => {
       .withFaceLandmarks()
       .withFaceDescriptors();
 
+    console.log(4, detections1, detections2)
+
     if (detections1.length > 0 && detections2.length > 0) {
       const descriptor1 = detections1[0].descriptor;
       const descriptor2 = detections2[0].descriptor;
@@ -268,6 +275,8 @@ const Survey = () => {
 
       return result;
     }
+    setFacialVerificationLoading(false);
+    return -1
   };
 
   /***************************************************************************/
@@ -490,7 +499,9 @@ const Survey = () => {
                           )}
                         {question?.type === "facialVerification" &&
                           facialVerificationLoading && (
-                            <CircularProgress color="inherit" />
+                            <div style={{ justifyContent: "center", display: "flex" }}>
+                              <CircularProgress color="inherit" />
+                            </div>
                           )}
                       </div>
                       <div

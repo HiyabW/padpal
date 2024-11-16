@@ -8,6 +8,7 @@ import AccessTime from "@mui/icons-material/AccessTime";
 import Button from "@mui/material/Button";
 import DotProgress from "./components/DotProgress";
 import Cookies from "js-cookie";
+import Grid from "@mui/material/Grid2";
 
 const Divider = styled(MuiDivider)(({ theme }) => ({
   marginTop: "1rem",
@@ -17,6 +18,10 @@ const Divider = styled(MuiDivider)(({ theme }) => ({
   borderColor: "divider",
   backgroundColor: "background.paper",
 }));
+
+function redirectToEditProfile() {
+  window.location = "/editProfile";
+}
 
 /************* Utils functions *************/
 
@@ -285,10 +290,19 @@ const UserCard = ({
       </motion.div>
       <motion.div className="userFeedInfoDiv">
         {/* If AI BOT, don't show budget or expected move out */}
-        <h2>
-          {user.name}
-          {user?.age ? `, ${getAge(user.age)}` : ``}
-        </h2>
+        <Grid container spacing={2} sx={{marginBottom: '1rem'}}>
+          <Grid size={{ lg: 12, md: 12, sm: 12, xs: 6 }}>
+            <h2>
+              {user.name}
+              {user?.age ? `, ${getAge(user.age)}` : ``}
+            </h2>
+          </Grid>
+          <Grid size={{ lg: 12, md: 12, sm: 12, xs: 6 }} sx={{display:'flex'}}>
+            {user._id === Cookies.get("id") &&
+              <Button variant="contained" disableElevation className="editProfileButton" onClick={redirectToEditProfile}>Edit Profile</Button>
+            }
+          </Grid>
+        </Grid>
         {user._id !== "6730784af24ec4375cf95a17" && (
           <>
             <h3 style={{ marginTop: "6px" }}>

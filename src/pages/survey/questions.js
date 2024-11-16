@@ -182,7 +182,7 @@ export const surveyQuestions = [
   {
     id: 19,
     "text": "One last thing!",
-    "subtext": "For the safety of our users, facial identity verification is required in order to be registered for padpal. We ask that you upload a real time photo of yourself, as well as a valid identification photo document.",
+    "subtext": "For the safety of our users, facial identity verification is required in order to use padpal. Please upload a real time photo of yourself, as well as a valid identification photo document. (But since this is a prototype, any photo with you in it will suffice for now)",
     label: "hobbies",
     type: "facialVerification"
   }
