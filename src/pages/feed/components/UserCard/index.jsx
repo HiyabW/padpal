@@ -156,7 +156,7 @@ const UserCard = ({
 
   const rotate = useTransform(() => {
     console.log("isRotated: ", isRotated);
-    const offset = isFront ? 0.00001 : isRotated % 2 ? 6 : -6;
+    const offset = (isFront || window.innerWidth<=900) ? 0.00001 : isRotated % 2 ? 6 : -6;
     return `${rotateRaw.get() + offset}deg`;
   });
 
@@ -316,7 +316,7 @@ const UserCard = ({
           </>
         )}
         <Divider />
-        <div className="userFeedInfo">
+        <div className="userFeedInfo" style={{height: window.innerWidth<=900 ? '20rem' : ''}} >
           <p>{user.bio}</p>
           <br></br>
           <div className="preferences">

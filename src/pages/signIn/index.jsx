@@ -256,7 +256,7 @@ function SignIn() {
           animate={{ opacity: isMobileIntroVisible ? 1 : 0 }} // Fade in/out
           exit={{ opacity: 0 }}             // Fade out when exiting
           transition={{ duration: 10 }}      // 1-second transition 
-          className={`landingAndSignIn onlyForMobile gradient-background2 ${isLoading ? 'loadingLandingAndSignIn' : ''}`} 
+          className={`landingAndSignIn onlyForMobile gradient-background2 ${isLoading ? 'loadingLandingAndSignIn' : ''}`}
           style={{
             position: 'absolute',
             width: '100%',
@@ -271,8 +271,8 @@ function SignIn() {
         <motion.div
           className={`landingAndSignIn gradient-background2 ${isLoading ? 'loadingLandingAndSignIn' : ''}`}
           initial={{ opacity: 0 }}
-          animate={{ opacity: (isMobileIntroVisible && window.innerWidth<=900) ? 0 : 1 }}
-          transition={{ duration: (!window.innerWidth<=900) ? 0.2 : 1, ease: "easeInOut" }}
+          animate={{ opacity: (isMobileIntroVisible && window.innerWidth <= 900) ? 0 : 1 }}
+          transition={{ duration: (!window.innerWidth <= 900) ? 0.2 : 1, ease: "easeInOut" }}
           style={{
             position: 'absolute',
             width: '100%',
@@ -289,7 +289,7 @@ function SignIn() {
                   <motion.div
                     initial={{ opacity: 0, y: 50 }}
                     animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.5, delay: window.innerWidth<=900 ? 1.7 : 0.2, ease: "easeInOut" }}
+                    transition={{ duration: 0.5, delay: window.innerWidth <= 900 ? 1.7 : 0.2, ease: "easeInOut" }}
                   >
                     <i className="padpalWelcome">PadPal.</i>
                   </motion.div>
@@ -298,7 +298,7 @@ function SignIn() {
                 <motion.div
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.5, delay: window.innerWidth<=900 ? 1.9 : 0.4, ease: "easeInOut" }}
+                  transition={{ duration: 0.5, delay: window.innerWidth <= 900 ? 1.9 : 0.4, ease: "easeInOut" }}
                 >
                   <Typography className="welcomeText" variant="h5">
                     Connecting Roommates, Creating Homes <br></br> One Swipe at a
@@ -320,7 +320,7 @@ function SignIn() {
                 <motion.div
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.5, delay: window.innerWidth<=900 ? 2.1 : 0.6, ease: "easeInOut" }}
+                  transition={{ duration: 0.5, delay: window.innerWidth <= 900 ? 2.1 : 0.6, ease: "easeInOut" }}
                   style={{ justifyItems: 'center' }}
                 >
                   {isLoading &&
@@ -425,21 +425,27 @@ function SignIn() {
                               name="password"
                               placeholder="password"
                               type={showPassword ? "text" : "password"}
-                              endAdornment={<IconButton
-                                aria-label={showPassword
-                                  ? "hide the password"
-                                  : "display the password"}
-                                onClick={handleClickShowPassword}
-                                onMouseDown={handleMouseDownPassword}
-                                onMouseUp={handleMouseUpPassword}
-                                edge="end"
-                              >
-                                {showPassword ? (
-                                  <VisibilityOff />
-                                ) : (
-                                  <Visibility />
-                                )}
-                              </IconButton>}
+                              slotProps={{
+                                input: {
+                                  endAdornment: (
+                                    <IconButton
+                                      aria-label={showPassword
+                                        ? "hide the password"
+                                        : "display the password"}
+                                      onClick={handleClickShowPassword}
+                                      onMouseDown={handleMouseDownPassword}
+                                      onMouseUp={handleMouseUpPassword}
+                                      edge="end"
+                                    >
+                                      {showPassword ? (
+                                        <VisibilityOff />
+                                      ) : (
+                                        <Visibility />
+                                      )}
+                                    </IconButton>
+                                  )
+                                }
+                              }}
                               id="password"
                               autoComplete="new-password"
                               required
@@ -466,7 +472,7 @@ function SignIn() {
                               type="email"
                               name="email"
                               placeholder="your@email.com"
-                              autoComplete={(shouldAutoComplete && window.innerWidth<=900) ? "email" : ""}
+                              autoComplete={(shouldAutoComplete && window.innerWidth <= 900) ? "email" : ""}
                               autoFocus={false}
                               required
                               fullWidth
@@ -485,21 +491,27 @@ function SignIn() {
                               autoFocus={false}
                               placeholder="password"
                               type={showPassword ? "text" : "password"}
-                              endAdornment={<IconButton
-                                aria-label={showPassword
-                                  ? "hide the password"
-                                  : "display the password"}
-                                onClick={handleClickShowPassword}
-                                onMouseDown={handleMouseDownPassword}
-                                onMouseUp={handleMouseUpPassword}
-                                edge="end"
-                              >
-                                {showPassword ? (
-                                  <VisibilityOff />
-                                ) : (
-                                  <Visibility />
-                                )}
-                              </IconButton>}
+                              slotProps={{
+                                input: {
+                                  endAdornment: (
+                                    <IconButton
+                                      aria-label={showPassword
+                                        ? "hide the password"
+                                        : "display the password"}
+                                      onClick={handleClickShowPassword}
+                                      onMouseDown={handleMouseDownPassword}
+                                      onMouseUp={handleMouseUpPassword}
+                                      edge="end"
+                                    >
+                                      {showPassword ? (
+                                        <VisibilityOff />
+                                      ) : (
+                                        <Visibility />
+                                      )}
+                                    </IconButton>
+                                  )
+                                }
+                              }}
                               id="password"
                               autoComplete="current-password"
                               required

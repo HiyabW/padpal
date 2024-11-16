@@ -120,9 +120,9 @@ const Survey = () => {
       setError("Password must be at least 8 characters");
       return;
     }
-    if (question?.label === "bio" && currSelectedAnswer?.length > 276) {
+    if (question?.label === "bio" && currSelectedAnswer?.length > 176) {
       setError(
-        `Your current bio is ${currSelectedAnswer?.length} characters. Please shorten it to be under 276.`
+        `Your current bio is ${currSelectedAnswer?.length} characters. Please shorten it to be under 176.`
       );
       return;
     }
