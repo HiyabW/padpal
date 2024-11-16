@@ -110,7 +110,7 @@ function SignIn() {
         setNameErrorMessage("");
       }
 
-      if (!phone || /[a-zA-Z]/.test(phone) || /[-’/`~!#*$@_%+=.,^&(){}[\]|;:”<>?\\]/g.test(phone) || /\p{Emoji}/u.test(phone) || phone.length !== 10 || phone.at(0) === '0') {
+      if (!phone || /[a-zA-Z]/.test(phone) || /[-’/`~!#*$@_%+=.,^&(){}[\]|;:”<>?\\]/g.test(phone) || phone.length !== 10 || phone.at(0) === '0') {
         if (/[-’/`~!#*$@_%+=.,^&(){}[\]|;:”<>?\\]/g.test(phone)) {
           setPhoneError(true);
           setPhoneErrorMessage("Please only include numbers.");
