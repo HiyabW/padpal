@@ -289,7 +289,7 @@ function SignIn() {
                   <motion.div
                     initial={{ opacity: 0, y: 50 }}
                     animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.5, delay: 0.2, ease: "easeInOut" }}
+                    transition={{ duration: 0.5, delay: window.innerWidth<=900 ? 1.7 : 0.2, ease: "easeInOut" }}
                   >
                     <i className="padpalWelcome">PadPal.</i>
                   </motion.div>
@@ -298,7 +298,7 @@ function SignIn() {
                 <motion.div
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.5, delay: 0.4, ease: "easeInOut" }}
+                  transition={{ duration: 0.5, delay: window.innerWidth<=900 ? 1.9 : 0.4, ease: "easeInOut" }}
                 >
                   <Typography className="welcomeText" variant="h5">
                     Connecting Roommates, Creating Homes <br></br> One Swipe at a
@@ -320,7 +320,7 @@ function SignIn() {
                 <motion.div
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.5, delay: 0.6, ease: "easeInOut" }}
+                  transition={{ duration: 0.5, delay: window.innerWidth<=900 ? 2.1 : 0.6, ease: "easeInOut" }}
                   style={{ justifyItems: 'center' }}
                 >
                   {isLoading &&
