@@ -465,6 +465,7 @@ function SignIn() {
                               name="email"
                               placeholder="your@email.com"
                               autoComplete="email"
+                              autoFocus={false}
                               required
                               fullWidth
                               variant="outlined"
@@ -479,6 +480,7 @@ function SignIn() {
                               error={passwordError}
                               helperText={passwordErrorMessage}
                               name="password"
+                              autoFocus={false}
                               placeholder="password"
                               type={showPassword ? "text" : "password"}
                               endAdornment={<IconButton
