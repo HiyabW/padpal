@@ -56,9 +56,11 @@ function SignIn() {
   const [showPassword, setShowPassword] = React.useState(false);
   const [isLoading, setIsLoading] = React.useState(false)
   const [isMobileIntroVisible, setIsMobileIntroVisible] = useState(true);
+  const [shouldAutoComplete, setShouldAutoComplete] = useState(true);
 
   setTimeout(() => {
     setIsMobileIntroVisible(false)
+    setShouldAutoComplete(true)
   }, "2000");
 
   // Before doing anything, if user is logged in already redirect them to feed page
@@ -464,7 +466,7 @@ function SignIn() {
                               type="email"
                               name="email"
                               placeholder="your@email.com"
-                              autoComplete="email"
+                              autoComplete={(shouldAutoComplete && window.innerWidth<=900) ? "email" : ""}
                               autoFocus={false}
                               required
                               fullWidth
