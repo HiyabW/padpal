@@ -255,7 +255,7 @@ function SignIn() {
         <motion.div initial={{ opacity: 1 }}          // Start fully visible
           animate={{ opacity: isMobileIntroVisible ? 1 : 0 }} // Fade in/out
           exit={{ opacity: 0 }}             // Fade out when exiting
-          transition={{ duration: 1 }}      // 1-second transition 
+          transition={{ duration: 10 }}      // 1-second transition 
           className={`landingAndSignIn onlyForMobile gradient-background2 ${isLoading ? 'loadingLandingAndSignIn' : ''}`} 
           style={{
             position: 'absolute',
