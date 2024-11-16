@@ -14,11 +14,11 @@ import MuiCard from "@mui/material/Card";
 import styled from "@mui/material/styles/styled";
 import Grid from "@mui/material/Grid2";
 import { motion } from "framer-motion";
-import LearnMore from "./components/LearnMore";
+import LearnMore from "./components/learnMore";
 import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import Alert from "@mui/material/Alert";
-import OutlinedInput from "@mui/material/OutlinedInput";
+import MobileIntro from "./components/MobileIntro";
 import IconButton from "@mui/material/IconButton";
 import CircularProgress from "@mui/material/CircularProgress"
 
@@ -55,6 +55,11 @@ function SignIn() {
   const [isSignIn, setIsSignIn] = React.useState(true);
   const [showPassword, setShowPassword] = React.useState(false);
   const [isLoading, setIsLoading] = React.useState(false)
+  const [isMobileIntroVisible, setIsMobileIntroVisible] = useState(true);
+
+  setTimeout(() => {
+    setIsMobileIntroVisible(false)
+  }, "2000");
 
   // Before doing anything, if user is logged in already redirect them to feed page
   const isLoggedIn = Cookies.get("isLoggedIn");
@@ -244,73 +249,88 @@ function SignIn() {
     window.location = "/feed";
   } else {
     return (
-      <motion.div
-        className={`landingAndSignIn gradient-background2 ${isLoading ? 'loadingLandingAndSignIn' : ''}`}
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ duration: 0.2, ease: "easeInOut" }}
-      >
-        <div className={`signIn`}>
+      <>
+        <motion.div initial={{ opacity: 1 }}          // Start fully visible
+          animate={{ opacity: isMobileIntroVisible ? 1 : 0 }} // Fade in/out
+          exit={{ opacity: 0 }}             // Fade out when exiting
+          transition={{ duration: 1 }}      // 1-second transition 
+          className={`landingAndSignIn onlyForMobile gradient-background2 ${isLoading ? 'loadingLandingAndSignIn' : ''}`} 
+          style={{
+            position: 'absolute',
+            width: '100%',
+            height: '100%',
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+          }}>
+          <MobileIntro />
+        </motion.div >
 
-          <Grid
-            container
-            spacing={{ lg: 10, md: 10, sm: 5, xs: 5 }}
-            sx={{ height: "100%", alignItems: "center", padding: "10vw", position: "absolute", width: '100%' }}
-          >
-            <Grid className="PadPalInfoGrid" size={{ xs: 12, md: 7 }}>
-              <Typography className="welcome" variant="h1">
-                <motion.div
-                  initial={{ opacity: 0, y: 50 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.5, delay: 0.2, ease: "easeInOut" }}
-                >
-                  <i className="padpalWelcome">PadPal.</i>
-                </motion.div>
-              </Typography>
-
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, delay: 0.4, ease: "easeInOut" }}
-              >
-                <Typography className="welcomeText" variant="h5">
-                  Connecting Roommates, Creating Homes <br></br> One Swipe at a
-                  Time.
+        <motion.div
+          className={`landingAndSignIn gradient-background2 ${isLoading ? 'loadingLandingAndSignIn' : ''}`}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: (isMobileIntroVisible && window.innerWidth<=900) ? 0 : 1 }}
+          transition={{ duration: (!window.innerWidth<=900) ? 0.2 : 1, ease: "easeInOut" }}
+          style={{
+            position: 'absolute',
+            width: '100%',
+          }}
+        >
+          <div className={`signIn`}>
+            <Grid
+              container
+              spacing={{ lg: 10, md: 10, sm: 5, xs: 5 }}
+              sx={{ height: "100%", alignItems: "center", padding: "10vw", position: "absolute", width: '100%' }}
+            >
+              <Grid className="PadPalInfoGrid" size={{ xs: 12, md: 7 }}>
+                <Typography className="welcome" variant="h1">
+                  <motion.div
+                    initial={{ opacity: 0, y: 50 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.5, delay: 0.2, ease: "easeInOut" }}
+                  >
+                    <i className="padpalWelcome">PadPal.</i>
+                  </motion.div>
                 </Typography>
-                <Button
-                  variant="contained"
-                  className="learnMoreButton"
-                  onClick={handleLearnMore}
+
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.5, delay: 0.4, ease: "easeInOut" }}
                 >
-                  Learn More
-                </Button>
-                <LearnMore
-                  open={openLearnMore}
-                  handleClose={handleCloseLearnMore}
-                />
-              </motion.div>
-            </Grid>
-            <Grid size={{ xs: 12, md: 5 }}>
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, delay: 0.6, ease: "easeInOut" }}
-                style={{ justifyItems: 'center' }}
-              >
-                {isLoading &&
+                  <Typography className="welcomeText" variant="h5">
+                    Connecting Roommates, Creating Homes <br></br> One Swipe at a
+                    Time.
+                  </Typography>
+                  <Button
+                    variant="contained"
+                    className="learnMoreButton"
+                    onClick={handleLearnMore}
+                  >
+                    Learn More
+                  </Button>
+                  <LearnMore
+                    open={openLearnMore}
+                    handleClose={handleCloseLearnMore} />
+                </motion.div>
+              </Grid>
+              <Grid size={{ xs: 12, md: 5 }}>
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.5, delay: 0.6, ease: "easeInOut" }}
+                  style={{ justifyItems: 'center' }}
+                >
+                  {isLoading &&
 
-                  <CircularProgress
-                    className="text-center"
-                    size="10rem"
-                    style={{ color: "white", marginBottom: "2rem" }}
-                    sx={{
-                      "--CircularProgress-thickness": "24px",
-                    }}
-                  />
-
-                }
-                {
-                  !isLoading && <Card variant="outlined" className="signInCard">
+                    <CircularProgress
+                      className="text-center"
+                      size="10rem"
+                      style={{ color: "white", marginBottom: "2rem" }}
+                      sx={{
+                        "--CircularProgress-thickness": "24px",
+                      }} />}
+                  {!isLoading && <Card variant="outlined" className="signInCard">
                     {error && (
                       <div sx={{ width: "50%" }}>
                         <Alert severity="error">{error}</Alert>
@@ -355,8 +375,7 @@ function SignIn() {
                               variant="outlined"
                               color={nameError ? "error" : "primary"}
                               sx={{ ariaLabel: "name" }}
-                              value={name}
-                            />
+                              value={name} />
                           </FormControl>
                           <FormControl className="formElements">
                             <FormLabel htmlFor="phone">Phone Number</FormLabel>
@@ -374,8 +393,7 @@ function SignIn() {
                               variant="outlined"
                               color={phoneError ? "error" : "primary"}
                               sx={{ ariaLabel: "email" }}
-                              value={phone}
-                            />
+                              value={phone} />
                           </FormControl>
 
                           <FormControl className="formElements">
@@ -394,8 +412,7 @@ function SignIn() {
                               variant="outlined"
                               color={emailError ? "error" : "primary"}
                               sx={{ ariaLabel: "email" }}
-                              value={email}
-                            />
+                              value={email} />
                           </FormControl>
                           <FormControl>
                             <FormLabel htmlFor="password">Password</FormLabel>
@@ -406,40 +423,32 @@ function SignIn() {
                               name="password"
                               placeholder="password"
                               type={showPassword ? "text" : "password"}
-                              endAdornment={
-                                <IconButton
-                                  aria-label={
-                                    showPassword
-                                      ? "hide the password"
-                                      : "display the password"
-                                  }
-                                  onClick={handleClickShowPassword}
-                                  onMouseDown={handleMouseDownPassword}
-                                  onMouseUp={handleMouseUpPassword}
-                                  edge="end"
-                                >
-                                  {showPassword ? (
-                                    <VisibilityOff />
-                                  ) : (
-                                    <Visibility />
-                                  )}
-                                </IconButton>
-                              }
+                              endAdornment={<IconButton
+                                aria-label={showPassword
+                                  ? "hide the password"
+                                  : "display the password"}
+                                onClick={handleClickShowPassword}
+                                onMouseDown={handleMouseDownPassword}
+                                onMouseUp={handleMouseUpPassword}
+                                edge="end"
+                              >
+                                {showPassword ? (
+                                  <VisibilityOff />
+                                ) : (
+                                  <Visibility />
+                                )}
+                              </IconButton>}
                               id="password"
                               autoComplete="new-password"
                               required
                               fullWidth
                               variant="outlined"
                               color={passwordError ? "error" : "primary"}
-                              value={password}
-                            />
+                              value={password} />
                           </FormControl>
                           <FormControlLabel
-                            control={
-                              <Checkbox value="remember" color="primary" />
-                            }
-                            label="Remember me"
-                          />
+                            control={<Checkbox value="remember" color="primary" />}
+                            label="Remember me" />
                         </>
                       )}
                       {/* <ForgotPassword open={open} handleClose={handleClose} /> */}
@@ -461,8 +470,7 @@ function SignIn() {
                               variant="outlined"
                               color={emailError ? "error" : "primary"}
                               sx={{ ariaLabel: "email" }}
-                              value={email}
-                            />
+                              value={email} />
                           </FormControl>
                           <FormControl className="formElements">
                             <FormLabel htmlFor="password">Password</FormLabel>
@@ -473,40 +481,32 @@ function SignIn() {
                               name="password"
                               placeholder="password"
                               type={showPassword ? "text" : "password"}
-                              endAdornment={
-                                <IconButton
-                                  aria-label={
-                                    showPassword
-                                      ? "hide the password"
-                                      : "display the password"
-                                  }
-                                  onClick={handleClickShowPassword}
-                                  onMouseDown={handleMouseDownPassword}
-                                  onMouseUp={handleMouseUpPassword}
-                                  edge="end"
-                                >
-                                  {showPassword ? (
-                                    <VisibilityOff />
-                                  ) : (
-                                    <Visibility />
-                                  )}
-                                </IconButton>
-                              }
+                              endAdornment={<IconButton
+                                aria-label={showPassword
+                                  ? "hide the password"
+                                  : "display the password"}
+                                onClick={handleClickShowPassword}
+                                onMouseDown={handleMouseDownPassword}
+                                onMouseUp={handleMouseUpPassword}
+                                edge="end"
+                              >
+                                {showPassword ? (
+                                  <VisibilityOff />
+                                ) : (
+                                  <Visibility />
+                                )}
+                              </IconButton>}
                               id="password"
                               autoComplete="current-password"
                               required
                               fullWidth
                               variant="outlined"
                               color={passwordError ? "error" : "primary"}
-                              value={password}
-                            />
+                              value={password} />
                           </FormControl>
                           <FormControlLabel
-                            control={
-                              <Checkbox value="remember" color="primary" />
-                            }
-                            label="Remember me"
-                          />
+                            control={<Checkbox value="remember" color="primary" />}
+                            label="Remember me" />
                           <Button
                             fullWidth
                             variant="contained"
@@ -554,26 +554,25 @@ function SignIn() {
                         </>
                       )}
                     </Box>
-                  </Card>
-                }
-              </motion.div>
+                  </Card>}
+                </motion.div>
+              </Grid>
             </Grid>
-          </Grid>
-          {/* <TextField
-            onChange={handleEmailChange}
-            id="outlined-basic"
-            label="Username"
-            variant="outlined"
-          />
-          <TextField
-            onChange={handlePasswordChange}
-            d="outlined-basic"
-            label="Password"
-            variant="outlined"
-          />
-          <Button onClick={signInUser}>Sign In</Button> */}
-        </div>
-      </motion.div>
+            {/* <TextField
+      onChange={handleEmailChange}
+      id="outlined-basic"
+      label="Username"
+      variant="outlined"
+    />
+    <TextField
+      onChange={handlePasswordChange}
+      d="outlined-basic"
+      label="Password"
+      variant="outlined"
+    />
+    <Button onClick={signInUser}>Sign In</Button> */}
+          </div>
+        </motion.div></>
     );
   }
 }
