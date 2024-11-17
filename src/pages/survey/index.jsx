@@ -25,7 +25,7 @@ import SurveyHelp from "./components/surveyHelp";
 import SurveyOptionsPictures from "./components/surveyOptionsPictures";
 import SurveyFacialVerification from "./components/surveyFacialVerification";
 import { Player } from '@lordicon/react'; // Import the Player component
-const questionnaireIcon = require(`${process.env.PUBLIC_URL}/public/heartIcon/questionnaireIcon.json`);
+const questionnaireIcon = require(`${process.env.PUBLIC_URL}/public/animatedIcons/questionnaire.json`);
 import * as faceapi from "face-api.js";
 
 const Card = styled(MuiCard)(({ theme }) => ({

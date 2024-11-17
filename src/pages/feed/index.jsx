@@ -14,7 +14,7 @@ import Onboarding from "./components/onboarding";
 import Grid from "@mui/material/Grid2";
 import { Player } from '@lordicon/react'; // Import the Player component
 const thumbDownIcon = require(`${process.env.PUBLIC_URL}/public/animatedIcons/thumbDownIcon.json`);
-const heartIcon = require(`${process.env.PUBLIC_URL}/public/heartIcon/thumbDownIcon.json`);
+const heartIcon = require(`${process.env.PUBLIC_URL}/public/animatedIcons/heartIcon.json`);
 
 
 const Feed = () => {
