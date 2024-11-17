@@ -13,8 +13,8 @@ import { loadConfettiPreset } from "tsparticles-preset-confetti";
 import Onboarding from "./components/onboarding";
 import Grid from "@mui/material/Grid2";
 import { Player } from '@lordicon/react'; // Import the Player component
-import thumbDownIcon from '/animatedIcons/thumbDownIcon.json'
-import heartIcon from '/animatedIcons/heartIcon.json'
+const thumbDownIcon = require(`${process.env.PUBLIC_URL}/animatedIcons/thumbDownIcon.json`);
+const heartIcon = require(`${process.env.PUBLIC_URL}/heartIcon/thumbDownIcon.json`);
 
 
 const Feed = () => {

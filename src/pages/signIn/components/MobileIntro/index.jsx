@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import { motion } from "framer-motion";
 import "./styles.css"
 import { Player } from '@lordicon/react'; // Import the Player component
-import homeIcon from "/animatedIcons/homeIcon.json"
+const homeIcon = require(`${process.env.PUBLIC_URL}/animatedIcons/homeIcon.json`);
 
 const MobileIntro = ({ text }) => {
     const playerRef = useRef(null);
