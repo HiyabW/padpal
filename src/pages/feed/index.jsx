@@ -2,7 +2,7 @@ import React from "react";
 import Cookies from "js-cookie";
 import UserCard from "./components/UserCard";
 import "./styles.css";
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import Button from "@mui/material/Button";
 import Box from "@mui/material/Box";
 import CircularProgress from "@mui/material/CircularProgress";
@@ -12,6 +12,10 @@ import { loadFull } from "tsparticles";
 import { loadConfettiPreset } from "tsparticles-preset-confetti";
 import Onboarding from "./components/onboarding";
 import Grid from "@mui/material/Grid2";
+import { Player } from '@lordicon/react'; // Import the Player component
+import thumbDownIcon from '/animatedIcons/thumbDownIcon.json'
+import heartIcon from '/animatedIcons/heartIcon.json'
+
 
 const Feed = () => {
   const isLoggedIn = Cookies.get("isLoggedIn");
@@ -21,6 +25,8 @@ const Feed = () => {
   const [match, setMatch] = React.useState(null);
   const [currPfp, setCurrPfp] = React.useState(null);
   const [open, setOpen] = React.useState(false);
+  const [accept, setAccept] = React.useState(false)
+  const [reject, setReject] = React.useState(false)
 
   const handleClose = () => {
     setOpen(false);
@@ -87,8 +93,39 @@ const Feed = () => {
     console.log(container);
   };
 
+  /************* Animated Icon Stuff *************/
+
+  const playerRefHeartIcon = useRef(null);
+  if (accept) {
+    playerRefHeartIcon.current?.playFromBeginning();
+  }
+
+  const playerRefThumbDownIcon = useRef(null);
+  if (reject) {
+    playerRefThumbDownIcon.current?.playFromBeginning();
+  }
+
+  /***********************************************/
+
   return (
     <div className="feed gradient-background">
+      {/* --------------- ICONS --------------- */}
+      {<div class="thumbsDown" style={{ position: "fixed", top: "40%", zIndex: "100", display: reject ? 'block' : 'none' }}>
+        <Player
+          ref={playerRefThumbDownIcon}
+          icon={thumbDownIcon}
+          size={window.innerWidth <= 900 ? 100 : 300}
+        />
+      </div>}
+
+      {<div class="heart" style={{ position: "fixed", top: "40%", zIndex: "100", display: accept ? 'block' : 'none' }}>
+        <Player
+          ref={playerRefHeartIcon}
+          icon={heartIcon}
+          size={window.innerWidth <= 900 ? 100 : 300}
+        />
+      </div>}
+      {/* ------------------------------------- */}
       {match && (
         <motion.div
           initial={{ opacity: 0 }}
@@ -125,7 +162,7 @@ const Feed = () => {
             }}
           />
           <Grid container spacing={10}>
-            <Grid size={{ md: 3, sm: 12, xs:12 }} sx={{display:'flex', justifyContent:'center'}}>
+            <Grid size={{ md: 3, sm: 12, xs: 12 }} sx={{ display: 'flex', justifyContent: 'center' }}>
               <motion.img
                 initial={{ opacity: 0 }}
                 animate={{
@@ -139,7 +176,7 @@ const Feed = () => {
               />
             </Grid>
 
-            <Grid size={{ md: 6, sm: 12, xs:12  }}>
+            <Grid size={{ md: 6, sm: 12, xs: 12 }}>
               <motion.div initial={0} className="matchedScreenText">
                 <motion.h1
                   initial={{ opacity: 0 }}
@@ -168,7 +205,7 @@ const Feed = () => {
               </motion.div>
             </Grid>
 
-            <Grid size={{ md: 3, sm: 12, xs:12  }} sx={{display:'flex', justifyContent:'center'}}>
+            <Grid size={{ md: 3, sm: 12, xs: 12 }} sx={{ display: 'flex', justifyContent: 'center' }}>
               <motion.img
                 initial={{ opacity: 0 }}
                 transition={{ delay: 0.5 }}
@@ -213,9 +250,12 @@ const Feed = () => {
                 user={users[key]}
                 users={users}
                 setUsers={setUsers}
-                match={match}
                 setMatch={setMatch}
                 images={images[users[key].email]}
+                accept={accept}
+                setAccept={setAccept}
+                reject={reject}
+                setReject={setReject}
               />
             );
           })}

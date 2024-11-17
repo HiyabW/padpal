@@ -1,5 +1,5 @@
 import React from "react";
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import "./styles.css";
 import Cookies from "js-cookie";
 import SurveyOptionsButtons from "./components/surveyOptionsButtons";
@@ -21,10 +21,11 @@ import MuiDivider from "@mui/material/Divider";
 import Typography from "@mui/joy/Typography";
 import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
 import HelpOutlineIcon from "@mui/icons-material/HelpOutline";
-import FactCheckIcon from "@mui/icons-material/FactCheck";
 import SurveyHelp from "./components/surveyHelp";
 import SurveyOptionsPictures from "./components/surveyOptionsPictures";
 import SurveyFacialVerification from "./components/surveyFacialVerification";
+import { Player } from '@lordicon/react'; // Import the Player component
+import questionnaireIcon from '/animatedIcons/questionnaire.json'
 import * as faceapi from "face-api.js";
 
 const Card = styled(MuiCard)(({ theme }) => ({
@@ -230,6 +231,15 @@ const Survey = () => {
     }
   };
 
+  /************* Animated Icon Stuff *************/
+
+  const playerRefQuestionnaireIcon = useRef(null);
+  useEffect(() => {
+    playerRefQuestionnaireIcon.current?.playFromBeginning();
+  }, [])
+
+  /***********************************************/
+
   /********************** Facial Verification Functions **********************/
 
   const compareFaces = async () => {
@@ -238,7 +248,7 @@ const Survey = () => {
     if (!realTimePhoto || !identificationPhoto) return 0;
 
     console.log(1)
-    
+
     setFacialVerificationLoading(true);
     const MODEL_URL = process.env.PUBLIC_URL + "/models";
     await faceapi.nets.faceRecognitionNet.loadFromUri(MODEL_URL);
@@ -333,9 +343,10 @@ const Survey = () => {
                     }}
                   >
                     <div className="x">
-                      <FactCheckIcon
-                        className="introIcon"
-                        sx={{ color: "#bdcaf0" }}
+                      <Player
+                        ref={playerRefQuestionnaireIcon}
+                        icon={questionnaireIcon}
+                        size={window.innerWidth <= 900 ? 150 : 300}
                       />
                     </div>
                   </Grid>

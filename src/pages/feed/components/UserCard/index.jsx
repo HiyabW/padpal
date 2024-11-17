@@ -78,8 +78,11 @@ const UserCard = ({
   users,
   setUsers,
   images,
-  match,
   setMatch,
+  accept,
+  setAccept,
+  reject,
+  setReject,
   feedOrViewProfile = "feed",
 }) => {
   console.log(users);
@@ -156,13 +159,25 @@ const UserCard = ({
 
   const rotate = useTransform(() => {
     console.log("isRotated: ", isRotated);
-    const offset = (isFront || window.innerWidth<=900) ? 0.00001 : isRotated % 2 ? 6 : -6;
+    const offset = (isFront || window.innerWidth <= 900) ? 0.00001 : isRotated % 2 ? 4 : -4;
     return `${rotateRaw.get() + offset}deg`;
   });
 
   const handleDragEnd = () => {
     if (Math.abs(x.get()) > 20) {
       const isAMatch = x.get() > 0 ? true : false;
+      if (x.get() > 0) {
+        setAccept(true)
+        setTimeout(() => {
+          setAccept(false)
+        }, "1000");
+      }
+      else {
+        setReject(true)
+        setTimeout(() => {
+          setReject(false)
+        }, "1000");
+      }
       // first POST req to /saveMatch
       fetch("https://palpal-api.onrender.com/match/saveMatch", {
         method: "POST",
@@ -243,7 +258,7 @@ const UserCard = ({
 
   /*************************************************************/
 
-  return (
+  return (<>
     <motion.div
       className="userFeedCardDiv hover:cursor-grab active:cursor-grabbing"
       drag={feedOrViewProfile === "feed" ? "x" : ""}
@@ -260,6 +275,7 @@ const UserCard = ({
       onDragEnd={handleDragEnd}
       dragConstraints={{ left: 0, right: 0 }}
     >
+
       <motion.div className="userFeedImageDiv">
         {images.length > 1 && (
           <div class="dotProgressDiv">
@@ -290,14 +306,14 @@ const UserCard = ({
       </motion.div>
       <motion.div className="userFeedInfoDiv">
         {/* If AI BOT, don't show budget or expected move out */}
-        <Grid container spacing={2} sx={{marginBottom: '1rem'}}>
+        <Grid container spacing={2} sx={{ marginBottom: '1rem' }}>
           <Grid size={{ lg: 12, md: 12, sm: 12, xs: 6 }}>
             <h2>
               {user.name}
               {user?.age ? `, ${getAge(user.age)}` : ``}
             </h2>
           </Grid>
-          <Grid size={{ lg: 12, md: 12, sm: 12, xs: 6 }} sx={{display:'flex'}}>
+          <Grid size={{ lg: 12, md: 12, sm: 12, xs: 6 }} sx={{ display: 'flex' }}>
             {user._id === Cookies.get("id") &&
               <Button variant="contained" disableElevation className="editProfileButton" onClick={redirectToEditProfile}>Edit Profile</Button>
             }
@@ -316,7 +332,7 @@ const UserCard = ({
           </>
         )}
         <Divider />
-        <div className="userFeedInfo" style={{height: window.innerWidth<=900 ? '20rem' : ''}} >
+        <div className="userFeedInfo" style={{ height: window.innerWidth <= 900 ? '20rem' : '' }} >
           <p>{user.bio}</p>
           <br></br>
           <div className="preferences">
@@ -346,6 +362,7 @@ const UserCard = ({
         </div>
       </motion.div>
     </motion.div>
+  </>
   );
 };
 

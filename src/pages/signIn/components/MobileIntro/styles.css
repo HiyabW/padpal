@@ -1,6 +1,7 @@
 .mobileIntro {
     h1 {
-    font-size: 20vw;
+    /* font-size: 20vw; */
+    font-size: 15vw;
     line-height: 13vw;
     font-family: var(--theme-primary-font-family);
     color: var(--theme-dark-mode-primary-text);

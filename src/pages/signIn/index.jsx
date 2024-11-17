@@ -321,14 +321,13 @@ function SignIn() {
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.5, delay: window.innerWidth <= 900 ? 2.1 : 0.6, ease: "easeInOut" }}
-                  style={{ justifyItems: 'center' }}
                 >
                   {isLoading &&
 
                     <CircularProgress
                       className="text-center"
                       size="10rem"
-                      style={{ color: "white", marginBottom: "2rem" }}
+                      style={{ color: "white", marginBottom: "2rem", marginLeft: "25%" }}
                       sx={{
                         "--CircularProgress-thickness": "24px",
                       }} />}
