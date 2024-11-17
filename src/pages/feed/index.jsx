@@ -110,7 +110,7 @@ const Feed = () => {
   return (
     <div className="feed gradient-background">
       {/* --------------- ICONS --------------- */}
-      {<div class="thumbsDown" style={{ position: "fixed", top: "40%", zIndex: "100", display: reject ? 'block' : 'none' }}>
+      {<div class="thumbsDown" style={{ position: "fixed", top: "40%", zIndex: "100", display: reject ? 'flex' : 'none', justifyContent: 'center', width: '100%' }}>
         <Player
           ref={playerRefThumbDownIcon}
           icon={thumbDownIcon}
@@ -118,7 +118,7 @@ const Feed = () => {
         />
       </div>}
 
-      {<div class="heart" style={{ position: "fixed", top: "40%", zIndex: "100", display: accept ? 'block' : 'none' }}>
+      {<div class="heart" style={{ position: "fixed", top: "40%", zIndex: "100", display: accept ? 'flex' : 'none', justifyContent: 'center', width: '100%' }}>
         <Player
           ref={playerRefHeartIcon}
           icon={heartIcon}
