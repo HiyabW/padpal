@@ -53,6 +53,6 @@
     top:auto;
     width: 90%;
     transform: translateX(5.5%);
-    background-color:#f2f4fc!important;
+    background-color:var(--theme-feed-background-color)!important;
   }
 }

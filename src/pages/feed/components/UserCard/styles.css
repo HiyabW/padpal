@@ -50,7 +50,8 @@
   .editProfileButton {
     color: var(--theme-dark-mode-primary-text) !important;
     background-color: var(--theme-dark-background-color) !important;
-    align-self: center;
+    margin-top: 0.5rem;
+    height: fit-content;
   }
 
 

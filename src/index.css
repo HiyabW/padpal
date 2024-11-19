@@ -6,10 +6,10 @@
 @import url("https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap");
 
 :root {
-  --theme-feed-background-color: linear-gradient(#f2f4fc, #c1c4d1);
-  /* --theme-feed-background-color: #f2f4fc!important; */
+  /* --theme-feed-background-color: linear-gradient(#f2f4fc, #c1c4d1); */
+  --theme-feed-background-color: #d9ddea!important;
   --theme-background-color-dark: #090a11;
-  --theme-primary-color: #3a74e5;
+  --theme-primary-color: #3a8fe5;
   --theme-secondary-color: #38383857;
   --theme-dark-mode-primary-text: #dee0ec;
   --theme-dark-mode-secondary-text: #e2e4eea4;
@@ -56,13 +56,12 @@ body {
 }
 
 .gradient-background {
+  background: linear-gradient(149deg,#3aa5e5,#e9c18a);
+  background-size: 120% 120%;
+  animation: gradient-animation 10s ease infinite;
   /* background: linear-gradient(228deg, #7d91b7, #3a74e5, #142e67);
   background-size: 180% 180%;
   animation: gradient-animation 6s ease infinite; */
-
-  background: linear-gradient(212deg,#2164b6,#d2ae4e);
-  background-size: 120% 120%;
-  animation: gradient-animation 10s ease infinite;
 }
 
 @keyframes gradient-animation {
@@ -78,7 +77,7 @@ body {
 }
 
 .gradient-background2 {
-  background: linear-gradient(300deg,#0f0f14,#1d4d7c, #477bb0);
+  background: linear-gradient(300deg,#0f0f14,#1d647c, #478db0);
   background-size: 180% 180%;
   animation: gradient-animation 6s ease infinite;
 }

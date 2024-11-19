@@ -84,6 +84,7 @@
     }
     .messageInputBox {
       width: 85%!important;
+      bottom: 1rem!important;
     }
     .message {
 

@@ -307,7 +307,7 @@ const UserCard = ({
       <motion.div className="userFeedInfoDiv">
         {/* If AI BOT, don't show budget or expected move out */}
         <Grid container spacing={2} sx={{marginBottom: user._id === Cookies.get("id") ? "1rem" : ""}}>
-          <Grid size={{ lg: 12, md: 12, sm: 12, xs: 6 }}>
+          <Grid size={{ lg: 12, md: 12, sm: 12, xs: 6 }} sx={{overflowWrap: 'break-word'}}>
             <h2>
               {user.name}
               {user?.age ? `, ${getAge(user.age)}` : ``}
