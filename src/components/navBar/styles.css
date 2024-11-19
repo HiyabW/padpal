@@ -9,16 +9,21 @@
   padding-left: 2.2rem;
   padding-right: 2.2rem;
   transform: translateX(13%);
-  color: var(--theme-light-mode-primary-text);;
+  color: var(--theme-light-mode-primary-text);
+  ;
   font-size: 1.3rem;
   z-index: 500;
   background-color: #f2f4fca7;
   border-bottom-left-radius: 0.5rem;
   border-bottom-right-radius: 0.5rem;
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
 
   h1 {
     font-size: 1.7rem;
     font-family: var(--theme-primary-font-family);
+    margin-bottom: 0;
+
     &:hover {
       cursor: pointer;
     }
@@ -31,24 +36,23 @@
   .navBarOptions {
     display: flex;
     align-items: center;
+
     &:hover {
       cursor: pointer;
     }
   }
+}
 
-  /* @media screen and (max-width: 768px) {
-    .currViewMobile {
-      height: 100%;
-      width: 100%;
-      display: block;
-    }
-
-    .notCurrViewMobile {
-      display: none;
-    }
-
-    #chatBackIcon {
-      display: block;
-    }
-  } */
+@media screen and (max-width: 768px) {
+  .navBar {
+    bottom: 0!important;
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+    border-top-left-radius: 0.5rem;
+    border-top-right-radius: 0.5rem;
+    top:auto;
+    width: 90%;
+    transform: translateX(5.5%);
+    background-color:#f2f4fc!important;
+  }
 }

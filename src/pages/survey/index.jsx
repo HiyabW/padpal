@@ -510,8 +510,8 @@ const Survey = () => {
                           )}
                         {question?.type === "facialVerification" &&
                           facialVerificationLoading && (
-                            <div style={{ justifyContent: "center", display: "flex" }}>
-                              <CircularProgress color="inherit" />
+                            <div style={{ justifyContent: "center", display: "flex", alignItems: "center" }}>
+                              <CircularProgress color="inherit" /><p style={{marginLeft: "1rem"}}>This may take some time, sit tight!</p>
                             </div>
                           )}
                       </div>

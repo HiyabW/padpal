@@ -135,15 +135,9 @@ function SignIn() {
       setEmailErrorMessage("");
     }
 
-    if (!password || password.length < 5 || /\p{Emoji}/u.test(password)) {
-      if (/\p{Emoji}/u.test(password)) {
-        setPasswordError(true);
-        setPasswordErrorMessage("Password cannot contain emojis.");
-      }
-      else {
-        setPasswordError(true);
-        setPasswordErrorMessage("Password must be at least 5 characters long.");
-      }
+    if (!password || password.length < 5) {
+      setPasswordError(true);
+      setPasswordErrorMessage("Password must be at least 5 characters long.");
       return;
     } else {
       setPasswordError(false);

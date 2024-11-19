@@ -50,7 +50,8 @@ const Chat = () => {
   }, []);
 
   return (
-    <Grid container className="Chat gradient-background2">
+    <div class="Chat gradient-background2">
+    <Grid container className="Chat Chatdiv">
       {!isLoaded && isLoggedIn && (
         <motion.div
           initial={{ opacity: 0, y: 50 }}
@@ -138,6 +139,7 @@ const Chat = () => {
       )}
       {!isLoggedIn && <div className="centeredDiv"><p>Session expired, please log back in.</p></div>}
     </Grid>
+    </div>
   );
 };
 

@@ -3,6 +3,7 @@ import Cookies from "js-cookie";
 import UserCard from "./components/UserCard";
 import "./styles.css";
 import { useEffect, useRef } from "react";
+import { styled } from '@mui/material/styles';
 import Button from "@mui/material/Button";
 import Box from "@mui/material/Box";
 import CircularProgress from "@mui/material/CircularProgress";
@@ -13,8 +14,23 @@ import { loadConfettiPreset } from "tsparticles-preset-confetti";
 import Onboarding from "./components/onboarding";
 import Grid from "@mui/material/Grid2";
 import { Player } from '@lordicon/react'; // Import the Player component
+import HelpOutlineOutlinedIcon from '@mui/icons-material/HelpOutlineOutlined';
+import Tooltip, { TooltipProps, tooltipClasses } from '@mui/material/Tooltip';
+import ClickAwayListener from '@mui/material/ClickAwayListener';
 const thumbDownIcon = require(`${process.env.PUBLIC_URL}/public/animatedIcons/thumbDownIcon.json`);
 const heartIcon = require(`${process.env.PUBLIC_URL}/public/animatedIcons/heartIcon.json`);
+
+const LightTooltip = styled(({ className, ...props }) => (
+  <Tooltip {...props} classes={{ popper: className }} />
+))(({ theme }) => ({
+  [`& .${tooltipClasses.tooltip}`]: {
+    backgroundColor: theme.palette.common.white,
+    color: 'rgba(0, 0, 0, 0.87)',
+    boxShadow: theme.shadows[1],
+    fontSize: '1rem',
+    maxWidth: window.innerWidth <= 900 ? '18rem' : '40rem',
+  },
+}));
 
 
 const Feed = () => {
@@ -27,6 +43,15 @@ const Feed = () => {
   const [open, setOpen] = React.useState(false);
   const [accept, setAccept] = React.useState(false)
   const [reject, setReject] = React.useState(false)
+  const [openTooltip, setOpenTooltip] = React.useState(false);
+
+  const handleTooltipClose = () => {
+    setOpenTooltip(false);
+  };
+
+  const handleTooltipOpen = () => {
+    setOpenTooltip(true);
+  };
 
   const handleClose = () => {
     setOpen(false);
@@ -241,6 +266,42 @@ const Feed = () => {
               <h1>Gathering Candidates...</h1>
             </motion.div>
           )}
+
+          {
+            loaded && (
+              <ClickAwayListener onClickAway={handleTooltipClose}>
+                <div>
+                  <LightTooltip placement='left-start' title={
+                    <React.Fragment>
+                      {window.innerWidth > 900 && "Click the ← arrow on your keyboard to decline, and → to match. Use the ↑ and ↓ arrows to toggle through pictures."}
+                      {window.innerWidth <= 900 && "Swipe left to decline, and swipe right to match."}
+                    </React.Fragment>
+                  }
+                    onClose={handleTooltipClose}
+                    open={openTooltip}
+                    disableFocusListener
+                    disableHoverListener
+                    disableTouchListener
+                    slotProps={{
+                      popper: {
+                        modifiers: [
+                          {
+                            name: 'offset',
+                            options: {
+                              offset: window.innerWidth <= 900 ? [0, -14] : [0, 0],
+                            },
+                          },
+                        ],
+                      },
+                    }}
+                  >
+                    <Button className='helpTooltip' onClick={handleTooltipOpen}>
+                      <HelpOutlineOutlinedIcon fontSize="large" />
+                    </Button>
+                  </LightTooltip>
+                </div>
+              </ClickAwayListener>)
+          }
 
           {Object.entries(users).map(([key, value]) => {
             isRotated += 1;

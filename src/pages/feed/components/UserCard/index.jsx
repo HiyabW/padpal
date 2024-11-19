@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useRef } from "react";
 import { motion, useMotionValue, useTransform } from "framer-motion";
 import "./styles.css";
 import AttachMoneyIcon from "@mui/icons-material/AttachMoney";
@@ -260,7 +260,7 @@ const UserCard = ({
 
   return (<>
     <motion.div
-      className="userFeedCardDiv hover:cursor-grab active:cursor-grabbing"
+      className={`userFeedCardDiv hover:cursor-grab active:cursor-grabbing ${feedOrViewProfile!=="feed" ? "viewProfile" : ""}`}
       drag={feedOrViewProfile === "feed" ? "x" : ""}
       style={{
         x,
@@ -306,7 +306,7 @@ const UserCard = ({
       </motion.div>
       <motion.div className="userFeedInfoDiv">
         {/* If AI BOT, don't show budget or expected move out */}
-        <Grid container spacing={2} sx={{ marginBottom: '1rem' }}>
+        <Grid container spacing={2} sx={{marginBottom: user._id === Cookies.get("id") ? "1rem" : ""}}>
           <Grid size={{ lg: 12, md: 12, sm: 12, xs: 6 }}>
             <h2>
               {user.name}

@@ -37,19 +37,25 @@
   }
 
   @media screen and (max-width: 768px) {
-    
-    .currViewMobile {
-      height: 90%;
-      width: 100%;
-      display: block;
+    .Chat {
+      padding-top: 0.5rem;
     }
+    .Chatdiv {
+      transform: translateY(-4.5%);
 
-    .notCurrViewMobile {
-      display: none;
-    }
+      .currViewMobile {
+        height: 90%;
+        width: 100%;
+        display: block;
+      }
 
-    #chatBackIcon {
-      display: block;
+      .notCurrViewMobile {
+        display: none;
+      }
+
+      #chatBackIcon {
+        display: block;
+      }
     }
   }
 }

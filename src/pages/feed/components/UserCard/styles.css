@@ -21,6 +21,11 @@
   border-radius: 1rem;
   overflow: hidden;
   background: var(--theme-feed-background-color);
+  margin-top: 7rem;
+}
+.viewProfile {
+  margin-top: 5rem!important;
+  margin-bottom: 3.5rem;
 }
 
 .mobilePictureCaroselButtons {
@@ -112,7 +117,11 @@
     height: fit-content;
     width: 95%;
     margin-bottom: 2rem;
-    margin-top: 4.5rem;
+    margin-top: 3rem;
+  }
+  .viewProfile {
+    margin-top: 1rem!important;
+    margin-bottom: 3.5rem;
   }
 
   .userFeedInfoDiv {

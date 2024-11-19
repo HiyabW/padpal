@@ -6,6 +6,13 @@
   min-height: 100%;
   overflow: hidden;
 
+  .helpTooltip {
+    color: white!important;
+    position: absolute!important;
+    top: 8%!important;
+    right: 8%!important;
+  }
+
   .matchedScreen {
     background-color: #68ed76;
     display: flex;
@@ -80,6 +87,13 @@
 
 
   @media screen and (max-width: 768px) {
+    .helpTooltip {
+      color: white!important;
+      position: absolute!important;
+      top: 2%!important;
+      right: 2%!important;
+    }
+
     .matchedScreen {
       .matchedImg {
         width: 10rem!important;
