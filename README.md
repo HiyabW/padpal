@@ -29,6 +29,7 @@ ___
 * Responsive and dynamic design to accomodate all devices and promote accessibility
 * A visually appealing and interactive interface that allows for both keyboard and touch input
   * Appealing and rewarding animations to keep users engaged
+* Leverageed Webpack to condense project size and optimize site performance
 ___
 ## Technologies
 * Front-end
