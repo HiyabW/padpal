@@ -1,6 +1,5 @@
 # PadPal
 > <img width="1440" alt="image" src="https://github.com/user-attachments/assets/cfa898a6-0ce1-449c-8641-82f534e024bf">
-
 > PadPal is a web application designed to help individuals find like-minded roommates using a Tinder-styled interface. Users answer a handful of varying questions to understand who they are and what they're looking for in a roommate. Then, PadPal analyzes their results and pairs the user with the top candidates who match their criteria.
 
 ***[VIEW LIVE DEMO](http://padpal.onrender.com)***
