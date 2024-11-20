@@ -3,10 +3,10 @@
 
 ___
 ## Table of Contents
-1. [Introduction](https://github.com/HiyabW/padpal/edit/new/README.md#introduction)
-2. [Features](https://github.com/HiyabW/padpal/edit/new/README.md#features)
-3. [Technologies](https://github.com/HiyabW/padpal/edit/new/README.md#technologies)
-4. [Installation](https://github.com/HiyabW/padpal/edit/new/README.md#installation)
+1. [Introduction](https://github.com/HiyabW/padpal/tree/new?tab=readme-ov-file#introduction)
+2. [Features](https://github.com/HiyabW/padpal/tree/new?tab=readme-ov-file#features)
+3. [Technologies](https://github.com/HiyabW/padpal/tree/new?tab=readme-ov-file#technologies)
+4. [Installation](https://github.com/HiyabW/padpal/tree/new?tab=readme-ov-file#installation)
 
 ___
 ## Introduction
