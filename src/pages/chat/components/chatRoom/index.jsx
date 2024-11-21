@@ -220,7 +220,7 @@ const ChatRoom = ({ user, justSent, setJustSent }) => {
       });
 
     /* PART 2 (ONLY IF CHATTING WITH AI BOT): REQUEST A RESPONSE FROM AI BOT */
-    if (user.id === "6730784af24ec4375cf95a17") {
+    if (user.id === "673eed0fd24e7b1c05d6616e") {
       fetch("https://palpal-api.onrender.com/chat/chatAI", {
         method: "POST",
         headers: {

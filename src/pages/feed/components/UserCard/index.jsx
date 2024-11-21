@@ -319,7 +319,7 @@ const UserCard = ({
             }
           </Grid>
         </Grid>
-        {user._id !== "6730784af24ec4375cf95a17" && (
+        {user._id !== "673eed0fd24e7b1c05d6616e" && (
           <>
             <h3 style={{ marginTop: "6px" }}>
               <AttachMoneyIcon className="muiIcon" />
