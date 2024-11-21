@@ -170,12 +170,13 @@ export const surveyQuestions = [
     id: 18,
     "text": "Build your feed with pictures.",
     label: "pictures",
-    "subtext": "Add at least one photo.",
+    "subtext": "Add at least one photo",
     type: "pictures"
   },
   {
     id: 19,
     "text": "Tell us what you're into.",
+    "subtext": "Select up to 4 hobbies",
     label: "hobbies",
     type: "select"
   },

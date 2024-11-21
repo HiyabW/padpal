@@ -307,7 +307,7 @@ const UserCard = ({
       <motion.div className="userFeedInfoDiv">
         {/* If AI BOT, don't show budget or expected move out */}
         <Grid container spacing={2} sx={{marginBottom: user._id === Cookies.get("id") ? "1rem" : ""}}>
-          <Grid size={{ lg: 12, md: 12, sm: 12, xs: 6 }} sx={{overflowWrap: 'break-word'}}>
+          <Grid size={{ lg: 12, md: 12, sm: 12, xs: user._id === Cookies.get("id") ? 6 : 12 }} sx={{overflowWrap: 'break-word'}}>
             <h2>
               {user.name}
               {user?.age ? `, ${getAge(user.age)}` : ``}
@@ -332,7 +332,7 @@ const UserCard = ({
           </>
         )}
         <Divider />
-        <div className="userFeedInfo" style={{ height: window.innerWidth <= 900 ? '20rem' : '' }} >
+        <div className="userFeedInfo" style={{ height: window.innerWidth <= 900 ? '27rem' : '' }} >
           <p>{user.bio}</p>
           <br></br>
           <div className="preferences">

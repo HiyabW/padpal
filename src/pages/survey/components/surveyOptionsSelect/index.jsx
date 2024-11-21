@@ -41,6 +41,7 @@ const SurveyOptionsSelect = ({
       <Autocomplete
         onChange={updateAnswer}
         disablePortal
+        disabled={currSelectedAnswer.length===4}
         options={input}
         sx={{ width: 300 }}
         renderOption={(props, option) => {
