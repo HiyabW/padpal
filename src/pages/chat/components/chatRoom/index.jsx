@@ -305,11 +305,9 @@ const ChatRoom = ({ user, justSent, setJustSent }) => {
             className={`outgoing`}
             sx={{
               backgroundColor: "#485869",
-
               marginBottom: "0.8rem",
               borderRadius: "1rem",
               paddingTop: "0.7rem",
-              paddingBottom: "0.7rem",
               width: "fit-content",
               maxWidth: "70%",
               paddingLeft: "1.2rem",

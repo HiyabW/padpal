@@ -112,7 +112,7 @@ export default function Onboarding({ open, handleClose }) {
           {activeStep === 1 && (
             <Box
               sx={{
-                transform: "translateX(35%)",
+                transform: window.innerWidth<=700 ? "translateX(44%)" : "translateX(35%)",
               }}
             >
               <motion.div

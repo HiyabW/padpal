@@ -133,7 +133,7 @@ const Feed = () => {
   /***********************************************/
 
   return (
-    <div className="feed gradient-background">
+    <div className="feed gradient-background" style={{height: match ? '100%' : ''}}>
       {/* --------------- ICONS --------------- */}
       {<div class="thumbsDown" style={{ position: "fixed", top: "40%", zIndex: "100", display: reject ? 'flex' : 'none', justifyContent: 'center', width: '100%' }}>
         <Player
@@ -186,7 +186,7 @@ const Feed = () => {
               },
             }}
           />
-          <Grid container spacing={10}>
+          <Grid container spacing={{lg:10, md: 10, sm: 3, xs: 3}}>
             <Grid size={{ md: 3, sm: 12, xs: 12 }} sx={{ display: 'flex', justifyContent: 'center' }}>
               <motion.img
                 initial={{ opacity: 0 }}
@@ -268,7 +268,7 @@ const Feed = () => {
           )}
 
           {
-            loaded && (
+            loaded && Object.keys(users).length > 0 && (
               <ClickAwayListener onClickAway={handleTooltipClose}>
                 <div>
                   <LightTooltip placement='left-start' title={

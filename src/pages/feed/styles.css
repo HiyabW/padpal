@@ -95,6 +95,8 @@
     }
 
     .matchedScreen {
+      height: 100%;
+      overflow: hidden!important;
       .matchedImg {
         width: 10rem!important;
         height: 10rem!important;
