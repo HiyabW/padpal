@@ -229,7 +229,7 @@ function SignIn() {
   }
 
   function handleNameChange(e) {
-    setName(e.target.value);
+    setName(e.target.value.charAt(0).toUpperCase().trim() + e.target.value?.slice(1).trim());
   }
   function handleEmailChange(e) {
     setEmail(e.target.value);
@@ -363,7 +363,7 @@ function SignIn() {
                               id="name"
                               type="name"
                               name="name"
-                              placeholder="John Doe"
+                              placeholder="John"
                               autoComplete="name"
                               required
                               fullWidth

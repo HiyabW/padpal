@@ -43,7 +43,31 @@
     cursor: pointer;
   }
 
-  @media screen and (max-width: 1350px) {
+  @media screen and (max-width: 1062px) {
+    img {
+      width: 3rem;
+      height: 3rem;
+    }
+  }
+  @media screen and (max-width: 768px) {
+    img {
+      width: 7.5rem;
+      height: 7.5rem;
+    }
+  }
+  @media screen and (max-width: 600px) {
+    img {
+      width: 6.5rem;
+      height: 6.5rem;
+    }
+  }
+  @media screen and (max-width: 490px) {
+    img {
+      width: 5rem;
+      height: 5rem;
+    }
+  }
+  @media screen and (max-width: 404px) {
     img {
       width: 4rem;
       height: 4rem;

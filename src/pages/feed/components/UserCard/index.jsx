@@ -310,7 +310,7 @@ const UserCard = ({
           <Grid size={{ lg: 12, md: 12, sm: 12, xs: user._id === Cookies.get("id") ? 6 : 12 }} sx={{overflowWrap: 'break-word'}}>
             <h2>
               {user.name}
-              {user?.age ? `, ${getAge(user.age)}` : ``}
+              {user._id !== "673eed0fd24e7b1c05d6616e" && user?.age ? `, ${getAge(user.age)}` : ``}
             </h2>
           </Grid>
           <Grid size={{ lg: 12, md: 12, sm: 12, xs: 6 }} sx={{ display: 'flex' }}>

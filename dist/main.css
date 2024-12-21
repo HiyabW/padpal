@@ -320,12 +320,21 @@
   min-height: 100%!important;
 }
 
+.onlyForMobile {
+  display: none!important;
+}
+
 .landingAndSignIn {
   display: block;
   justify-content: center;
   align-items: center;
   width: 100%;
-  min-height:200%!important;
+  overflow: scroll;
+  min-height:100%!important;
+  
+  .PadPalInfoGrid {
+    margin-bottom: 1rem;
+  }
 
   .cardHeader {
     text-align: center;
@@ -339,7 +348,7 @@
   }
 
   h5 {
-    font-size: 1vw;
+    font-size: 1rem;
     font-family: var(--theme-secondary-font-family);
   }
 
@@ -385,11 +394,19 @@
 }
 
 @media screen and (max-width: 900px) {
+  .onlyForMobile {
+    display: flex!important;
+  }
   .PadPalInfoGrid {
     text-align: center;
+    margin-bottom: 0;
   }
   .welcome {
     margin-bottom: 0.5rem !important;
+
+    .welcomeText {
+      font-size: 0.9rem!important;
+    }
   }
   .learnMoreButton {
     margin-top: 0.5rem!important;
@@ -422,6 +439,15 @@
   }
 }
 
+.mobileIntro {
+    h1 {
+    /* font-size: 20vw; */
+    font-size: 15vw;
+    line-height: 13vw;
+    font-family: var(--theme-primary-font-family);
+    color: var(--theme-dark-mode-primary-text);
+  }
+}
 .userFeedImage {
   width: 100%;
   height: 100%;
@@ -445,11 +471,16 @@
   border-radius: 1rem;
   overflow: hidden;
   background: var(--theme-feed-background-color);
+  margin-top: 7rem;
+}
+.viewProfile {
+  margin-top: 5rem!important;
+  margin-bottom: 3.5rem;
 }
 
 .mobilePictureCaroselButtons {
-  display: none!important;
-  background-color: white!important;
+  display: none !important;
+  background-color: white !important;
 }
 
 .userFeedImageDiv {
@@ -458,6 +489,7 @@
   float: left;
   z-index: 5;
 }
+
 .userFeedInfoDiv {
   width: 40%;
   height: 100%;
@@ -465,14 +497,24 @@
   float: right;
   padding: 3rem;
 
+  .editProfileButton {
+    color: var(--theme-dark-mode-primary-text) !important;
+    background-color: var(--theme-dark-background-color) !important;
+    margin-top: 0.5rem;
+    height: fit-content;
+  }
+
+
   h2 {
     font-size: 4rem;
     line-height: 5rem;
+    display: inline;
     font-family: var(--theme-primary-font-family);
     background: linear-gradient(to bottom, #3b72ff, #060d3c);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
   }
+
   h3 {
     font-size: 1.2rem;
     line-height: 2.2rem;
@@ -482,6 +524,7 @@
     align-items: center;
     display: flex;
   }
+
   p {
     font-size: 1rem;
   }
@@ -521,42 +564,55 @@
 }
 
 @media screen and (max-width: 768px) {
+  .userFeedCardDiv {
+    height: fit-content;
+    width: 95%;
+    margin-bottom: 2rem;
+    margin-top: 4rem;
+  }
+  .viewProfile {
+    margin-top: 1rem!important;
+    margin-bottom: 3.5rem;
+  }
+
   .userFeedInfoDiv {
     h2 {
       font-size: 2rem;
       line-height: 3rem;
     }
+
     h3 {
       font-size: 1rem;
       line-height: 2rem;
     }
-    padding: 2rem;
+
+    padding: 1.5rem;
     height: 50%;
     width: 100%;
+    overflow-y: visible;
   }
 
   .userFeedImageDiv {
-    height: 50%;
+    height: 30rem;
     width: 100%;
   }
 
   .dot-progress {
     position: absolute !important;
-    top: 42%;
+    top: 26rem;
     height: fit-content;
     transform: translateY(-10%);
     width: 100% !important;
-    display: flex!important;
+    display: flex !important;
     align-items: center;
   }
 
   .mobilePictureCaroselButtons {
-    display: block!important;
+    display: block !important;
     width: 3rem;
     height: 3rem;
   }
 }
-
 .dot-progress {
     display: flex;
     justify-content: center;
@@ -584,6 +640,13 @@
   width: 100%;
   min-height: 100%;
   overflow: hidden;
+
+  .helpTooltip {
+    color: white!important;
+    position: absolute!important;
+    top: 8%!important;
+    right: 8%!important;
+  }
 
   .matchedScreen {
     background-color: #68ed76;
@@ -659,7 +722,16 @@
 
 
   @media screen and (max-width: 768px) {
+    .helpTooltip {
+      color: white!important;
+      position: absolute!important;
+      top: 2%!important;
+      right: 2%!important;
+    }
+
     .matchedScreen {
+      height: 100%;
+      overflow: hidden!important;
       .matchedImg {
         width: 10rem!important;
         height: 10rem!important;
@@ -739,31 +811,47 @@
     }
   }
 
+  #chatBackIcon {
+    margin-left: 0.5rem;
+    margin-bottom: 2rem;
+    margin-top: 0;
+    display: none;
+  }
+
   @media screen and (max-width: 768px) {
-    
-    .ChatListGrid {
-      height: 25%;
-      width: 100%;
-      margin-top: 2rem;
-      margin-bottom: 0.5rem;
+    .Chat {
+      padding-top: 0.5rem;
     }
-    .ChatRoomGrid {
-      height: 70%;
-      width: 100%;
+    .Chatdiv {
+      transform: translateY(-4.5%);
+
+      .currViewMobile {
+        height: 90%;
+        width: 100%;
+        display: block;
+      }
+
+      .notCurrViewMobile {
+        display: none;
+      }
+
+      #chatBackIcon {
+        display: block;
+      }
     }
   }
 }
-
 .ChatPreview {
   overflow: hidden;
   padding: 1rem;
+  padding-bottom: 0.5rem;
   border-radius: 1rem;
-  transition: all .2s ease-in-out; 
+  transition: all .2s ease-in-out;
 
   img {
     border-radius: 50%;
-    width: 4rem;
-    height: 4rem;
+    width: 5rem;
+    height: 5rem;
     object-fit: cover;
   }
 
@@ -772,6 +860,7 @@
     display: flex;
     justify-content: space-between;
     color: var(--theme-dark-mode-primary-text);
+
     h1 {
       font-weight: bold;
       font-size: 1rem;
@@ -792,12 +881,18 @@
 
   &:hover {
     overflow: hidden;
-    transform: scale(1.01); 
+    transform: scale(1.01);
     background-color: rgb(50, 60, 72);
     cursor: pointer;
   }
-}
 
+  @media screen and (max-width: 1350px) {
+    img {
+      width: 4rem;
+      height: 4rem;
+    }
+  }
+}
 .ChatRoomDiv {
   height: 100%;
   width: 100%;
@@ -876,14 +971,15 @@
   }
   @media screen and (max-width: 768px) {
     h1 {
-      font-size: 1rem;
+      font-size: 1.8rem;
     }
     img {
-      width: 3rem;
-      height: 3rem;
+      width: 4rem;
+      height: 4rem;
     }
     .messageInputBox {
       width: 85%!important;
+      bottom: 1rem!important;
     }
     .message {
 
@@ -902,16 +998,21 @@
   padding-left: 2.2rem;
   padding-right: 2.2rem;
   transform: translateX(13%);
-  color: var(--theme-light-mode-primary-text);;
+  color: var(--theme-light-mode-primary-text);
+  ;
   font-size: 1.3rem;
   z-index: 500;
   background-color: #f2f4fca7;
   border-bottom-left-radius: 0.5rem;
   border-bottom-right-radius: 0.5rem;
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
 
   h1 {
     font-size: 1.7rem;
     font-family: var(--theme-primary-font-family);
+    margin-bottom: 0;
+
     &:hover {
       cursor: pointer;
     }
@@ -924,17 +1025,25 @@
   .navBarOptions {
     display: flex;
     align-items: center;
+
     &:hover {
       cursor: pointer;
     }
   }
 }
 
-.editProfileButton {
-  margin-top: 3vh!important;
-  min-width: 20vw!important;
-  color: black !important;
-  background-color: var(--theme-dark-mode-primary-text)!important;
+@media screen and (max-width: 768px) {
+  .navBar {
+    bottom: 0!important;
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+    border-top-left-radius: 0.5rem;
+    border-top-right-radius: 0.5rem;
+    top:auto;
+    width: 90%;
+    transform: translateX(5.5%);
+    background-color:var(--theme-feed-background-color)!important;
+  }
 }
 
 .surveyPictureDivEditProfile {
@@ -1062,9 +1171,10 @@
 @tailwind utilities;
 
 :root {
-  --theme-feed-background-color: linear-gradient(#f2f4fc, #c1c4d1);
+  /* --theme-feed-background-color: linear-gradient(#f2f4fc, #c1c4d1); */
+  --theme-feed-background-color: #d9ddea!important;
   --theme-background-color-dark: #090a11;
-  --theme-primary-color: #3a74e5;
+  --theme-primary-color: #3a8fe5;
   --theme-secondary-color: #38383857;
   --theme-dark-mode-primary-text: #dee0ec;
   --theme-dark-mode-secondary-text: #e2e4eea4;
@@ -1111,9 +1221,12 @@ body {
 }
 
 .gradient-background {
-  background: linear-gradient(228deg, #7d91b7, #3a74e5, #142e67);
+  background: linear-gradient(149deg,#3aa5e5,#e9c18a);
+  background-size: 120% 120%;
+  animation: gradient-animation 10s ease infinite;
+  /* background: linear-gradient(228deg, #7d91b7, #3a74e5, #142e67);
   background-size: 180% 180%;
-  animation: gradient-animation 6s ease infinite;
+  animation: gradient-animation 6s ease infinite; */
 }
 
 @keyframes gradient-animation {
@@ -1129,7 +1242,7 @@ body {
 }
 
 .gradient-background2 {
-  background: linear-gradient(300deg,#0f0f14,#1d4d7c, #477bb0);
+  background: linear-gradient(300deg,#0f0f14,#1d647c, #478db0);
   background-size: 180% 180%;
   animation: gradient-animation 6s ease infinite;
 }
