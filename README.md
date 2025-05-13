@@ -1,7 +1,7 @@
 # PadPal
 > _**Full walkthrough time laps**e_:
 > 
-> [![Watch the video](https://img.youtube.com/vi/Hd4mF6R9ZKI/hqdefault.jpg)]([https://www.youtube.com/watch?v=dQw4w9WgXcQ](https://www.youtube.com/watch?v=Hd4mF6R9ZKI))
+> [![Watch the video](https://img.youtube.com/vi/Hd4mF6R9ZKI/hqdefault.jpg)](https://www.youtube.com/watch?v=Hd4mF6R9)
 
 > PadPal is a web application designed to help individuals find like-minded roommates using a Tinder-styled interface. Users answer a handful of varying questions to understand who they are and what they're looking for in a roommate. Then, PadPal analyzes their results and pairs the user with the top candidates who match their criteria.
 
