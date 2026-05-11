@@ -1,0 +1,55 @@
+---
+description: PadPal v2 engineering workflow — commit format, branching strategy, Jira ticket rules, and PR process. Always apply to all sessions on this project.
+alwaysApply: true
+---
+
+# PadPal v2 Engineering Workflow
+
+Full details live in `WORKFLOW.md` at the project root. Read it at the start of every session involving code changes or Jira work.
+
+## Non-Negotiable Rules
+
+- **DO NOT** write any code unless explicitly told to work on a specific Jira ticket
+- **DO NOT** refactor, optimize, or fix anything outside the current ticket's scope
+- **STOP after opening a PR** — wait for explicit greenlight before starting the next ticket
+- 1 Jira ticket = 1 feature branch = multiple atomic commits
+
+## Jira
+
+- Project key: `SCRUM` (Atlassian board: PadPal)
+- Ticket URL format: `https://hiyabwoldegebriel.atlassian.net/browse/SCRUM-XXX`
+- Phase 1 sprint: "PadPal V2 - Phase 1" (SCRUM-1 through SCRUM-18)
+
+## Branch Naming
+
+```
+feature/SCRUM-XXX-short-kebab-title
+```
+
+Cut all branches from `padpal-v2`.
+
+## Commit Format
+
+```
+<type>(<scope>): <short description> [SCRUM-XXX]
+```
+
+Types: `feat` · `fix` · `perf` · `refactor` · `chore` · `docs`
+
+## Execution Order Per Ticket
+
+1. Read the Jira ticket and `AUDIT.md` reference
+2. Read relevant source files before touching anything
+3. Create feature branch off `padpal-v2`
+4. Implement only the scoped change with atomic commits
+5. Push branch and open PR using the mandatory template in `WORKFLOW.md`
+6. Update Jira ticket to "In Review"
+7. **STOP — wait for next instruction**
+
+## Reference Files
+
+| File | When to Read |
+|------|-------------|
+| `WORKFLOW.md` | Start of every session involving a ticket |
+| `AUDIT.md` | Before implementing any fix — understand root cause |
+| `PRD.md` | Before implementing any feature — understand intended behavior |
