@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "./styles.css"; // Import your CSS file for the fade effect
 import Cookies from "js-cookie";
 import Box from "@mui/material/Box";
@@ -58,10 +58,13 @@ function SignIn() {
   const [isMobileIntroVisible, setIsMobileIntroVisible] = useState(true);
   const [shouldAutoComplete, setShouldAutoComplete] = useState(true);
 
-  setTimeout(() => {
-    setIsMobileIntroVisible(false)
-    setShouldAutoComplete(true)
-  }, "2000");
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setIsMobileIntroVisible(false);
+      setShouldAutoComplete(true);
+    }, 2000);
+    return () => clearTimeout(timer);
+  }, []);
 
   // Before doing anything, if user is logged in already redirect them to feed page
   const isLoggedIn = Cookies.get("isLoggedIn");
