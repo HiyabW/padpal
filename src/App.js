@@ -7,11 +7,35 @@ import Chat from './pages/chat';
 import NavBar from './components/navBar';
 import ViewProfile from './pages/viewProfile';
 import EditProfile from './pages/editProfile';
-import React from 'react';
+import React, { useEffect } from 'react';
+import Cookies from 'js-cookie';
+import { apiFetch } from './utils/apiFetch';
 
 function App() {
-
   const location = useLocation();
+
+  useEffect(() => {
+    const token = Cookies.get('isLoggedIn');
+    if (!token) return;
+
+    // Decode JWT expiry without a library (JWTs are base64url encoded)
+    try {
+      const payload = JSON.parse(atob(token.split('.')[1].replace(/-/g, '+').replace(/_/g, '/')));
+      if (!payload.exp) return;
+      const expiresInMs = payload.exp * 1000 - Date.now();
+      const refreshAtMs = expiresInMs - 5 * 60 * 1000; // refresh 5 min before expiry
+      if (refreshAtMs <= 0) {
+        apiFetch('/feed/');
+        return;
+      }
+      const timer = setTimeout(() => {
+        apiFetch('/auth/refreshToken', { method: 'POST' });
+      }, refreshAtMs);
+      return () => clearTimeout(timer);
+    } catch {
+      // Non-standard JWT — skip proactive refresh
+    }
+  }, [location.pathname]);
 
   return (
     <>

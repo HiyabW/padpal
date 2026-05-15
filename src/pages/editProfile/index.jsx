@@ -1,5 +1,6 @@
 import React, { useEffect, useRef } from "react";
 import Cookies from "js-cookie";
+import { apiFetch } from "../../utils/apiFetch";
 import MuiCard from "@mui/material/Card";
 import styled from "@mui/material/styles/styled";
 import { motion } from "framer-motion";
@@ -49,13 +50,9 @@ const EditProfile = () => {
 
   const updateUser = () => {
     setIsLoading(true);
-    fetch("https://palpal-api.onrender.com/auth/survey", {
+    apiFetch("/auth/survey", {
       method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
       body: JSON.stringify({
-        _id: `${Cookies.get("id")}`,
         agePreferences: agePreferences,
         budget: budget,
         genderPreferences: genderPreferences,
@@ -73,14 +70,9 @@ const EditProfile = () => {
 
   async function deletePreviousImages() {
     // Then POST all pictures (separate endpoint, separate fetch call)
-    fetch("https://palpal-api.onrender.com/images/deleteImages", {
+    apiFetch("/images/deleteImages", {
       method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        userId: `${Cookies.get("id")}`,
-      }),
+      body: JSON.stringify({}),
     })
       .then((response) => response.json())
       .then((data) => {
@@ -100,13 +92,9 @@ const EditProfile = () => {
       myImages.push(image3);
     }
     // Then POST all pictures (separate endpoint, separate fetch call)
-    fetch("https://palpal-api.onrender.com/images/addImages", {
+    apiFetch("/images/addImages", {
       method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
       body: JSON.stringify({
-        owner: `${Cookies.get("id")}`,
         images: myImages,
       }),
     })
@@ -120,14 +108,9 @@ const EditProfile = () => {
     console.log("RERENDER");
     if (isLoggedIn) {
       // fetch data on currUser
-      fetch("https://palpal-api.onrender.com/feed/getUser", {
+      apiFetch("/feed/getUser", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          id: id,
-        }),
+        body: JSON.stringify({}),
       })
         .then((response) => response.json())
         .then((data) => {

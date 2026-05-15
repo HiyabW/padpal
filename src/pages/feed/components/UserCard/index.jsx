@@ -1,5 +1,6 @@
 import React, { useEffect, useRef } from "react";
 import { motion, useMotionValue, useTransform } from "framer-motion";
+import { apiFetch } from "../../../../utils/apiFetch";
 import "./styles.css";
 import AttachMoneyIcon from "@mui/icons-material/AttachMoney";
 import MuiDivider from "@mui/material/Divider";
@@ -179,13 +180,9 @@ const UserCard = ({
         }, "1000");
       }
       // first POST req to /saveMatch
-      fetch("https://palpal-api.onrender.com/match/saveMatch", {
+      apiFetch("/match/saveMatch", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
         body: JSON.stringify({
-          from: `${Cookies.get("id")}`,
           to: user._id,
           isAMatch,
         }),
@@ -199,15 +196,10 @@ const UserCard = ({
         });
 
       // ...then GET /getMatch to see if they've matched back. if so, call foundMatch to que match screen
-      //req body should have from:userEmail, to:currUserEmail, isAMatch:isAMatch
-      fetch("https://palpal-api.onrender.com/match/getMatch", {
+      apiFetch("/match/getMatch", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
         body: JSON.stringify({
           from: user._id,
-          to: `${Cookies.get("id")}`,
           isAMatch,
         }),
       })

@@ -154,7 +154,8 @@ function SignIn() {
   function signInUser() {
     setIsLoading(true)
     fetch("https://palpal-api.onrender.com/auth/login", {
-      method: "POST", // or 'POST', 'PUT', 'DELETE', etc.
+      method: "POST",
+      credentials: "include",
       headers: {
         "Content-Type": "application/json",
       },
@@ -194,7 +195,8 @@ function SignIn() {
   function signUpUser() {
     setIsLoading(true)
     fetch("https://palpal-api.onrender.com/auth/register", {
-      method: "POST", // or 'POST', 'PUT', 'DELETE', etc.
+      method: "POST",
+      credentials: "include",
       headers: {
         "Content-Type": "application/json",
       },

@@ -8,6 +8,7 @@ import TextField from "@mui/material/TextField";
 import SendIcon from "@mui/icons-material/Send";
 import InputAdornment from "@mui/material/InputAdornment";
 import Cookies from "js-cookie";
+import { apiFetch } from "../../../../utils/apiFetch";
 import Settings from "./components/settings";
 import Tooltip from "@mui/material/Tooltip";
 
@@ -194,31 +195,22 @@ const ChatRoom = ({ user, justSent, setJustSent }) => {
 
   function sendMessage() {
     const today = new Date();
-    fetch("https://palpal-api.onrender.com/chat/sendMessage", {
+    apiFetch("/chat/sendMessage", {
       method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
       body: JSON.stringify({
-        from: `${Cookies.get("id")}`,
         to: user.id,
         message: currMessage,
         date: today,
       }),
     })
       .then((response) => response.json())
-      .then((data) => {
-        /* add new message into the chatroom (will) properly render as part of 
-        sorted messages on rerender every 5 sec, but for now manually add */
+      .then(() => {
         setJustSent(currMessage);
-
-        // clear message input
         setCurrMessage("");
       })
       .catch((err) => {
         console.log(err);
       });
-
   }
 
   return (
