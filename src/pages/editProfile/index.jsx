@@ -56,8 +56,8 @@ const EditProfile = () => {
       },
       body: JSON.stringify({
         _id: `${Cookies.get("id")}`,
-        agePreferences: agePreferences.current,
-        budget: budget.current,
+        agePreferences: agePreferences,
+        budget: budget,
         genderPreferences: genderPreferences,
         expectedMoveOut: expectedMoveOut,
       }),
