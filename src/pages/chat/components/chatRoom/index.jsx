@@ -219,31 +219,6 @@ const ChatRoom = ({ user, justSent, setJustSent }) => {
         console.log(err);
       });
 
-    /* PART 2 (ONLY IF CHATTING WITH AI BOT): REQUEST A RESPONSE FROM AI BOT */
-    if (user.id === "673eed0fd24e7b1c05d6616e") {
-      fetch("https://palpal-api.onrender.com/chat/chatAI", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          from: `${Cookies.get("id")}`,
-          message: currMessage,
-        }),
-      })
-        .then((response) => response.json())
-        .then((data) => {
-          /* add new message into the chatroom (will) properly render as part of 
-            sorted messages on rerender every 5 sec, but for now manually add */
-          setJustSent(currMessage);
-
-          // clear message input
-          setCurrMessage("");
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-    }
   }
 
   return (
