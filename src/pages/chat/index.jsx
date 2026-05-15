@@ -15,7 +15,6 @@ const Chat = () => {
   const [data, setData] = React.useState(null);
   const [isLoaded, setIsLoaded] = React.useState(false);
   const [justSent, setJustSent] = React.useState(null);
-  const [apiKey, setApiKey] = React.useState(null);
   const [currViewMobile, setCurrViewMobile] = React.useState("ChatPreview")
 
   const fetchData = async () => {
