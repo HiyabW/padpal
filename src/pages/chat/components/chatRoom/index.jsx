@@ -233,8 +233,9 @@ const ChatRoom = ({ user, justSent, setJustSent }) => {
         {Object.entries(user.SortedMessages).map(([key, value]) => {
           let date = new Date(user.SortedMessages[key]["date"]);
           const isLastItem =
-            Object.keys(user.SortedMessages)[user.SortedMessages.length - 1] ===
-              key
+            Object.keys(user.SortedMessages)[
+              Object.keys(user.SortedMessages).length - 1
+            ] === key
               ? true
               : false;
 
