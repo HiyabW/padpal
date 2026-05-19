@@ -2,6 +2,7 @@ import React from "react";
 import { useState, useRef, useEffect } from "react";
 import "./styles.css";
 import Cookies from "js-cookie";
+import { apiFetch } from "../../utils/apiFetch";
 import SurveyOptionsButtons from "./components/surveyOptionsButtons";
 import { surveyQuestions } from "./questions";
 import Button from "@mui/material/Button";
@@ -171,13 +172,9 @@ const Survey = () => {
       formData.append("file", addedUserAnswers["pictures"]);
 
       // POST new user into db!
-      fetch("https://palpal-api.onrender.com/auth/survey", {
+      apiFetch("/auth/survey", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
         body: JSON.stringify({
-          _id: `${Cookies.get("id")}`,
           age: addedUserAnswers["age"],
           agePreferences: addedUserAnswers["agePreferences"],
           budget: addedUserAnswers["budget"][0],
@@ -206,13 +203,9 @@ const Survey = () => {
 
       async function addImages() {
         // Then POST all pictures (separate endpoint, separate fetch call)
-        fetch("https://palpal-api.onrender.com/images/addImages", {
+        apiFetch("/images/addImages", {
           method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
           body: JSON.stringify({
-            owner: `${Cookies.get("id")}`,
             images: addedUserAnswers["pictures"],
           }),
         })

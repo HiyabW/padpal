@@ -7,6 +7,7 @@ import Button from "@mui/material/Button";
 import { motion } from "framer-motion";
 import Cookies from 'js-cookie'
 import './styles.css'
+import { apiFetch } from "../../utils/apiFetch";
 
 const ViewProfile = () => {
   const [searchParams] = useSearchParams();
@@ -24,14 +25,9 @@ const ViewProfile = () => {
 
       console.log(id)
       // fetch data on currUser
-      fetch("https://palpal-api.onrender.com/feed/getUser", {
+      apiFetch("/feed/getUser", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          id: id,
-        }),
+        body: JSON.stringify({ id }),
       })
         .then((response) => response.json())
         .then((data) => {

@@ -3,6 +3,7 @@ import React, { useEffect } from "react";
 import ChatPreview from "./components/chatPreview";
 import ChatRoom from "./components/chatRoom";
 import Cookies from "js-cookie";
+import { apiFetch } from "../../utils/apiFetch";
 import CircularProgress from "@mui/material/CircularProgress";
 import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid2";
@@ -19,14 +20,9 @@ const Chat = () => {
 
   const fetchData = async () => {
     try {
-      fetch("https://palpal-api.onrender.com/chat/getChats", {
+      apiFetch("/chat/getChats", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          id: `${Cookies.get("id")}`,
-        }),
+        body: JSON.stringify({}),
       })
         .then((response) => response.json())
         .then((data) => {

@@ -1,5 +1,6 @@
 import React from "react";
 import Cookies from "js-cookie";
+import { apiFetch } from "../../utils/apiFetch";
 import UserCard from "./components/UserCard";
 import "./styles.css";
 import { useEffect, useRef } from "react";
@@ -62,14 +63,9 @@ const Feed = () => {
   useEffect(() => {
     if (isLoggedIn) {
       // first fetch data
-      fetch("https://palpal-api.onrender.com/feed/", {
+      apiFetch("/feed/", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          id: `${Cookies.get("id")}`,
-        }),
+        body: JSON.stringify({}),
       })
         .then((response) => response.json())
         .then((data) => {
@@ -86,14 +82,9 @@ const Feed = () => {
         });
 
       // ... then fetch currUser Pfp
-      fetch("https://palpal-api.onrender.com/feed/getUser", {
+      apiFetch("/feed/getUser", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          id: `${Cookies.get("id")}`,
-        }),
+        body: JSON.stringify({}),
       })
         .then((response) => response.json())
         .then((data) => {
