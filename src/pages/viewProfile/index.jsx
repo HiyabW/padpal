@@ -31,8 +31,9 @@ const ViewProfile = () => {
       })
         .then((response) => response.json())
         .then((data) => {
-          setUser(data["user"]);
-          setUsers(data["user"]);
+          const fetchedUser = data["user"];
+          setUser(fetchedUser);
+          setUsers({ [fetchedUser.email]: fetchedUser });
           setImages(data["images"]);
         })
         .catch((err) => {
