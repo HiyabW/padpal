@@ -1,5 +1,6 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useCallback } from "react";
 import { motion, useMotionValue, useTransform } from "framer-motion";
+import { apiFetch } from "../../../../utils/apiFetch";
 import "./styles.css";
 import AttachMoneyIcon from "@mui/icons-material/AttachMoney";
 import MuiDivider from "@mui/material/Divider";
@@ -87,68 +88,9 @@ const UserCard = ({
 }) => {
   console.log(users);
 
-  /************* Keyboard Shortcut functions *************/
-  // handle what happens on key press
-  const handleKeyPress = (event) => {
-    console.log(`Key pressed: ${event.key}`);
-    if (event.key === "ArrowRight" && isFront) {
-      handle = setInterval(() => incrementValue(x, "right"), 50);
-    }
-    if (event.key === "ArrowLeft" && isFront) {
-      handle = setInterval(() => incrementValue(x, "left"), 50);
-    }
-    if (event.key === "ArrowDown" && isFront) {
-      nextPicture();
-    }
-    if (event.key === "ArrowUp" && isFront) {
-      previousPicture();
-    }
-  };
-
-  function nextPicture() {
-    let nextImageIndex = imageIndex;
-    nextImageIndex += 1;
-    if (nextImageIndex < images.length) setImageIndex(nextImageIndex);
-  }
-
-  function previousPicture() {
-    let nextImageIndex = imageIndex;
-    nextImageIndex -= 1;
-    if (nextImageIndex >= 0) setImageIndex(nextImageIndex);
-  }
-
-  var handle;
-  // slowly do mousemove utils
-  function incrementValue(x, direction) {
-    if (feedOrViewProfile !== "view profile") {
-      if (direction === "left") {
-        x.set((x.get() - 5) * 1.5);
-      } else {
-        x.set((x.get() + 5) * 1.5);
-      }
-      console.log(x.get());
-
-      if (Math.abs(x.get()) >= 200) {
-        window.clearInterval(handle);
-        handleDragEnd();
-      }
-    }
-  }
-
-  useEffect(() => {
-    // attach the event listener
-    document.addEventListener("keydown", handleKeyPress);
-
-    // remove the event listener
-    return () => {
-      document.removeEventListener("keydown", handleKeyPress);
-    };
-  }, [handleKeyPress]);
-  /*******************************************/
-
   const [imageIndex, setImageIndex] = React.useState(0);
-
   const x = useMotionValue(0);
+  const swipeIntervalRef = useRef(null);
 
   const opacity = useTransform(x, [-150, 0, 150], [0, 1, 0]);
   const rotateRaw = useTransform(x, [-150, 150], [-18, 18]);
@@ -157,13 +99,18 @@ const UserCard = ({
   const isFront =
     feedOrViewProfile == "view profile" ? true : isKeyLast(users, user.email);
 
-  const rotate = useTransform(() => {
-    console.log("isRotated: ", isRotated);
-    const offset = (isFront || window.innerWidth <= 900) ? 0.00001 : isRotated % 2 ? 4 : -4;
-    return `${rotateRaw.get() + offset}deg`;
-  });
+  const nextPicture = useCallback(() => {
+    setImageIndex((prev) => {
+      const next = prev + 1;
+      return next < images.length ? next : prev;
+    });
+  }, [images.length]);
 
-  const handleDragEnd = () => {
+  const previousPicture = useCallback(() => {
+    setImageIndex((prev) => (prev > 0 ? prev - 1 : prev));
+  }, []);
+
+  const handleDragEnd = useCallback(() => {
     if (Math.abs(x.get()) > 20) {
       const isAMatch = x.get() > 0 ? true : false;
       if (x.get() > 0) {
@@ -179,13 +126,9 @@ const UserCard = ({
         }, "1000");
       }
       // first POST req to /saveMatch
-      fetch("https://palpal-api.onrender.com/match/saveMatch", {
+      apiFetch("/match/saveMatch", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
         body: JSON.stringify({
-          from: `${Cookies.get("id")}`,
           to: user._id,
           isAMatch,
         }),
@@ -199,15 +142,10 @@ const UserCard = ({
         });
 
       // ...then GET /getMatch to see if they've matched back. if so, call foundMatch to que match screen
-      //req body should have from:userEmail, to:currUserEmail, isAMatch:isAMatch
-      fetch("https://palpal-api.onrender.com/match/getMatch", {
+      apiFetch("/match/getMatch", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
         body: JSON.stringify({
           from: user._id,
-          to: `${Cookies.get("id")}`,
           isAMatch,
         }),
       })
@@ -229,7 +167,63 @@ const UserCard = ({
         return newUsers;
       });
     }
-  };
+  }, [x, user, setUsers, setMatch, setAccept, setReject, images]);
+
+  const handleKeyPress = useCallback(
+    (event) => {
+      console.log(`Key pressed: ${event.key}`);
+      const incrementValue = (direction) => {
+        if (feedOrViewProfile !== "view profile") {
+          if (direction === "left") {
+            x.set((x.get() - 5) * 1.5);
+          } else {
+            x.set((x.get() + 5) * 1.5);
+          }
+          console.log(x.get());
+
+          if (Math.abs(x.get()) >= 200) {
+            window.clearInterval(swipeIntervalRef.current);
+            handleDragEnd();
+          }
+        }
+      };
+
+      if (event.key === "ArrowRight") {
+        swipeIntervalRef.current = setInterval(
+          () => incrementValue("right"),
+          50
+        );
+      }
+      if (event.key === "ArrowLeft") {
+        swipeIntervalRef.current = setInterval(
+          () => incrementValue("left"),
+          50
+        );
+      }
+      if (event.key === "ArrowDown") {
+        nextPicture();
+      }
+      if (event.key === "ArrowUp") {
+        previousPicture();
+      }
+    },
+    [feedOrViewProfile, x, handleDragEnd, nextPicture, previousPicture]
+  );
+
+  useEffect(() => {
+    if (!isFront) return;
+
+    document.addEventListener("keydown", handleKeyPress);
+    return () => {
+      document.removeEventListener("keydown", handleKeyPress);
+    };
+  }, [handleKeyPress, isFront]);
+
+  const rotate = useTransform(() => {
+    console.log("isRotated: ", isRotated);
+    const offset = (isFront || window.innerWidth <= 900) ? 0.00001 : isRotated % 2 ? 4 : -4;
+    return `${rotateRaw.get() + offset}deg`;
+  });
 
   /**************** Util preference translations *****************/
 

@@ -3,6 +3,7 @@ import Button from "@mui/material/Button";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
+import { apiFetch } from "../../../../../../utils/apiFetch";
 import Modal from 'react-bootstrap/Modal';
 import Cookies from 'js-cookie';
 
@@ -26,13 +27,9 @@ export default function Settings({user}) {
   };
 
   function unmatch() {
-    fetch("https://palpal-api.onrender.com/match/unmatch", {
+    apiFetch("/match/unmatch", {
       method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
       body: JSON.stringify({
-        from: `${Cookies.get("id")}`,
         to: user.id
       }),
     })
