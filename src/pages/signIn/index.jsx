@@ -21,6 +21,7 @@ import Alert from "@mui/material/Alert";
 import MobileIntro from "./components/MobileIntro";
 import IconButton from "@mui/material/IconButton";
 import CircularProgress from "@mui/material/CircularProgress"
+import { apiFetch } from "../../utils/apiFetch";
 
 const Card = styled(MuiCard)(({ theme }) => ({
   display: "flex",
@@ -153,12 +154,8 @@ function SignIn() {
 
   function signInUser() {
     setIsLoading(true)
-    fetch("https://palpal-api.onrender.com/auth/login", {
+    apiFetch("/auth/login", {
       method: "POST",
-      credentials: "include",
-      headers: {
-        "Content-Type": "application/json",
-      },
       body: JSON.stringify({
         email: `${email}`,
         password: `${password}`,
@@ -194,12 +191,8 @@ function SignIn() {
 
   function signUpUser() {
     setIsLoading(true)
-    fetch("https://palpal-api.onrender.com/auth/register", {
+    apiFetch("/auth/register", {
       method: "POST",
-      credentials: "include",
-      headers: {
-        "Content-Type": "application/json",
-      },
       body: JSON.stringify({
         email: `${email}`,
         password: `${password}`,

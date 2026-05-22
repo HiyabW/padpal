@@ -22,6 +22,7 @@ const isProduction = process.env.NODE_ENV == 'production';
 const stylesHandler = isProduction ? MiniCssExtractPlugin.loader : 'style-loader';
 
 const PUBLIC_URL = process.env.PUBLIC_URL || '';
+const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:3007';
 
 
 const config = smp.wrap({
@@ -47,6 +48,7 @@ const config = smp.wrap({
         new webpack.DefinePlugin({
             // 'process.env': JSON.stringify(process.env), // Define all process.env variables
             'process.env.PUBLIC_URL': JSON.stringify(PUBLIC_URL),
+            'process.env.REACT_APP_API_URL': JSON.stringify(API_URL),
         }),
         new CopyWebpackPlugin({
             patterns: [

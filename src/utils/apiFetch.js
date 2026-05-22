@@ -1,6 +1,5 @@
 import Cookies from 'js-cookie';
-
-const API_BASE = 'https://palpal-api.onrender.com';
+import API_BASE from '../config/api';
 
 const AUTH_PATHS_NO_REFRESH = ['/auth/login', '/auth/register', '/auth/refreshToken'];
 
