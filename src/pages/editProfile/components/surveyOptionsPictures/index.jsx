@@ -5,6 +5,8 @@ import styled from "@mui/material/styles/styled";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 import IconButton from "@mui/material/IconButton";
 import CancelIcon from "@mui/icons-material/Cancel";
+import CircularProgress from "@mui/material/CircularProgress";
+import { uploadProfileImage } from "../../../../utils/uploadImage";
 
 const SurveyOptionsPictures = ({
   images,
@@ -15,6 +17,9 @@ const SurveyOptionsPictures = ({
   image3,
   setImage3,
 }) => {
+  const [uploadingSlot, setUploadingSlot] = React.useState(null);
+  const [uploadError, setUploadError] = React.useState(null);
+
   const VisuallyHiddenInput = styled("input")({
     clip: "rect(0 0 0 0)",
     clipPath: "inset(50%)",
@@ -28,7 +33,6 @@ const SurveyOptionsPictures = ({
   });
 
   const cancel = (e, imageNumber) => {
-
     if (imageNumber === 1) {
       setImage1(null);
       if (images.current) {
@@ -49,141 +53,97 @@ const SurveyOptionsPictures = ({
         images.current = images.current.splice(2, 1);
       }
     }
+
+    setUploadError(null);
   };
 
-  const updateAnswer = (e, imageNumber) => {
+  const setImageForSlot = (imageNumber, imageUrl) => {
+    if (imageNumber === 1) {
+      setImage1(imageUrl);
+    }
+    if (imageNumber === 2) {
+      setImage2(imageUrl);
+    }
+    if (imageNumber === 3) {
+      setImage3(imageUrl);
+    }
+  };
+
+  const updateAnswer = async (e, imageNumber) => {
+    const file = e.target.files?.[0];
+    if (!file) {
+      return;
+    }
+
     e.target.classList.add("selected");
+    setUploadError(null);
+    setUploadingSlot(imageNumber);
 
-    // Convert file to base64, then save in currSelectedAnswer
-    var reader = new FileReader();
-    reader.readAsDataURL(e.target.files[0]);
-    reader.onload = () => {
-      console.log(reader.result);
-      /* also update image states... */
-      if (imageNumber === 1) {
-        setImage1(reader.result);
-      }
-      if (imageNumber === 2) {
-        setImage2(reader.result);
-      }
-      if (imageNumber === 3) {
-        setImage3(reader.result);
-      }
-    };
-    reader.onerror = (error) => {
-      console.log("Error: ", error);
-    };
+    try {
+      const imageUrl = await uploadProfileImage(file);
+      setImageForSlot(imageNumber, imageUrl);
+    } catch (error) {
+      setUploadError(error.message || "Failed to upload image");
+    } finally {
+      setUploadingSlot(null);
+      e.target.value = "";
+    }
+  };
 
-    // console.log(currSelectedAnswer);
+  const renderSlot = (imageNumber, imageValue) => {
+    const isUploading = uploadingSlot === imageNumber;
+
+    return (
+      <Grid
+        className={`surveyPictureDivItem ${imageValue ? "selected" : ""}`}
+        size={4}
+      >
+        {isUploading && (
+          <CircularProgress size={48} className="surveyImageUploading" />
+        )}
+        {imageValue && !isUploading && (
+          <>
+            <IconButton
+              component="label"
+              role={undefined}
+              variant="contained"
+              tabIndex={-1}
+              className="surveyImageCancel"
+            >
+              <CancelIcon fontSize="large" onClick={(e) => cancel(e, imageNumber)} />
+            </IconButton>
+            <img src={imageValue} className="surveyImage" alt="" />
+          </>
+        )}
+        {!imageValue && !isUploading && (
+          <IconButton
+            component="label"
+            role={undefined}
+            variant="contained"
+            tabIndex={-1}
+          >
+            <AddCircleOutlineIcon fontSize="large" />
+            <VisuallyHiddenInput
+              type="file"
+              accept="image/jpeg,image/png,image/webp"
+              onChange={(e) => updateAnswer(e, imageNumber)}
+              className="picturesSurvey"
+            />
+          </IconButton>
+        )}
+      </Grid>
+    );
   };
 
   return (
-    <Grid container className="surveyPictureDivEditProfile" spacing={2}>
-      <Grid
-        className={`surveyPictureDivItem ${image1 ? "selected" : ""}`}
-        size={4}
-      >
-        {image1 && (
-          <>
-            <IconButton
-              component="label"
-              role={undefined}
-              variant="contained"
-              tabIndex={-1}
-              className="surveyImageCancel"
-            >
-              <CancelIcon fontSize="large" onClick={(e) => cancel(e, 1)} />
-            </IconButton>
-            <img src={image1} className="surveyImage" />
-          </>
-        )}
-        {!image1 && (
-          <IconButton
-            component="label"
-            role={undefined}
-            variant="contained"
-            tabIndex={-1}
-          >
-            <AddCircleOutlineIcon fontSize="large" />
-            <VisuallyHiddenInput
-              type="file"
-              onChange={(e) => updateAnswer(e, 1)}
-              className="picturesSurvey"
-            />
-          </IconButton>
-        )}
+    <>
+      {uploadError && <p className="surveyImageUploadError">{uploadError}</p>}
+      <Grid container className="surveyPictureDivEditProfile" spacing={2}>
+        {renderSlot(1, image1)}
+        {renderSlot(2, image2)}
+        {renderSlot(3, image3)}
       </Grid>
-
-      <Grid
-        className={`surveyPictureDivItem ${image2 ? "selected" : ""}`}
-        size={4}
-      >
-        {image2 && (
-          <>
-            <IconButton
-              component="label"
-              role={undefined}
-              variant="contained"
-              tabIndex={-1}
-              className="surveyImageCancel"
-            >
-              <CancelIcon fontSize="large" onClick={(e) => cancel(e, 2)} />
-            </IconButton>
-            <img src={image2} className="surveyImage" />
-          </>
-        )}
-        {!image2 && (
-          <IconButton
-            component="label"
-            role={undefined}
-            variant="contained"
-            tabIndex={-1}
-          >
-            <AddCircleOutlineIcon fontSize="large" />
-            <VisuallyHiddenInput
-              type="file"
-              onChange={(e) => updateAnswer(e, 2)}
-              className="picturesSurvey"
-            />
-          </IconButton>
-        )}
-      </Grid>
-
-      <Grid
-        className={`surveyPictureDivItem ${image3 ? "selected" : ""}`}
-        size={4}
-      >
-        {image3 && (
-          <>
-            <IconButton
-              component="label"
-              role={undefined}
-              variant="contained"
-              tabIndex={-1}
-              className="surveyImageCancel"
-            >
-              <CancelIcon fontSize="large" onClick={(e) => cancel(e, 3)} />
-            </IconButton>
-            <img src={image3} className="surveyImage" />
-          </>
-        )}
-        {!image3 && (
-          <IconButton
-            component="label"
-            role={undefined}
-            variant="contained"
-            tabIndex={-1}
-          >
-            <AddCircleOutlineIcon fontSize="large" />
-            <VisuallyHiddenInput
-              type="file"
-              onChange={(e) => updateAnswer(e, 3)}
-              className="picturesSurvey"
-            />
-          </IconButton>
-        )}
-      </Grid>
-    </Grid>
+    </>
   );
 };
 
