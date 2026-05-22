@@ -9,6 +9,8 @@ const SurveyOptionsText = ({
   currSelectedAnswer,
   setCurrSelectedAnswer,
 }) => {
+  const value = typeof currSelectedAnswer === "string" ? currSelectedAnswer : "";
+
   const updateAnswer = (e) => {
     if (currSelectedElement) {
       currSelectedElement.classList.remove("selected");
@@ -30,6 +32,7 @@ const SurveyOptionsText = ({
         <TextField
           sx={{ width: '70%' }}
           multiline
+          value={value}
           onChange={updateAnswer}
           id="outlined-basic"
           label={question.placeholder}

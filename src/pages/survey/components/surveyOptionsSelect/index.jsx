@@ -14,6 +14,8 @@ const SurveyOptionsSelect = ({
   currSelectedAnswer,
   setCurrSelectedAnswer,
 }) => {
+  const selectedValues = Array.isArray(currSelectedAnswer) ? currSelectedAnswer : [];
+
   const updateAnswer = (e) => {
     if (currSelectedElement) {
       currSelectedElement.classList.remove("selected");
@@ -24,14 +26,14 @@ const SurveyOptionsSelect = ({
     }
 
     // dont add duplicate options
-    if (currSelectedAnswer.includes(e.target.innerText)) {
+    if (selectedValues.includes(e.target.innerText)) {
       return;
     }
     e.target.classList.add("selected");
     setCurrSelectedElement(e.target);
-    console.log(currSelectedAnswer);
+    console.log(selectedValues);
     console.log(e);
-    setCurrSelectedAnswer([...currSelectedAnswer, e.target.innerText]);
+    setCurrSelectedAnswer([...selectedValues, e.target.innerText]);
   };
 
   const input = question.label === "hobbies" ? hobbies : cities;
@@ -41,7 +43,7 @@ const SurveyOptionsSelect = ({
       <Autocomplete
         onChange={updateAnswer}
         disablePortal
-        disabled={currSelectedAnswer.length===4}
+        disabled={selectedValues.length === 4}
         options={input}
         sx={{ width: 300 }}
         renderOption={(props, option) => {
@@ -64,7 +66,7 @@ const SurveyOptionsSelect = ({
 
       <Box id="selectedOptions" direction={"row"} sx={{ my: 2, overflow: 'scroll' }}>
         {console.log(currSelectedAnswer)}
-        {currSelectedAnswer.map((option) => {
+        {selectedValues.map((option) => {
           return (
             <SelectOptionButtons
               key={option}
