@@ -1,6 +1,16 @@
 import Cookies from 'js-cookie';
+import API_BASE from '../config/api';
 
-const API_BASE = 'https://palpal-api.onrender.com';
+const AUTH_PATHS_NO_REFRESH = ['/auth/login', '/auth/register', '/auth/refreshToken'];
+
+function normalizePath(path) {
+    const withLeadingSlash = path.startsWith('/') ? path : `/${path}`;
+    return withLeadingSlash.split('?')[0];
+}
+
+function isPublicAuthPath(path) {
+    return AUTH_PATHS_NO_REFRESH.includes(normalizePath(path));
+}
 
 async function refreshAccessToken() {
     try {
@@ -22,7 +32,9 @@ async function refreshAccessToken() {
 }
 
 export async function apiFetch(path, options = {}) {
-    const token = Cookies.get('isLoggedIn');
+    const hadSession = Boolean(Cookies.get('isLoggedIn'));
+    const sendAuth = hadSession && !isPublicAuthPath(path);
+    const token = sendAuth ? Cookies.get('isLoggedIn') : null;
     const headers = {
         'Content-Type': 'application/json',
         ...options.headers,
@@ -35,7 +47,10 @@ export async function apiFetch(path, options = {}) {
         headers,
     });
 
-    if (res.status === 401) {
+    const canRetryWithRefresh =
+        res.status === 401 && hadSession && !isPublicAuthPath(path);
+
+    if (canRetryWithRefresh) {
         const newToken = await refreshAccessToken();
         if (!newToken) return res;
         res = await fetch(`${API_BASE}${path}`, {
