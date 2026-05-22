@@ -57,6 +57,65 @@ const Divider = styled(MuiDivider)(({ theme }) => ({
   backgroundColor: "background.paper",
 }));
 
+const EMPTY_PICTURE_SLOTS = [null, null, null];
+
+const emptyAnswerForQuestion = (q) => {
+  if (q?.type === "pictures") {
+    return [...EMPTY_PICTURE_SLOTS];
+  }
+  if (q?.type === "text" || q?.type === "buttons") {
+    return "";
+  }
+  if (q?.type === "datePicker") {
+    return null;
+  }
+  return [];
+};
+
+const restoreAnswerForQuestion = (q, answers) => {
+  if (!q?.label) {
+    return emptyAnswerForQuestion(q);
+  }
+
+  const saved = answers[q.label];
+  if (saved == null) {
+    return emptyAnswerForQuestion(q);
+  }
+
+  if (q.type === "pictures") {
+    if (!Array.isArray(saved)) {
+      return [...EMPTY_PICTURE_SLOTS];
+    }
+    return [
+      saved[0] ?? null,
+      saved[1] ?? null,
+      saved[2] ?? null,
+    ];
+  }
+
+  if (q.type === "text" || q?.type === "buttons" || q?.type === "datePicker") {
+    return saved;
+  }
+
+  if (Array.isArray(saved)) {
+    return [...saved];
+  }
+
+  return saved;
+};
+
+const hasSurveyAnswer = (question, answer) => {
+  if (question?.type === "pictures") {
+    return Array.isArray(answer) && answer.some(Boolean);
+  }
+
+  if (Array.isArray(answer)) {
+    return answer.length > 0;
+  }
+
+  return answer != null && answer !== "";
+};
+
 const Survey = () => {
   let [index, setIndex] = useState(-1);
   let [question, setQuestion] = useState(surveyQuestions[index]);
@@ -85,25 +144,35 @@ const Survey = () => {
   };
 
   const back = () => {
-    /* ... First reset current answer choices and update progress bar */
+    const updatedAnswers = { ...userAnswers };
+    if (question?.label) {
+      updatedAnswers[question.label] = currSelectedAnswer;
+    }
+    setUserAnswers(updatedAnswers);
+
     setCurrSelectedElement(null);
-    setCurrSelectedAnswer([]);
     setProgress((progress -= 6.4));
     setError(null);
 
-    setIndex(--index);
-    setQuestion(surveyQuestions[index]);
+    const newIndex = index - 1;
+    const prevQuestion = surveyQuestions[newIndex];
+    setIndex(newIndex);
+    setQuestion(prevQuestion);
+    setCurrSelectedAnswer(restoreAnswerForQuestion(prevQuestion, updatedAnswers));
   };
 
   const next = async () => {
     let addedUserAnswers = null;
     if (index === -1) {
-      setIndex(++index);
-      setQuestion(surveyQuestions[index]);
+      const newIndex = 0;
+      const firstQuestion = surveyQuestions[newIndex];
+      setIndex(newIndex);
+      setQuestion(firstQuestion);
+      setCurrSelectedAnswer(restoreAnswerForQuestion(firstQuestion, userAnswers));
       return;
     }
     if (
-      (currSelectedAnswer?.length <= 0 || currSelectedAnswer === null) &&
+      !hasSurveyAnswer(question, currSelectedAnswer) &&
       question.type !== "facialVerification"
     ) {
       setError("Please answer the following question before continuing");
@@ -206,7 +275,7 @@ const Survey = () => {
         apiFetch("/images/addImages", {
           method: "POST",
           body: JSON.stringify({
-            images: addedUserAnswers["pictures"],
+            images: (addedUserAnswers["pictures"] || []).filter(Boolean),
           }),
         })
           .then((response) => response.json())
@@ -219,8 +288,11 @@ const Survey = () => {
 
     // increment index to change to next question, but we only do this if we aren't at the end of the survey
     if (index !== surveyQuestions.length - 1) {
-      setIndex(++index);
-      setQuestion(surveyQuestions[index]);
+      const newIndex = index + 1;
+      const nextQuestion = surveyQuestions[newIndex];
+      setIndex(newIndex);
+      setQuestion(nextQuestion);
+      setCurrSelectedAnswer(restoreAnswerForQuestion(nextQuestion, addedUserAnswers));
     }
   };
 
