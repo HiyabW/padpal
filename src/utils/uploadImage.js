@@ -54,3 +54,19 @@ export async function uploadProfileImage(file) {
 
     return imageUrl;
 }
+
+export async function deleteProfileImage(imageUrl) {
+    if (!imageUrl || imageUrl.startsWith('data:')) {
+        return;
+    }
+
+    const response = await apiFetch('/images/deleteImage', {
+        method: 'POST',
+        body: JSON.stringify({ imageUrl }),
+    });
+
+    if (!response.ok) {
+        const errorBody = await response.json().catch(() => ({}));
+        throw new Error(errorBody?.error?.message || 'Failed to delete image');
+    }
+}
