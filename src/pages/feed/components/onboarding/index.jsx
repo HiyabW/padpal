@@ -34,7 +34,7 @@ export default function Onboarding({ open, handleClose }) {
   const isOnboarded = () => {
     Cookies.remove("needsOnboarding");
     handleClose();
-    // fetch("https://palpal-api.onrender.com/auth/onboarded", {
+    // apiFetch("/auth/onboarded", {
     //   method: "POST",
     //   headers: {
     //     "Content-Type": "application/json",

@@ -1,6 +1,5 @@
 import Cookies from 'js-cookie';
-
-const API_BASE = 'https://palpal-api.onrender.com';
+import API_BASE from '../config/api';
 
 async function refreshAccessToken() {
     try {
