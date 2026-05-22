@@ -27,16 +27,29 @@ export async function uploadProfileImage(file) {
 
     const { uploadUrl, imageUrl } = await presignResponse.json();
 
-    const uploadResponse = await fetch(uploadUrl, {
-        method: 'PUT',
-        body: file,
-        headers: {
-            'Content-Type': file.type,
-        },
-    });
+    if (!uploadUrl || !imageUrl) {
+        throw new Error('Upload preparation returned an invalid response');
+    }
+
+    const uploadHost = new URL(uploadUrl).host;
+
+    let uploadResponse;
+    try {
+        uploadResponse = await fetch(uploadUrl, {
+            method: 'PUT',
+            body: file,
+            headers: {
+                'Content-Type': file.type,
+            },
+        });
+    } catch (error) {
+        throw new Error(
+            `Upload to ${uploadHost} was blocked (network or CORS). Check the S3 bucket region matches AWS_REGION.`
+        );
+    }
 
     if (!uploadResponse.ok) {
-        throw new Error('Failed to upload image to storage');
+        throw new Error(`Upload to ${uploadHost} failed with status ${uploadResponse.status}`);
     }
 
     return imageUrl;
