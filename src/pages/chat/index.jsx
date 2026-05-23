@@ -1,48 +1,111 @@
 import "./styles.css";
-import React, { useEffect } from "react";
+import React, { useCallback, useEffect } from "react";
 import ChatPreview from "./components/chatPreview";
 import ChatRoom from "./components/chatRoom";
 import Cookies from "js-cookie";
 import { apiFetch } from "../../api/client";
+import { connectChatSocket, disconnectChatSocket } from "../../api/socket";
 import CircularProgress from "@mui/material/CircularProgress";
 import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid2";
 import { motion } from "framer-motion";
 import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIos";
 
+const CHAT_MESSAGE_LIMIT = 25;
+
+function findPartnerId(message, myId) {
+  return String(message.from) === String(myId)
+    ? String(message.to)
+    : String(message.from);
+}
+
+function appendMessageToData(prevData, message, myId) {
+  if (!prevData?.Messages) return prevData;
+
+  const partnerId = findPartnerId(message, myId);
+  const chat =
+    prevData.Messages[partnerId] ||
+    Object.values(prevData.Messages).find(
+      (entry) => String(entry.id) === partnerId
+    );
+
+  if (!chat) return prevData;
+
+  const chatKey =
+    prevData.Messages[partnerId] != null
+      ? partnerId
+      : Object.keys(prevData.Messages).find(
+          (key) => String(prevData.Messages[key].id) === partnerId
+        );
+
+  if (!chatKey) return prevData;
+
+  const existing = chat.SortedMessages || [];
+  if (existing.some((entry) => String(entry._id) === String(message._id))) {
+    return prevData;
+  }
+
+  return {
+    ...prevData,
+    Messages: {
+      ...prevData.Messages,
+      [chatKey]: {
+        ...chat,
+        SortedMessages: [message, ...existing],
+      },
+    },
+  };
+}
+
 const Chat = () => {
   const isLoggedIn = Cookies.get("isLoggedIn");
+  const myId = Cookies.get("id");
   const [selectedUser, setSelectedUser] = React.useState(false);
   const [data, setData] = React.useState(null);
   const [isLoaded, setIsLoaded] = React.useState(false);
   const [justSent, setJustSent] = React.useState(null);
-  const [currViewMobile, setCurrViewMobile] = React.useState("ChatPreview")
+  const [currViewMobile, setCurrViewMobile] = React.useState("ChatPreview");
 
-  const fetchData = async () => {
+  const fetchData = useCallback(async () => {
+    if (!isLoggedIn) return;
+
     try {
-      apiFetch("/chat/getChats", {
+      const response = await apiFetch("/chat/getChats", {
         method: "POST",
-        body: JSON.stringify({}),
-      })
-        .then((response) => response.json())
-        .then((data) => {
-          setData(data);
-          setIsLoaded(true);
-          setJustSent(null);
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-    } catch (error) {
-      console.error("Error fetching data:", error);
+        body: JSON.stringify({ limit: CHAT_MESSAGE_LIMIT }),
+      });
+      const nextData = await response.json();
+      setData(nextData);
+      setIsLoaded(true);
+    } catch (err) {
+      console.log(err);
     }
-  };
+  }, [isLoggedIn]);
+
+  const handleIncomingMessage = useCallback(
+    (message) => {
+      setData((prev) => appendMessageToData(prev, message, myId));
+      setJustSent(null);
+    },
+    [myId]
+  );
+
+  const handleOutgoingMessage = useCallback(
+    (message) => {
+      setData((prev) => appendMessageToData(prev, message, myId));
+      setJustSent(null);
+    },
+    [myId]
+  );
 
   useEffect(() => {
-    fetchData(); // Initial fetch
-    const intervalId = setInterval(fetchData, 3000); // Fetch every 5 seconds
-    return () => clearInterval(intervalId); // Cleanup on unmount
-  }, []);
+    if (!isLoggedIn) return;
+
+    fetchData();
+    connectChatSocket({ onNewMessage: handleIncomingMessage });
+
+    return () => disconnectChatSocket();
+  }, [isLoggedIn, fetchData, handleIncomingMessage]);
 
   return (
     <div class="Chat gradient-background2">
@@ -80,6 +143,7 @@ const Chat = () => {
             <Box className="ChatList">
               {Object.entries(data["Messages"]).map(([key]) => (
                 <ChatPreview
+                  key={key}
                   userId={key}
                   user={data["Messages"][key]}
                   justSent={justSent}
@@ -101,7 +165,8 @@ const Chat = () => {
                   <ChatRoom
                     user={data["Messages"][selectedUser]}
                     justSent={justSent}
-                    setJustSent={setJustSent} />
+                    setJustSent={setJustSent}
+                    onMessageSent={handleOutgoingMessage} />
                 </>
               )}
               {!selectedUser && Object.keys(data["Messages"]).length > 0 && (

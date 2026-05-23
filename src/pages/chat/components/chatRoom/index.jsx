@@ -21,7 +21,7 @@ const Divider = styled(MuiDivider)(({ theme }) => ({
   backgroundColor: "background.paper",
 }));
 
-const ChatRoom = ({ user, justSent, setJustSent }) => {
+const ChatRoom = ({ user, justSent, setJustSent, onMessageSent }) => {
   const [currMessage, setCurrMessage] = React.useState("");
   const currDate = useRef(null);
   let index = -1;
@@ -124,14 +124,7 @@ const ChatRoom = ({ user, justSent, setJustSent }) => {
     if (!currDate.current) {
       currDate.current = date;
     }
-    console.log(
-      message,
-      date,
-      outgoingOrIncoming,
-      currDate.current,
-      isOverAnHourApart(new Date(currDate.current), date),
-      isLastItem
-    );
+
     if (
       currDate.current &&
       (isOverAnHourApart(new Date(currDate.current), date) || isLastItem)
@@ -140,12 +133,6 @@ const ChatRoom = ({ user, justSent, setJustSent }) => {
         dateIfOverHourApart = date;
       } else {
         dateIfOverHourApart = previousMessageDate;
-        console.log(
-          "previousMessageDATE CHOSEN: ",
-          message,
-          previousMessage,
-          previousMessageDate
-        );
       }
 
       currDate.current = date;
@@ -194,21 +181,28 @@ const ChatRoom = ({ user, justSent, setJustSent }) => {
   }
 
   function sendMessage() {
+    if (!currMessage.trim()) return;
+
+    const text = currMessage;
     const today = new Date();
+    setJustSent(text);
+    setCurrMessage("");
+
     apiFetch("/chat/sendMessage", {
       method: "POST",
       body: JSON.stringify({
         to: user.id,
-        message: currMessage,
+        message: text,
         date: today,
       }),
     })
       .then((response) => response.json())
-      .then(() => {
-        setJustSent(currMessage);
-        setCurrMessage("");
+      .then((savedMessage) => {
+        onMessageSent?.(savedMessage);
       })
       .catch((err) => {
+        setJustSent(null);
+        setCurrMessage(text);
         console.log(err);
       });
   }
