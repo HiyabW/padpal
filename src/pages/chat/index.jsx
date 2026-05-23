@@ -98,14 +98,21 @@ const Chat = () => {
     [myId]
   );
 
+  const handleMatchCreated = useCallback(() => {
+    fetchData();
+  }, [fetchData]);
+
   useEffect(() => {
     if (!isLoggedIn) return;
 
     fetchData();
-    connectChatSocket({ onNewMessage: handleIncomingMessage });
+    connectChatSocket({
+      onNewMessage: handleIncomingMessage,
+      onMatchCreated: handleMatchCreated,
+    });
 
     return () => disconnectChatSocket();
-  }, [isLoggedIn, fetchData, handleIncomingMessage]);
+  }, [isLoggedIn, fetchData, handleIncomingMessage, handleMatchCreated]);
 
   return (
     <div class="Chat gradient-background2">

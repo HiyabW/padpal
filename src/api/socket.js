@@ -5,7 +5,7 @@ import { baseURL } from './client';
 let socket = null;
 let visibilityHandler = null;
 
-export function connectChatSocket({ onNewMessage } = {}) {
+export function connectChatSocket({ onNewMessage, onMatchCreated } = {}) {
   const token = Cookies.get('isLoggedIn');
   if (!token) return null;
 
@@ -29,6 +29,10 @@ export function connectChatSocket({ onNewMessage } = {}) {
 
   if (onNewMessage) {
     socket.on('new_message', onNewMessage);
+  }
+
+  if (onMatchCreated) {
+    socket.on('match_created', onMatchCreated);
   }
 
   visibilityHandler = () => {
