@@ -1,4 +1,5 @@
 import Cookies from 'js-cookie';
+import { updateChatSocketAuth } from './socket';
 
 export const baseURL =
   typeof process !== 'undefined' && process.env?.REACT_APP_API_URL
@@ -64,6 +65,7 @@ async function refreshAccessToken() {
     const data = await res.json();
     const inOneHour = new Date(new Date().getTime() + 60 * 60 * 1000);
     Cookies.set('isLoggedIn', data.accessToken, { expires: inOneHour });
+    updateChatSocketAuth();
     return data.accessToken;
   } catch {
     Cookies.remove('isLoggedIn');

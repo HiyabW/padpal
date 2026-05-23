@@ -1,10 +1,14 @@
 import "./styles.css";
-import React, { useCallback, useEffect } from "react";
+import React, { useCallback, useEffect, useRef } from "react";
 import ChatPreview from "./components/chatPreview";
 import ChatRoom from "./components/chatRoom";
 import Cookies from "js-cookie";
 import { apiFetch } from "../../api/client";
-import { connectChatSocket, disconnectChatSocket } from "../../api/socket";
+import {
+  destroyChatSocket,
+  ensureChatSocketConnected,
+  setChatSocketHandlers,
+} from "../../api/socket";
 import CircularProgress from "@mui/material/CircularProgress";
 import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid2";
@@ -102,17 +106,33 @@ const Chat = () => {
     fetchData();
   }, [fetchData]);
 
+  const socketHandlersRef = useRef({
+    handleIncomingMessage,
+    handleMatchCreated,
+  });
+
+  socketHandlersRef.current = {
+    handleIncomingMessage,
+    handleMatchCreated,
+  };
+
+  useEffect(() => {
+    if (!isLoggedIn) return;
+    fetchData();
+  }, [isLoggedIn, fetchData]);
+
   useEffect(() => {
     if (!isLoggedIn) return;
 
-    fetchData();
-    connectChatSocket({
-      onNewMessage: handleIncomingMessage,
-      onMatchCreated: handleMatchCreated,
+    ensureChatSocketConnected();
+    setChatSocketHandlers({
+      onNewMessage: (message) =>
+        socketHandlersRef.current.handleIncomingMessage(message),
+      onMatchCreated: () => socketHandlersRef.current.handleMatchCreated(),
     });
 
-    return () => disconnectChatSocket();
-  }, [isLoggedIn, fetchData, handleIncomingMessage, handleMatchCreated]);
+    return () => destroyChatSocket();
+  }, [isLoggedIn]);
 
   return (
     <div class="Chat gradient-background2">

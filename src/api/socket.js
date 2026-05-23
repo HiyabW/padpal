@@ -3,21 +3,42 @@ import Cookies from 'js-cookie';
 import { baseURL } from './client';
 
 let socket = null;
-let visibilityHandler = null;
+let isConnecting = false;
+let handlers = {
+  onNewMessage: null,
+  onMatchCreated: null,
+};
 
-export function connectChatSocket({ onNewMessage, onMatchCreated } = {}) {
+function bindSocketEvents() {
+  if (!socket) return;
+
+  socket.off('new_message');
+  socket.off('match_created');
+
+  if (handlers.onNewMessage) {
+    socket.on('new_message', handlers.onNewMessage);
+  }
+
+  if (handlers.onMatchCreated) {
+    socket.on('match_created', handlers.onMatchCreated);
+  }
+}
+
+export function ensureChatSocketConnected() {
   const token = Cookies.get('isLoggedIn');
   if (!token) return null;
 
-  if (socket?.connected) {
+  if (socket) {
+    socket.auth = { token };
+    if (!socket.connected && !isConnecting) {
+      isConnecting = true;
+      socket.connect();
+    }
+    bindSocketEvents();
     return socket;
   }
 
-  if (socket) {
-    socket.disconnect();
-    socket.removeAllListeners();
-  }
-
+  isConnecting = true;
   socket = io(baseURL, {
     auth: { token },
     transports: ['websocket', 'polling'],
@@ -27,47 +48,54 @@ export function connectChatSocket({ onNewMessage, onMatchCreated } = {}) {
     randomizationFactor: 0.5,
   });
 
-  if (onNewMessage) {
-    socket.on('new_message', onNewMessage);
-  }
+  socket.on('connect', () => {
+    isConnecting = false;
+  });
 
-  if (onMatchCreated) {
-    socket.on('match_created', onMatchCreated);
-  }
+  socket.on('disconnect', () => {
+    isConnecting = false;
+  });
 
-  visibilityHandler = () => {
-    if (!socket) return;
+  socket.on('connect_error', () => {
+    isConnecting = false;
+  });
 
-    if (document.hidden) {
-      socket.disconnect();
-      return;
-    }
-
-    const freshToken = Cookies.get('isLoggedIn');
-    if (!freshToken) return;
-
-    socket.auth = { token: freshToken };
-    if (!socket.connected) {
-      socket.connect();
-    }
-  };
-
-  document.addEventListener('visibilitychange', visibilityHandler);
-
+  bindSocketEvents();
   return socket;
 }
 
-export function disconnectChatSocket() {
-  if (visibilityHandler) {
-    document.removeEventListener('visibilitychange', visibilityHandler);
-    visibilityHandler = null;
-  }
+export function setChatSocketHandlers({ onNewMessage, onMatchCreated } = {}) {
+  handlers.onNewMessage = onNewMessage || null;
+  handlers.onMatchCreated = onMatchCreated || null;
+  bindSocketEvents();
+}
+
+export function clearChatSocketHandlers() {
+  handlers.onNewMessage = null;
+  handlers.onMatchCreated = null;
 
   if (socket) {
-    socket.removeAllListeners();
+    socket.off('new_message');
+    socket.off('match_created');
+  }
+}
+
+export function updateChatSocketAuth() {
+  const token = Cookies.get('isLoggedIn');
+  if (!socket || !token) return;
+
+  socket.auth = { token };
+}
+
+export function destroyChatSocket() {
+  clearChatSocketHandlers();
+
+  if (socket) {
     socket.disconnect();
     socket = null;
   }
+
+  isConnecting = false;
 }
 
 export function getChatSocket() {
