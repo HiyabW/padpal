@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useCallback } from "react";
 import { motion, useMotionValue, useTransform } from "framer-motion";
-import { apiFetch } from "../../../../utils/apiFetch";
+import { apiFetch } from "../../../../api/client";
 import "./styles.css";
 import AttachMoneyIcon from "@mui/icons-material/AttachMoney";
 import MuiDivider from "@mui/material/Divider";
@@ -125,7 +125,7 @@ const UserCard = ({
           setReject(false)
         }, "1000");
       }
-      // first POST req to /saveMatch
+      // save swipe first, then check for mutual match
       apiFetch("/match/saveMatch", {
         method: "POST",
         body: JSON.stringify({
@@ -134,21 +134,12 @@ const UserCard = ({
         }),
       })
         .then((response) => response.json())
-        .then((data) => {
-          console.log(data);
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-
-      // ...then GET /getMatch to see if they've matched back. if so, call foundMatch to que match screen
-      apiFetch("/match/getMatch", {
-        method: "POST",
-        body: JSON.stringify({
-          from: user._id,
-          isAMatch,
-        }),
-      })
+        .then(() =>
+          apiFetch("/match/getMatch", {
+            method: "POST",
+            body: JSON.stringify({ to: user._id }),
+          })
+        )
         .then((response) => response.json())
         .then((data) => {
           if (data.isAMatch) {
