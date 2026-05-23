@@ -1,6 +1,6 @@
 import React from "react";
 import Cookies from "js-cookie";
-import { apiFetch } from "../../utils/apiFetch";
+import { apiFetch } from "../../api/client";
 import UserCard from "./components/UserCard";
 import "./styles.css";
 import { useEffect, useRef } from "react";

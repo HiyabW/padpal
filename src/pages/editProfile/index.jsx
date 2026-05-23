@@ -1,6 +1,6 @@
 import React, { useEffect, useRef } from "react";
 import Cookies from "js-cookie";
-import { apiFetch } from "../../utils/apiFetch";
+import { apiFetch } from "../../api/client";
 import MuiCard from "@mui/material/Card";
 import styled from "@mui/material/styles/styled";
 import { motion } from "framer-motion";

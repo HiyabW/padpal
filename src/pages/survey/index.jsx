@@ -2,7 +2,7 @@ import React from "react";
 import { useState, useRef, useEffect } from "react";
 import "./styles.css";
 import Cookies from "js-cookie";
-import { apiFetch } from "../../utils/apiFetch";
+import { apiFetch } from "../../api/client";
 import SurveyOptionsButtons from "./components/surveyOptionsButtons";
 import { surveyQuestions } from "./questions";
 import Button from "@mui/material/Button";

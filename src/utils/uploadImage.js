@@ -1,4 +1,4 @@
-import { apiFetch } from './apiFetch';
+import { apiFetch } from '../api/client';
 
 const ALLOWED_CONTENT_TYPES = new Set([
     'image/jpeg',
@@ -19,11 +19,6 @@ export async function uploadProfileImage(file) {
         method: 'POST',
         body: JSON.stringify({ contentType: file.type }),
     });
-
-    if (!presignResponse.ok) {
-        const errorBody = await presignResponse.json().catch(() => ({}));
-        throw new Error(errorBody?.error?.message || 'Failed to prepare image upload');
-    }
 
     const { uploadUrl, imageUrl } = await presignResponse.json();
 
@@ -60,13 +55,8 @@ export async function deleteProfileImage(imageUrl) {
         return;
     }
 
-    const response = await apiFetch('/images/deleteImage', {
+    await apiFetch('/images/deleteImage', {
         method: 'POST',
         body: JSON.stringify({ imageUrl }),
     });
-
-    if (!response.ok) {
-        const errorBody = await response.json().catch(() => ({}));
-        throw new Error(errorBody?.error?.message || 'Failed to delete image');
-    }
 }

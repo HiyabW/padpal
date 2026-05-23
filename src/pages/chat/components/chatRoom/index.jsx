@@ -8,7 +8,7 @@ import TextField from "@mui/material/TextField";
 import SendIcon from "@mui/icons-material/Send";
 import InputAdornment from "@mui/material/InputAdornment";
 import Cookies from "js-cookie";
-import { apiFetch } from "../../../../utils/apiFetch";
+import { apiFetch } from "../../../../api/client";
 import Settings from "./components/settings";
 import Tooltip from "@mui/material/Tooltip";
 
