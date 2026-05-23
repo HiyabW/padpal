@@ -7,7 +7,7 @@ import Button from "@mui/material/Button";
 import { motion } from "framer-motion";
 import Cookies from 'js-cookie'
 import './styles.css'
-import { apiFetch } from "../../utils/apiFetch";
+import { apiFetch } from "../../api/client";
 
 const ViewProfile = () => {
   const [searchParams] = useSearchParams();

@@ -9,7 +9,7 @@ import ViewProfile from './pages/viewProfile';
 import EditProfile from './pages/editProfile';
 import React, { useEffect } from 'react';
 import Cookies from 'js-cookie';
-import { apiFetch } from './utils/apiFetch';
+import { apiFetch } from './api/client';
 
 function App() {
   const location = useLocation();

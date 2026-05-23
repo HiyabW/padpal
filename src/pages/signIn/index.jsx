@@ -21,7 +21,7 @@ import Alert from "@mui/material/Alert";
 import MobileIntro from "./components/MobileIntro";
 import IconButton from "@mui/material/IconButton";
 import CircularProgress from "@mui/material/CircularProgress"
-import { apiFetch } from "../../utils/apiFetch";
+import { apiFetch } from "../../api/client";
 
 const Card = styled(MuiCard)(({ theme }) => ({
   display: "flex",

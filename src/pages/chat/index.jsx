@@ -3,7 +3,7 @@ import React, { useEffect } from "react";
 import ChatPreview from "./components/chatPreview";
 import ChatRoom from "./components/chatRoom";
 import Cookies from "js-cookie";
-import { apiFetch } from "../../utils/apiFetch";
+import { apiFetch } from "../../api/client";
 import CircularProgress from "@mui/material/CircularProgress";
 import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid2";
