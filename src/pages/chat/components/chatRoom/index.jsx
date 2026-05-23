@@ -1,6 +1,6 @@
 import Box from "@mui/material/Box";
 import IconButton from "@mui/material/IconButton";
-import React, { useRef } from "react";
+import React, { useCallback, useLayoutEffect, useRef } from "react";
 import "./styles.css";
 import MuiDivider from "@mui/material/Divider";
 import styled from "@mui/material/styles/styled";
@@ -11,6 +11,9 @@ import Cookies from "js-cookie";
 import { apiFetch } from "../../../../api/client";
 import Settings from "./components/settings";
 import Tooltip from "@mui/material/Tooltip";
+import CircularProgress from "@mui/material/CircularProgress";
+
+const SCROLL_LOAD_THRESHOLD_PX = 80;
 
 const Divider = styled(MuiDivider)(({ theme }) => ({
   marginTop: "1rem",
@@ -21,11 +24,28 @@ const Divider = styled(MuiDivider)(({ theme }) => ({
   backgroundColor: "background.paper",
 }));
 
-const ChatRoom = ({ user, justSent, setJustSent, onMessageSent }) => {
+const ChatRoom = ({
+  user,
+  justSent,
+  setJustSent,
+  onMessageSent,
+  onOlderMessagesLoaded,
+  messageLimit = 25,
+}) => {
   const [currMessage, setCurrMessage] = React.useState("");
+  const [isLoadingOlder, setIsLoadingOlder] = React.useState(false);
   const currDate = useRef(null);
-  let index = -1;
+  const messagesRef = useRef(null);
+  const scrollRestoreRef = useRef(null);
+  const loadingOlderRef = useRef(false);
+  const needsInitialScrollRef = useRef(true);
+  const previousUserIdRef = useRef(null);
   const regExp = /[a-zA-Z]/g;
+  const sortedMessages = Array.isArray(user.SortedMessages)
+    ? user.SortedMessages
+    : Object.values(user.SortedMessages || {});
+  const displayMessages = [...sortedMessages].reverse();
+  const hasMore = user.hasMore !== false;
 
   /**** Util functions -- mainly pertaining to date *****/
 
@@ -35,7 +55,6 @@ const ChatRoom = ({ user, justSent, setJustSent, onMessageSent }) => {
     const yesterday = new Date(today);
     yesterday.setDate(yesterday.getDate() - 1);
 
-    // Check if the date is today
     if (
       date.getDate() === today.getDate() &&
       date.getMonth() === today.getMonth() &&
@@ -44,7 +63,6 @@ const ChatRoom = ({ user, justSent, setJustSent, onMessageSent }) => {
       return "Today";
     }
 
-    // Check if the date is yesterday
     if (
       date.getDate() === yesterday.getDate() &&
       date.getMonth() === yesterday.getMonth() &&
@@ -73,11 +91,12 @@ const ChatRoom = ({ user, justSent, setJustSent, onMessageSent }) => {
 
   function getDay(date) {
     const fullMonth = monthNames[date.getMonth()];
-    const day = date.getDate().toString().padStart(2, "0"); // add leading zero if needed
+    const day = date.getDate().toString().padStart(2, "0");
     const year = date.getFullYear();
 
-    const formattedDate = `${fullMonth} ${day}${today.getFullYear() !== year ? `, ${year}` : ""
-      }`;
+    const formattedDate = `${fullMonth} ${day}${
+      today.getFullYear() !== year ? `, ${year}` : ""
+    }`;
     return formattedDate;
   }
 
@@ -86,7 +105,7 @@ const ChatRoom = ({ user, justSent, setJustSent, onMessageSent }) => {
     const minutes = date.getMinutes();
 
     const ampm = hours >= 12 ? "PM" : "AM";
-    const formattedHours = hours % 12 || 12; // 0 should be displayed as 12
+    const formattedHours = hours % 12 || 12;
 
     const formattedMinutes = minutes < 10 ? "0" + minutes : minutes;
 
@@ -94,17 +113,107 @@ const ChatRoom = ({ user, justSent, setJustSent, onMessageSent }) => {
   }
 
   function isOverAnHourApart(date1, date2) {
-    // Get the difference in milliseconds
     const diff = Math.abs(date1.getTime() - date2.getTime());
-
-    // Convert milliseconds to hours
     const hoursDiff = diff / (1000 * 60 * 60);
-
-    // Check if the difference is greater than 1 hour
     return hoursDiff > 1;
   }
 
   /*********************************************************/
+
+  const loadOlderMessages = useCallback(async () => {
+    if (loadingOlderRef.current || !hasMore || sortedMessages.length === 0) {
+      return;
+    }
+
+    const oldestMessage = sortedMessages[sortedMessages.length - 1];
+    if (!oldestMessage?.date) return;
+
+    const container = messagesRef.current;
+    if (!container) return;
+
+    scrollRestoreRef.current = {
+      scrollHeight: container.scrollHeight,
+      scrollTop: container.scrollTop,
+    };
+
+    loadingOlderRef.current = true;
+    setIsLoadingOlder(true);
+
+    try {
+      const response = await apiFetch("/chat/getMessages", {
+        method: "POST",
+        body: JSON.stringify({
+          partnerId: String(user.id),
+          before: oldestMessage.date,
+          limit: messageLimit,
+        }),
+      });
+      const { messages, hasMore: nextHasMore } = await response.json();
+
+      if (messages?.length) {
+        onOlderMessagesLoaded?.(user.id, messages, nextHasMore);
+      } else {
+        scrollRestoreRef.current = null;
+        onOlderMessagesLoaded?.(user.id, [], false);
+      }
+    } catch (err) {
+      scrollRestoreRef.current = null;
+      console.log(err);
+    } finally {
+      loadingOlderRef.current = false;
+      setIsLoadingOlder(false);
+    }
+  }, [
+    hasMore,
+    messageLimit,
+    onOlderMessagesLoaded,
+    sortedMessages,
+    user.id,
+  ]);
+
+  const handleMessagesScroll = useCallback(() => {
+    const container = messagesRef.current;
+    if (
+      !container ||
+      loadingOlderRef.current ||
+      !hasMore ||
+      needsInitialScrollRef.current
+    ) {
+      return;
+    }
+
+    if (container.scrollTop <= SCROLL_LOAD_THRESHOLD_PX) {
+      loadOlderMessages();
+    }
+  }, [hasMore, loadOlderMessages]);
+
+  useLayoutEffect(() => {
+    const isNewChat = previousUserIdRef.current !== user.id;
+    if (isNewChat) {
+      previousUserIdRef.current = user.id;
+      currDate.current = null;
+      scrollRestoreRef.current = null;
+      loadingOlderRef.current = false;
+      setIsLoadingOlder(false);
+      needsInitialScrollRef.current = true;
+    }
+
+    const container = messagesRef.current;
+    if (!container || displayMessages.length === 0) return;
+
+    if (scrollRestoreRef.current) {
+      const { scrollHeight, scrollTop } = scrollRestoreRef.current;
+      container.scrollTop =
+        container.scrollHeight - scrollHeight + scrollTop;
+      scrollRestoreRef.current = null;
+      return;
+    }
+
+    if (needsInitialScrollRef.current) {
+      container.scrollTop = container.scrollHeight;
+      needsInitialScrollRef.current = false;
+    }
+  }, [user.id, displayMessages.length]);
 
   function handleInput(e) {
     setCurrMessage(e.target.value);
@@ -118,7 +227,6 @@ const ChatRoom = ({ user, justSent, setJustSent, onMessageSent }) => {
     previousMessage,
     previousMessageDate
   ) {
-    // first figure out if enough time has passed to add date
     let dateIfOverHourApart = null;
 
     if (!currDate.current) {
@@ -146,8 +254,6 @@ const ChatRoom = ({ user, justSent, setJustSent, onMessageSent }) => {
       }
       dateTime = getFormattedTime(dateIfOverHourApart);
 
-      // then create and return message box
-
       dateObj = (
         <Box className="date">
           <p>
@@ -155,7 +261,6 @@ const ChatRoom = ({ user, justSent, setJustSent, onMessageSent }) => {
           </p>
         </Box>
       );
-
     }
 
     return (
@@ -171,7 +276,11 @@ const ChatRoom = ({ user, justSent, setJustSent, onMessageSent }) => {
             outgoingOrIncoming === "outgoing" ? "right-start" : "left-start"
           }
         >
-          <Box className={`message ${outgoingOrIncoming} ${regExp.test(message) ? '' : 'isEmpty'}`}>
+          <Box
+            className={`message ${outgoingOrIncoming} ${
+              regExp.test(message) ? "" : "isEmpty"
+            }`}
+          >
             <p>{message}</p>
           </Box>
         </Tooltip>
@@ -223,158 +332,115 @@ const ChatRoom = ({ user, justSent, setJustSent, onMessageSent }) => {
       </Box>
       <Divider></Divider>
 
-      <Box className="messages">
-        {Object.entries(user.SortedMessages).map(([key, value]) => {
-          let date = new Date(user.SortedMessages[key]["date"]);
-          const isLastItem =
-            Object.keys(user.SortedMessages)[
-              Object.keys(user.SortedMessages).length - 1
-            ] === key
-              ? true
-              : false;
-
-          const isFirstItem =
-            Object.keys(user.SortedMessages)[0] === key ? true : false;
-
-          if (isFirstItem) {
-            currDate.current = date;
-          }
-
-          const previousMessage = user.SortedMessages[index];
-          const previousMessageDate = new Date(previousMessage?.date);
-          index += 1;
-          return createAndAddMessage(
-            value.message,
-            Cookies.get("id") === user.SortedMessages[key]["from"]
-              ? "outgoing"
-              : "incoming",
-            date,
-            isLastItem,
-            previousMessage?.message,
-            previousMessageDate
-          );
-        })}
-        {justSent &&
-          (Object.entries(user.SortedMessages).length === 0
-            ? true
-            : isOverAnHourApart(currDate.current, new Date())) && (
-            <Box className="date">
-              <p>Today {getFormattedTime(new Date())}</p>
-            </Box>
-          )}
-        {justSent && (
-          <Box
-            className={`outgoing`}
-            sx={{
-              backgroundColor: "#485869",
-              marginBottom: "0.8rem",
-              borderRadius: "1rem",
-              paddingTop: "0.7rem",
-              width: "fit-content",
-              maxWidth: "70%",
-              paddingLeft: "1.2rem",
-              paddingRight: "1.2rem",
-            }}
-          >
-            <p>{justSent}</p>
+      <Box className="messagesViewport">
+        {isLoadingOlder && (
+          <Box className="loadOlderMessages" aria-live="polite">
+            <CircularProgress size="1.5rem" sx={{ color: "white" }} />
           </Box>
         )}
 
-        {/* <Box className="date">
-          <p>Today 1:26pm</p>
-        </Box>
-        <Box className="message incoming first">
-          <p>hey</p>
-        </Box>
-        <Box className="message incoming">
-          <p>whats up?</p>
-        </Box>
+        <Box
+          className="messages"
+          ref={messagesRef}
+          onScroll={handleMessagesScroll}
+        >
+          {hasMore && (
+            <div className="olderMessagesSentinel" aria-hidden="true" />
+          )}
 
-        <Box className="date">
-          <p>Today 8:43pm</p>
-        </Box>
+          {displayMessages.map((value, messageIndex) => {
+            let date = new Date(value.date);
+            const isLastItem = messageIndex === displayMessages.length - 1;
+            const isFirstItem = messageIndex === 0;
 
-        <Box className="message outgoing">
-          <p>
-            heyyy nothing much! I saw your profile and you seem like you'd have
-            a lot in common with me, I was wondering if you found a roommate
-            yet?
-          </p>
-        </Box>
-        <Box className="message outgoing">
-          <p>
-            there's an open house for an apartment in el segundo if youre down
-            to go!
-          </p>
-        </Box>
+            if (isFirstItem) {
+              currDate.current = date;
+            }
 
-        <Box className="message incoming">
-          <p>
-            aww wait yeah that sounds so fun! where are you at rn? wanna
-            carpool?
-          </p>
-        </Box>
-
-        <Box className="date">
-          <p>Today 1:26pm</p>
-        </Box>
-        <Box className="message incoming">
-          <p>hii did you still wanna carpool</p>
-        </Box>
-        <Box className="message incoming">
-          <p>
-            just lmk whenever you have time, lorem ipsum blah blah placeholder
-            text lorem ipsum blah blah placeholder text lorem ipsum blah blah
-            placeholder text lorem ipsum blah blah placeholder text
-          </p>
-        </Box> */}
-
-        {/* Message input box at bottom */}
-        <Box className="messageInputBox">
-          <TextField
-            className="messageInput"
-            id="outlined-basic"
-            label="Message"
-            value={currMessage}
-            variant="outlined"
-            onChange={handleInput}
-            sx={{
-              // Root class for the input field
-              "& .MuiOutlinedInput-root": {
-                color: "#abb5c4",
-                fontFamily: "Arial",
-                fontWeight: "bold",
-                backgroundColor: "#111a21",
+            const previousMessage = displayMessages[messageIndex - 1];
+            const previousMessageDate = new Date(previousMessage?.date);
+            return (
+              <React.Fragment key={value._id || messageIndex}>
+                {createAndAddMessage(
+                  value.message,
+                  Cookies.get("id") === value.from ? "outgoing" : "incoming",
+                  date,
+                  isLastItem,
+                  previousMessage?.message,
+                  previousMessageDate
+                )}
+              </React.Fragment>
+            );
+          })}
+          {justSent &&
+            (displayMessages.length === 0
+              ? true
+              : isOverAnHourApart(currDate.current, new Date())) && (
+              <Box className="date">
+                <p>Today {getFormattedTime(new Date())}</p>
+              </Box>
+            )}
+          {justSent && (
+            <Box
+              className={`outgoing`}
+              sx={{
+                backgroundColor: "#485869",
+                marginBottom: "0.8rem",
                 borderRadius: "1rem",
-                // Class for the border around the input field
-                "& .MuiOutlinedInput-notchedOutline": {
-                  borderColor: "#485261",
-                  borderWidth: "1px",
-                },
-              },
-              // Class for the label of the input field
-              "& .MuiInputLabel-outlined": {
-                color: "#abb5c4",
-                fontWeight: "bold",
-              },
-            }}
-            slotProps={{
-              input: {
-                endAdornment: (
-                  <InputAdornment position="end">
-                    <IconButton
-                      aria-label="toggle password visibility"
-                      onClick={sendMessage}
-                      sx={{ zIndex: 5, backgroundColor: "#1967b4" }}
-                    >
-                      <SendIcon />
-                    </IconButton>
-                  </InputAdornment>
-                ),
-              },
-            }}
-          />
+                paddingTop: "0.7rem",
+                width: "fit-content",
+                maxWidth: "70%",
+                paddingLeft: "1.2rem",
+                paddingRight: "1.2rem",
+              }}
+            >
+              <p>{justSent}</p>
+            </Box>
+          )}
         </Box>
+      </Box>
+
+      <Box className="messageInputBox">
+        <TextField
+          className="messageInput"
+          id="outlined-basic"
+          label="Message"
+          value={currMessage}
+          variant="outlined"
+          onChange={handleInput}
+          sx={{
+            "& .MuiOutlinedInput-root": {
+              color: "#abb5c4",
+              fontFamily: "Arial",
+              fontWeight: "bold",
+              backgroundColor: "#111a21",
+              borderRadius: "1rem",
+              "& .MuiOutlinedInput-notchedOutline": {
+                borderColor: "#485261",
+                borderWidth: "1px",
+              },
+            },
+            "& .MuiInputLabel-outlined": {
+              color: "#abb5c4",
+              fontWeight: "bold",
+            },
+          }}
+          slotProps={{
+            input: {
+              endAdornment: (
+                <InputAdornment position="end">
+                  <IconButton
+                    aria-label="toggle password visibility"
+                    onClick={sendMessage}
+                    sx={{ zIndex: 5, backgroundColor: "#1967b4" }}
+                  >
+                    <SendIcon />
+                  </IconButton>
+                </InputAdornment>
+              ),
+            },
+          }}
+        />
       </Box>
     </Box>
   );

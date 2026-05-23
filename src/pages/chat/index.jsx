@@ -23,6 +23,42 @@ function findPartnerId(message, myId) {
     : String(message.from);
 }
 
+function prependOlderMessagesToData(prevData, partnerId, olderMessages, hasMore) {
+  if (!prevData?.Messages) return prevData;
+
+  const chatKey =
+    prevData.Messages[partnerId] != null
+      ? partnerId
+      : Object.keys(prevData.Messages).find(
+          (key) => String(prevData.Messages[key].id) === String(partnerId)
+        );
+
+  if (!chatKey) return prevData;
+
+  const chat = prevData.Messages[chatKey];
+  const existing = chat.SortedMessages || [];
+  const existingIds = new Set(existing.map((entry) => String(entry._id)));
+  const uniqueOlder = olderMessages.filter(
+    (entry) => !existingIds.has(String(entry._id))
+  );
+
+  if (uniqueOlder.length === 0 && chat.hasMore === hasMore) {
+    return prevData;
+  }
+
+  return {
+    ...prevData,
+    Messages: {
+      ...prevData.Messages,
+      [chatKey]: {
+        ...chat,
+        SortedMessages: [...existing, ...uniqueOlder],
+        hasMore,
+      },
+    },
+  };
+}
+
 function appendMessageToData(prevData, message, myId) {
   if (!prevData?.Messages) return prevData;
 
@@ -101,6 +137,12 @@ const Chat = () => {
     },
     [myId]
   );
+
+  const handleOlderMessagesLoaded = useCallback((partnerId, olderMessages, hasMore) => {
+    setData((prev) =>
+      prependOlderMessagesToData(prev, partnerId, olderMessages, hasMore)
+    );
+  }, []);
 
   const handleMatchCreated = useCallback(() => {
     fetchData();
@@ -193,7 +235,9 @@ const Chat = () => {
                     user={data["Messages"][selectedUser]}
                     justSent={justSent}
                     setJustSent={setJustSent}
-                    onMessageSent={handleOutgoingMessage} />
+                    onMessageSent={handleOutgoingMessage}
+                    onOlderMessagesLoaded={handleOlderMessagesLoaded}
+                    messageLimit={CHAT_MESSAGE_LIMIT} />
                 </>
               )}
               {!selectedUser && Object.keys(data["Messages"]).length > 0 && (
