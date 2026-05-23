@@ -8,6 +8,7 @@ import LogoutIcon from "@mui/icons-material/Logout";
 import "./styles.css";
 import Cookies from "js-cookie";
 import { useLocation } from "react-router-dom";
+import { destroyChatSocket } from "../../api/socket";
 
 function redirectToFeed() {
   window.location = "/feed";
@@ -22,6 +23,7 @@ function redirectToChat() {
 }
 
 function logout() {
+  destroyChatSocket();
   Cookies.remove("id");
   Cookies.remove("isLoggedIn");
   window.location = "/";
