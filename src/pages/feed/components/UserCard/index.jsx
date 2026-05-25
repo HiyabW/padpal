@@ -351,4 +351,4 @@ const UserCard = ({
   );
 };
 
-export default UserCard;
+export default React.memo(UserCard);
