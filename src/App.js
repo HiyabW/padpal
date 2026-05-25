@@ -2,9 +2,9 @@ import './App.css';
 import { Routes, Route, useLocation } from 'react-router-dom';
 import NavBar from './components/navBar';
 import React, { Suspense, useEffect } from 'react';
+import CircularProgress from '@mui/material/CircularProgress';
 import Cookies from 'js-cookie';
 import { apiFetch } from './api/client';
-import LoadingSpinner from './components/loadingSpinner';
 
 const Feed = React.lazy(() => import('./pages/feed'));
 const Chat = React.lazy(() => import('./pages/chat'));
@@ -45,7 +45,11 @@ function App() {
         (location.pathname !== '/' && location.pathname !== '/survey') &&
         <NavBar />
       }
-      <Suspense fallback={<LoadingSpinner />}>
+      <Suspense fallback={
+        <div className="centeredDiv gradient-background2">
+          <CircularProgress color="inherit" />
+        </div>
+      }>
         <Routes>
           <Route exact path='/' element={<SignIn />} />
           <Route exact path='/survey' element={<Survey />} />
