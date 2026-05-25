@@ -25,9 +25,9 @@ import HelpOutlineIcon from "@mui/icons-material/HelpOutline";
 import SurveyHelp from "./components/surveyHelp";
 import SurveyOptionsPictures from "./components/surveyOptionsPictures";
 import SurveyFacialVerification from "./components/surveyFacialVerification";
+import { compareFaces } from "./components/surveyFacialVerification/compareFaces";
 import { Player } from '@lordicon/react'; // Import the Player component
 const questionnaireIcon = require(`${process.env.PUBLIC_URL}/public/animatedIcons/questionnaire.json`);
-import * as faceapi from "face-api.js";
 
 const Card = styled(MuiCard)(({ theme }) => ({
   display: "flex",
@@ -198,7 +198,11 @@ const Survey = () => {
       return;
     }
     if (question?.type === "facialVerification") {
-      const resultOfFacialVerification = await compareFaces();
+      const resultOfFacialVerification = await compareFaces(
+        realTimePhoto,
+        identificationPhoto,
+        setFacialVerificationLoading
+      );
       if (resultOfFacialVerification === 0) {
         setError(`Please upload both photos before continuing.`);
         return;
@@ -304,57 +308,6 @@ const Survey = () => {
   }, [])
 
   /***********************************************/
-
-  /********************** Facial Verification Functions **********************/
-
-  const compareFaces = async () => {
-    console.log(0, realTimePhoto, identificationPhoto)
-
-    if (!realTimePhoto || !identificationPhoto) return 0;
-
-    console.log(1)
-
-    setFacialVerificationLoading(true);
-    const MODEL_URL = process.env.PUBLIC_URL + "/models";
-    await faceapi.nets.faceRecognitionNet.loadFromUri(MODEL_URL);
-    await faceapi.nets.faceLandmark68Net.loadFromUri(MODEL_URL);
-    await faceapi.nets.ssdMobilenetv1.loadFromUri(MODEL_URL);
-
-    console.log(2)
-
-    const img1 = await faceapi.fetchImage(realTimePhoto);
-    const img2 = await faceapi.fetchImage(identificationPhoto);
-
-    console.log(3)
-
-    const detections1 = await faceapi
-      .detectAllFaces(img1)
-      .withFaceLandmarks()
-      .withFaceDescriptors();
-    const detections2 = await faceapi
-      .detectAllFaces(img2)
-      .withFaceLandmarks()
-      .withFaceDescriptors();
-
-    console.log(4, detections1, detections2)
-
-    if (detections1.length > 0 && detections2.length > 0) {
-      const descriptor1 = detections1[0].descriptor;
-      const descriptor2 = detections2[0].descriptor;
-      const distance = faceapi.euclideanDistance(descriptor1, descriptor2);
-
-      const result = distance < 0.6 ? 2 : 1;
-      if (result) {
-        setFacialVerificationLoading(false);
-      }
-
-      return result;
-    }
-    setFacialVerificationLoading(false);
-    return -1
-  };
-
-  /***************************************************************************/
 
   return (
     <div className="overArchingDiv gradient-background">
