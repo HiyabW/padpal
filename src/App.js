@@ -1,15 +1,17 @@
 import './App.css';
-import { Routes, Route, useLocation, HashRouter } from 'react-router-dom'
-import Survey from './pages/survey';
-import SignIn from './pages/signIn';
-import Feed from './pages/feed';
-import Chat from './pages/chat';
+import { Routes, Route, useLocation } from 'react-router-dom';
 import NavBar from './components/navBar';
-import ViewProfile from './pages/viewProfile';
-import EditProfile from './pages/editProfile';
-import React, { useEffect } from 'react';
+import React, { Suspense, useEffect } from 'react';
 import Cookies from 'js-cookie';
 import { apiFetch } from './api/client';
+import LoadingSpinner from './components/loadingSpinner';
+
+const Feed = React.lazy(() => import('./pages/feed'));
+const Chat = React.lazy(() => import('./pages/chat'));
+const ViewProfile = React.lazy(() => import('./pages/viewProfile'));
+const EditProfile = React.lazy(() => import('./pages/editProfile'));
+const Survey = React.lazy(() => import('./pages/survey'));
+const SignIn = React.lazy(() => import('./pages/signIn'));
 
 function App() {
   const location = useLocation();
@@ -40,9 +42,10 @@ function App() {
   return (
     <>
       {
-        (location.pathname !== "/" && location.pathname !== "/survey") &&
+        (location.pathname !== '/' && location.pathname !== '/survey') &&
         <NavBar />
       }
+      <Suspense fallback={<LoadingSpinner />}>
         <Routes>
           <Route exact path='/' element={<SignIn />} />
           <Route exact path='/survey' element={<Survey />} />
@@ -51,6 +54,7 @@ function App() {
           <Route exact path='/viewProfile' element={<ViewProfile />} />
           <Route exact path='/editProfile' element={<EditProfile />} />
         </Routes>
+      </Suspense>
     </>
   );
 }
