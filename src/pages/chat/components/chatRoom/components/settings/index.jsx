@@ -5,8 +5,6 @@ import MenuItem from "@mui/material/MenuItem";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import { apiFetch } from "../../../../../../api/client";
 import Modal from 'react-bootstrap/Modal';
-import Cookies from 'js-cookie';
-
 export default function Settings({user}) {
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);

@@ -3,8 +3,8 @@ import { Routes, Route, useLocation } from 'react-router-dom';
 import NavBar from './components/navBar';
 import React, { Suspense, useEffect } from 'react';
 import CircularProgress from '@mui/material/CircularProgress';
-import Cookies from 'js-cookie';
 import { apiFetch } from './api/client';
+import { useAuth } from './context/AuthContext';
 
 const Feed = React.lazy(() => import('./pages/feed'));
 const Chat = React.lazy(() => import('./pages/chat'));
@@ -15,29 +15,18 @@ const SignIn = React.lazy(() => import('./pages/signIn'));
 
 function App() {
   const location = useLocation();
+  const { user } = useAuth();
 
   useEffect(() => {
-    const token = Cookies.get('isLoggedIn');
-    if (!token) return;
+    if (!user) return;
 
-    // Decode JWT expiry without a library (JWTs are base64url encoded)
-    try {
-      const payload = JSON.parse(atob(token.split('.')[1].replace(/-/g, '+').replace(/_/g, '/')));
-      if (!payload.exp) return;
-      const expiresInMs = payload.exp * 1000 - Date.now();
-      const refreshAtMs = expiresInMs - 5 * 60 * 1000; // refresh 5 min before expiry
-      if (refreshAtMs <= 0) {
-        apiFetch('/feed/');
-        return;
-      }
-      const timer = setTimeout(() => {
-        apiFetch('/auth/refreshToken', { method: 'POST' });
-      }, refreshAtMs);
-      return () => clearTimeout(timer);
-    } catch {
-      // Non-standard JWT — skip proactive refresh
-    }
-  }, [location.pathname]);
+    const refreshIntervalMs = 45 * 60 * 1000;
+    const timer = setInterval(() => {
+      apiFetch('/auth/refreshToken', { method: 'POST' }).catch(() => {});
+    }, refreshIntervalMs);
+
+    return () => clearInterval(timer);
+  }, [user, location.pathname]);
 
   return (
     <>

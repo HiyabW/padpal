@@ -7,8 +7,8 @@ import styled from "@mui/material/styles/styled";
 import TextField from "@mui/material/TextField";
 import SendIcon from "@mui/icons-material/Send";
 import InputAdornment from "@mui/material/InputAdornment";
-import Cookies from "js-cookie";
 import { apiFetch } from "../../../../api/client";
+import { useAuth } from "../../../../context/AuthContext";
 import Settings from "./components/settings";
 import Tooltip from "@mui/material/Tooltip";
 import CircularProgress from "@mui/material/CircularProgress";
@@ -32,6 +32,8 @@ const ChatRoom = ({
   onOlderMessagesLoaded,
   messageLimit = 25,
 }) => {
+  const { user: authUser } = useAuth();
+  const currentUserId = authUser?.id;
   const [currMessage, setCurrMessage] = React.useState("");
   const [isLoadingOlder, setIsLoadingOlder] = React.useState(false);
   const currDate = useRef(null);
@@ -363,7 +365,7 @@ const ChatRoom = ({
               <React.Fragment key={value._id || messageIndex}>
                 {createAndAddMessage(
                   value.message,
-                  Cookies.get("id") === value.from ? "outgoing" : "incoming",
+                  String(currentUserId) === String(value.from) ? "outgoing" : "incoming",
                   date,
                   isLastItem,
                   previousMessage?.message,

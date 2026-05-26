@@ -2,8 +2,8 @@ import "./styles.css";
 import React, { useCallback, useEffect, useRef } from "react";
 import ChatPreview from "./components/chatPreview";
 import ChatRoom from "./components/chatRoom";
-import Cookies from "js-cookie";
 import { apiFetch } from "../../api/client";
+import { useAuth } from "../../context/AuthContext";
 import {
   destroyChatSocket,
   ensureChatSocketConnected,
@@ -98,8 +98,8 @@ function appendMessageToData(prevData, message, myId) {
 }
 
 const Chat = () => {
-  const isLoggedIn = Cookies.get("isLoggedIn");
-  const myId = Cookies.get("id");
+  const { user, loading, isAuthenticated } = useAuth();
+  const myId = user?.id;
   const [selectedUser, setSelectedUser] = React.useState(false);
   const [data, setData] = React.useState(null);
   const [isLoaded, setIsLoaded] = React.useState(false);
@@ -107,7 +107,7 @@ const Chat = () => {
   const [currViewMobile, setCurrViewMobile] = React.useState("ChatPreview");
 
   const fetchData = useCallback(async () => {
-    if (!isLoggedIn) return;
+    if (!isAuthenticated) return;
 
     try {
       const response = await apiFetch("/chat/getChats", {
@@ -120,7 +120,7 @@ const Chat = () => {
     } catch (err) {
       console.log(err);
     }
-  }, [isLoggedIn]);
+  }, [isAuthenticated]);
 
   const handleIncomingMessage = useCallback(
     (message) => {
@@ -159,12 +159,16 @@ const Chat = () => {
   };
 
   useEffect(() => {
-    if (!isLoggedIn) return;
+    if (loading) return;
+    if (!isAuthenticated) {
+      window.location = "/";
+      return;
+    }
     fetchData();
-  }, [isLoggedIn, fetchData]);
+  }, [loading, isAuthenticated, fetchData]);
 
   useEffect(() => {
-    if (!isLoggedIn) return;
+    if (!isAuthenticated) return;
 
     ensureChatSocketConnected();
     setChatSocketHandlers({
@@ -174,12 +178,12 @@ const Chat = () => {
     });
 
     return () => destroyChatSocket();
-  }, [isLoggedIn]);
+  }, [isAuthenticated]);
 
   return (
     <div class="Chat gradient-background2">
     <Grid container className="Chat Chatdiv">
-      {!isLoaded && isLoggedIn && (
+      {!isLoaded && isAuthenticated && (
         <motion.div
           initial={{ opacity: 0, y: 50 }}
           animate={{ opacity: 1, y: 0 }}
@@ -206,7 +210,7 @@ const Chat = () => {
         </motion.div>
       )}
 
-      {isLoaded && isLoggedIn && (
+      {isLoaded && isAuthenticated && (
         <>
           <Grid size={4} className={`ChatListGrid ${currViewMobile === "ChatPreview" ? 'currViewMobile' : 'notCurrViewMobile'}`} sx={{ border: 1 }} spacing={2}>
             <Box className="ChatList">
@@ -268,7 +272,7 @@ const Chat = () => {
           </Grid>
         </>
       )}
-      {!isLoggedIn && <div className="centeredDiv"><p>Session expired, please log back in.</p></div>}
+      {!loading && !isAuthenticated && <div className="centeredDiv"><p>Session expired, please log back in.</p></div>}
     </Grid>
     </div>
   );

@@ -1,4 +1,3 @@
-import Cookies from 'js-cookie';
 import { updateChatSocketAuth } from './socket';
 
 export const baseURL =
@@ -62,28 +61,18 @@ async function refreshAccessToken() {
       credentials: 'include',
     });
     if (!res.ok) throw new Error('Refresh failed');
-    const data = await res.json();
-    const inOneHour = new Date(new Date().getTime() + 60 * 60 * 1000);
-    Cookies.set('isLoggedIn', data.accessToken, { expires: inOneHour });
     updateChatSocketAuth();
-    return data.accessToken;
+    return true;
   } catch {
-    Cookies.remove('isLoggedIn');
-    Cookies.remove('id');
-    window.location = '/';
-    return null;
+    return false;
   }
 }
 
 export async function apiFetch(path, options = {}) {
   const normalizedPath = normalizePath(path);
-  const hadSession = Boolean(Cookies.get('isLoggedIn'));
-  const sendAuth = hadSession && !isPublicAuthPath(normalizedPath);
-  const token = sendAuth ? Cookies.get('isLoggedIn') : null;
   const headers = {
     'Content-Type': 'application/json',
     ...options.headers,
-    ...(token ? { Authorization: `Bearer ${token}` } : {}),
   };
 
   let res = await fetch(`${baseURL}${normalizedPath}`, {
@@ -93,15 +82,20 @@ export async function apiFetch(path, options = {}) {
   });
 
   const canRetryWithRefresh =
-    res.status === 401 && hadSession && !isPublicAuthPath(normalizedPath);
+    res.status === 401 && !isPublicAuthPath(normalizedPath);
 
   if (canRetryWithRefresh) {
-    const newToken = await refreshAccessToken();
-    if (!newToken) return res;
+    const refreshed = await refreshAccessToken();
+    if (!refreshed) {
+      if (normalizedPath !== '/auth/me') {
+        window.location = '/';
+      }
+      return res;
+    }
     res = await fetch(`${baseURL}${normalizedPath}`, {
       ...options,
       credentials: 'include',
-      headers: { ...headers, Authorization: `Bearer ${newToken}` },
+      headers,
     });
   }
 
