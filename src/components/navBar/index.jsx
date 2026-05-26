@@ -6,33 +6,39 @@ import GroupsIcon from "@mui/icons-material/Groups";
 import React from "react";
 import LogoutIcon from "@mui/icons-material/Logout";
 import "./styles.css";
-import Cookies from "js-cookie";
 import { useLocation } from "react-router-dom";
 import { destroyChatSocket } from "../../api/socket";
+import { apiFetch } from "../../api/client";
+import { useAuth } from "../../context/AuthContext";
 
-function redirectToFeed() {
-  window.location = "/feed";
-}
-
-function redirectToViewProfile() {
-  window.location = `/viewProfile?id=${Cookies.get("id")}`;
-}
-
-function redirectToChat() {
-  window.location = "/chat";
-}
-
-function logout() {
-  destroyChatSocket();
-  Cookies.remove("id");
-  Cookies.remove("isLoggedIn");
-  window.location = "/";
-}
-
-const NavBar = () => {
+function NavBar() {
   const location = useLocation();
-  console.log(location);
+  const { user, clearUser } = useAuth();
   const chatOrFeedButton = location.pathname === "/chat" ? "feed" : "chat";
+
+  function redirectToFeed() {
+    window.location = "/feed";
+  }
+
+  function redirectToViewProfile() {
+    if (!user?.id) return;
+    window.location = `/viewProfile?id=${user.id}`;
+  }
+
+  function redirectToChat() {
+    window.location = "/chat";
+  }
+
+  async function logout() {
+    destroyChatSocket();
+    try {
+      await apiFetch("/auth/logout", { method: "DELETE" });
+    } catch {
+      // Still redirect if logout request fails
+    }
+    clearUser();
+    window.location = "/";
+  }
 
   return (
     <Box className="navBar">
@@ -56,16 +62,6 @@ const NavBar = () => {
           </Box>
         )}
 
-        {/* <Box
-          display={"flex"}
-          marginLeft={"2rem"}
-          onClick={redirectToEditProfile}
-        >
-          <Tooltip title="Edit Profile">
-            <EditIcon />
-          </Tooltip>
-        </Box> */}
-
         <Box
           display={"flex"}
           marginLeft={"2rem"}
@@ -84,6 +80,6 @@ const NavBar = () => {
       </Box>
     </Box>
   );
-};
+}
 
 export default NavBar;

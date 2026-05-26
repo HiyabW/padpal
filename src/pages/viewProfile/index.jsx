@@ -5,7 +5,6 @@ import CircularProgress from "@mui/material/CircularProgress";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import { motion } from "framer-motion";
-import Cookies from 'js-cookie'
 import './styles.css'
 import { apiFetch } from "../../api/client";
 

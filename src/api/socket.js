@@ -1,5 +1,4 @@
 import { io } from 'socket.io-client';
-import Cookies from 'js-cookie';
 import { baseURL } from './client';
 
 let socket = null;
@@ -25,11 +24,7 @@ function bindSocketEvents() {
 }
 
 export function ensureChatSocketConnected() {
-  const token = Cookies.get('isLoggedIn');
-  if (!token) return null;
-
   if (socket) {
-    socket.auth = { token };
     if (!socket.connected && !isConnecting) {
       isConnecting = true;
       socket.connect();
@@ -40,7 +35,7 @@ export function ensureChatSocketConnected() {
 
   isConnecting = true;
   socket = io(baseURL, {
-    auth: { token },
+    withCredentials: true,
     transports: ['websocket', 'polling'],
     reconnection: true,
     reconnectionDelay: 1000,
@@ -81,10 +76,10 @@ export function clearChatSocketHandlers() {
 }
 
 export function updateChatSocketAuth() {
-  const token = Cookies.get('isLoggedIn');
-  if (!socket || !token) return;
-
-  socket.auth = { token };
+  if (!socket) return;
+  if (!socket.connected && !isConnecting) {
+    socket.connect();
+  }
 }
 
 export function destroyChatSocket() {

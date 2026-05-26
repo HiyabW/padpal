@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import "./styles.css"; // Import your CSS file for the fade effect
-import Cookies from "js-cookie";
+import { useAuth } from "../../context/AuthContext";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Checkbox from "@mui/material/Checkbox";
@@ -39,6 +39,7 @@ const Card = styled(MuiCard)(({ theme }) => ({
 }));
 
 function SignIn() {
+  const { user, loading, refreshUser } = useAuth();
   const [name, setName] = useState(null);
   const [email, setEmail] = useState(null);
   const [password, setPassword] = useState(null);
@@ -66,9 +67,6 @@ function SignIn() {
     }, 2000);
     return () => clearTimeout(timer);
   }, []);
-
-  // Before doing anything, if user is logged in already redirect them to feed page
-  const isLoggedIn = Cookies.get("isLoggedIn");
 
   const handleClickShowPassword = () => setShowPassword((show) => !show);
 
@@ -162,25 +160,15 @@ function SignIn() {
       }),
     })
       .then((response) => response.json())
-      .then((data) => {
-        console.log(data, data["id"]);
-        // IF LOGIN WORKED
-        if (data.accessToken) {
-          var inOneHour = new Date(new Date().getTime() + 60 * 60 * 1000);
-          Cookies.set("isLoggedIn", `${data.accessToken}`, {
-            expires: inOneHour,
-          });
-          Cookies.set("id", `${data["id"]}`, {
-            expires: inOneHour,
-          });
-
+      .then(async (data) => {
+        if (data?.id) {
+          await refreshUser();
           data?.gender
             ? (window.location = "/feed")
             : (window.location = "/survey");
         } else {
-          console.log(data.error.message);
-          setError(data.error.message);
-          setIsLoading(false)
+          setError(data?.error?.message || "Login failed");
+          setIsLoading(false);
         }
       })
       .catch((error) => {
@@ -201,23 +189,13 @@ function SignIn() {
       }),
     })
       .then((response) => response.json()) // Assuming the API returns JSON data
-      .then((data) => {
-        console.log(data);
-        // IF SIGN UP WORKED
-        if (data.accessToken) {
-          var inOneHour = new Date(new Date().getTime() + 15 * 60 * 1000);
-          Cookies.set("isLoggedIn", `${data.accessToken}`, {
-            expires: inOneHour,
-          });
-          Cookies.set("id", `${data["id"]}`, {
-            expires: inOneHour,
-          });
-
+      .then(async (data) => {
+        if (data?.id) {
+          await refreshUser();
           window.location = "/survey";
         } else {
-          console.log(data.error.message);
-          setError(data.error.message);
-          setIsLoading(false)
+          setError(data?.error?.message || "Sign up failed");
+          setIsLoading(false);
         }
       })
       .catch((error) => {
@@ -239,10 +217,12 @@ function SignIn() {
     setPhone(e.target.value);
   }
 
-  if (isLoggedIn) {
+  if (!loading && user) {
     window.location = "/feed";
-  } else {
-    return (
+    return null;
+  }
+
+  return (
       <>
         <motion.div initial={{ opacity: 1 }}          // Start fully visible
           animate={{ opacity: isMobileIntroVisible ? 1 : 0 }} // Fade in/out
@@ -580,8 +560,7 @@ function SignIn() {
     <Button onClick={signInUser}>Sign In</Button> */}
           </div>
         </motion.div></>
-    );
-  }
+  );
 }
 
 export default SignIn;

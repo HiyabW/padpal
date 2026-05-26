@@ -3,6 +3,7 @@ import { useState, useRef, useEffect } from "react";
 import "./styles.css";
 import Cookies from "js-cookie";
 import { apiFetch } from "../../api/client";
+import { useAuth } from "../../context/AuthContext";
 import SurveyOptionsButtons from "./components/surveyOptionsButtons";
 import { surveyQuestions } from "./questions";
 import Button from "@mui/material/Button";
@@ -117,6 +118,7 @@ const hasSurveyAnswer = (question, answer) => {
 };
 
 const Survey = () => {
+  const { user, loading, isAuthenticated } = useAuth();
   let [index, setIndex] = useState(-1);
   let [question, setQuestion] = useState(surveyQuestions[index]);
   let [currSelectedElement, setCurrSelectedElement] = useState(null);
@@ -130,9 +132,9 @@ const Survey = () => {
   const [facialVerificationLoading, setFacialVerificationLoading] =
     React.useState(false);
 
-  const isLoggedIn = Cookies.get("isLoggedIn");
-  if (!isLoggedIn) {
+  if (!loading && !isAuthenticated) {
     window.location = "/";
+    return null;
   }
 
   const handleClickOpen = () => {
@@ -235,7 +237,7 @@ const Survey = () => {
     if (index === surveyQuestions.length - 1) {
       setProgress(100);
       // before doing anything, make sure user is signed in or else POST will fail
-      if (!Cookies.get("id")) {
+      if (!user?.id) {
         alert("Session expired, please log back in.");
         window.location = "/";
         return;
@@ -311,7 +313,7 @@ const Survey = () => {
 
   return (
     <div className="overArchingDiv gradient-background">
-      {isLoggedIn && (
+      {isAuthenticated && (
         <>
           {index === -1 && (
             <motion.div

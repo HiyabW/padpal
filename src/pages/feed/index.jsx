@@ -1,6 +1,7 @@
 import React from "react";
 import Cookies from "js-cookie";
 import { apiFetch } from "../../api/client";
+import { useAuth } from "../../context/AuthContext";
 import UserCard from "./components/UserCard";
 import "./styles.css";
 import { useEffect, useRef, useMemo, useCallback } from "react";
@@ -35,7 +36,7 @@ const LightTooltip = styled(({ className, ...props }) => (
 
 
 const Feed = () => {
-  const isLoggedIn = Cookies.get("isLoggedIn");
+  const { user, loading, isAuthenticated } = useAuth();
   const [loaded, setLoaded] = React.useState(false);
   const [users, setUsers] = React.useState({});
   const [images, setImages] = React.useState({});
@@ -59,7 +60,11 @@ const Feed = () => {
   }, []);
 
   useEffect(() => {
-    if (isLoggedIn) {
+    if (!loading && !isAuthenticated) {
+      window.location = "/";
+      return;
+    }
+    if (isAuthenticated) {
       // first fetch data
       apiFetch("/feed/", {
         method: "POST",
@@ -92,7 +97,7 @@ const Feed = () => {
           console.log(err);
         });
     }
-  }, []);
+  }, [loading, isAuthenticated]);
 
   const closeMatchScreen = useCallback(() => {
     setMatch(null);
@@ -248,7 +253,7 @@ const Feed = () => {
           </Grid>
         </motion.div>
       )}
-      {isLoggedIn && (
+      {isAuthenticated && (
         <>
           <Onboarding open={open} handleClose={handleClose} />
           {!loaded && (
@@ -328,7 +333,7 @@ const Feed = () => {
           )}
         </>
       )}
-      {!isLoggedIn && (
+      {!loading && !isAuthenticated && (
         <div className="p-4 centeredDiv">
           Session expired, please log back in.
         </div>

@@ -8,8 +8,8 @@ import styled from "@mui/material/styles/styled";
 import AccessTime from "@mui/icons-material/AccessTime";
 import Button from "@mui/material/Button";
 import DotProgress from "./components/DotProgress";
-import Cookies from "js-cookie";
 import Grid from "@mui/material/Grid2";
+import { useAuth } from "../../../../context/AuthContext";
 
 const Divider = styled(MuiDivider)(({ theme }) => ({
   marginTop: "1rem",
@@ -86,6 +86,8 @@ const UserCard = ({
   setReject,
   feedOrViewProfile = "feed",
 }) => {
+  const { user: authUser } = useAuth();
+  const currentUserId = authUser?.id;
   console.log(users);
 
   const [imageIndex, setImageIndex] = React.useState(0);
@@ -291,15 +293,15 @@ const UserCard = ({
       </motion.div>
       <motion.div className="userFeedInfoDiv">
         {/* If AI BOT, don't show budget or expected move out */}
-        <Grid container spacing={2} sx={{marginBottom: user._id === Cookies.get("id") ? "1rem" : ""}}>
-          <Grid size={{ lg: 12, md: 12, sm: 12, xs: user._id === Cookies.get("id") ? 6 : 12 }} sx={{overflowWrap: 'break-word'}}>
+        <Grid container spacing={2} sx={{marginBottom: user._id === currentUserId ? "1rem" : ""}}>
+          <Grid size={{ lg: 12, md: 12, sm: 12, xs: user._id === currentUserId ? 6 : 12 }} sx={{overflowWrap: 'break-word'}}>
             <h2>
               {user.name}
               {user._id !== "673eed0fd24e7b1c05d6616e" && user?.age ? `, ${getAge(user.age)}` : ``}
             </h2>
           </Grid>
           <Grid size={{ lg: 12, md: 12, sm: 12, xs: 6 }} sx={{ display: 'flex' }}>
-            {user._id === Cookies.get("id") &&
+            {user._id === currentUserId &&
               <Button variant="contained" disableElevation className="editProfileButton" onClick={redirectToEditProfile}>Edit Profile</Button>
             }
           </Grid>

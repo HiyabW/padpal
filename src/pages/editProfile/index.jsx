@@ -1,6 +1,6 @@
 import React, { useEffect, useRef } from "react";
-import Cookies from "js-cookie";
 import { apiFetch } from "../../api/client";
+import { useAuth } from "../../context/AuthContext";
 import MuiCard from "@mui/material/Card";
 import styled from "@mui/material/styles/styled";
 import { motion } from "framer-motion";
@@ -16,9 +16,9 @@ import Grid from "@mui/material/Grid2";
 import Divider from "@mui/material/Divider";
 
 const EditProfile = () => {
+  const { user: authUser, loading, isAuthenticated } = useAuth();
   const [user, setUser] = React.useState(null);
   const images = useRef(null);
-  const isLoggedIn = Cookies.get("isLoggedIn");
   const [image1, setImage1] = React.useState(null);
   const [image2, setImage2] = React.useState(null);
   const [image3, setImage3] = React.useState(null);
@@ -27,8 +27,6 @@ const EditProfile = () => {
   const [budget, setBudgetPreferences] = React.useState(null);
   const [genderPreferences, setGenderPreferences] = React.useState([]);
   const [isLoading, setIsLoading] = React.useState(true);
-
-  const id = Cookies.get("id");
 
   const Card = styled(MuiCard)(({ theme }) => ({
     display: "flex",
@@ -100,13 +98,18 @@ const EditProfile = () => {
     })
       .then((response) => response.json())
       .then((data) => {
-        window.location = `/viewProfile?id=${Cookies.get("id")}`;
+        window.location = `/viewProfile?id=${authUser?.id}`;
       });
   }
 
   useEffect(() => {
+    if (loading) return;
+    if (!isAuthenticated) {
+      window.location = "/";
+      return;
+    }
     console.log("RERENDER");
-    if (isLoggedIn) {
+    if (isAuthenticated) {
       // fetch data on currUser
       apiFetch("/feed/getUser", {
         method: "POST",
@@ -145,7 +148,7 @@ const EditProfile = () => {
           console.log(err);
         });
     }
-  }, []);
+  }, [loading, isAuthenticated]);
 
   function getAge(birthdayStr) {
     const today = new Date();
@@ -168,7 +171,7 @@ const EditProfile = () => {
       className="editProfile gradient-background"
       style={{ height: `${isLoading ? "100%" : ""}` }}
     >
-      {isLoggedIn && user && images && !isLoading && (
+      {isAuthenticated && user && images && !isLoading && (
         <Card className="userFeedCardDiv">
           <div class="userInfo">
             <h1>
@@ -299,7 +302,7 @@ const EditProfile = () => {
           </div>
         </motion.div>
       )}
-      {!isLoggedIn && (
+      {!loading && !isAuthenticated && (
         <div className="centeredDiv">Session expired, please log back in.</div>
       )}
     </div>
