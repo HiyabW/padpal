@@ -198,13 +198,15 @@ The **Phase 0** initiative (design system, marketing MVP, Rooms feature) **takes
 
 ### Phase 0 — Product Launch (SCRUM-49+)
 
-| Epic | SCRUM | Scope |
-|------|-------|-------|
-| Design System v2 | SCRUM-49 (epic), 50–55 | Tokens, SwipeCard, FeedStack, MatchOverlay, BottomNavBar |
-| Marketing MVP | SCRUM-56 (epic), 57–62, 66 | App shell, sign-in, slim onboarding, Home feed, chat, profile — **record videos at SCRUM-62** |
-| Rooms Backend | SCRUM-68 (epic), 69–76 | Listing models, APIs, group chat (`palpal-api`) |
-| Rooms Frontend | SCRUM-77 (epic), 78–84 | Mode entry, wizard, feeds, invites, group chat, lifecycle |
-| Safety & Polish | SCRUM-85 (epic), 86–89 | Report/block, image moderation, T&C, empty states |
+| Epic | Jira Epic | Stories | Scope |
+|------|-----------|---------|-------|
+| Design System v2 | [SCRUM-72](https://hiyabwoldegebriel.atlassian.net/browse/SCRUM-72) | SCRUM-74–79 | Tokens, SwipeCard, FeedStack, MatchOverlay, BottomNavBar |
+| Marketing MVP | [SCRUM-70](https://hiyabwoldegebriel.atlassian.net/browse/SCRUM-70) | SCRUM-83–87, 89, 91 | App shell, sign-in, slim onboarding, Home feed, chat, profile — **record videos at SCRUM-89** |
+| Rooms Backend | [SCRUM-71](https://hiyabwoldegebriel.atlassian.net/browse/SCRUM-71) | SCRUM-80–82, 93, 95, 97–98, 100 | Listing models, APIs, group chat (`palpal-api`) |
+| Rooms Frontend | [SCRUM-69](https://hiyabwoldegebriel.atlassian.net/browse/SCRUM-69) | SCRUM-88, 90, 92, 94, 96, 99, 101 | Mode entry, wizard, feeds, invites, group chat, lifecycle |
+| Safety & Polish | [SCRUM-73](https://hiyabwoldegebriel.atlassian.net/browse/SCRUM-73) | SCRUM-102–105 | Report/block, image moderation, T&C, empty states |
+
+Full key map: `docs/product/plans/jira-phase-0-key-map.md`
 
 ---
 
