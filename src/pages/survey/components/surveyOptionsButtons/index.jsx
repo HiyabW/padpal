@@ -21,11 +21,12 @@ const SurveyOptionsButtons = ({
   return (
     <ul className="buttonList" style={{listStyleType:'none', padding:0}}>
       {question.options.map((option) => {
+        const isSelected = currSelectedAnswer === option.name;
         return (
-          <li className="buttonListItem">
+          <li className="buttonListItem" key={option.name}>
             <Button
-            className="buttonListElement"
-            variant="outlined"
+            className={`buttonListElement ${isSelected ? "selected" : ""}`}
+            variant={isSelected ? "contained" : "outlined"}
               onClick={(e) => {
                 selected(e);
               }}

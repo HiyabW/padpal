@@ -11,16 +11,16 @@ const SurveyOptionsCheckboxes = ({
   currSelectedAnswer,
   setCurrSelectedAnswer,
 }) => {
+  const selectedValues = Array.isArray(currSelectedAnswer) ? currSelectedAnswer : [];
+
   const selected = (e) => {
-    console.log("before: ", currSelectedAnswer);
+    console.log("before: ", selectedValues);
     if (e.target.checked === true) {
-      setCurrSelectedAnswer([...currSelectedAnswer, e.target.value]);
+      setCurrSelectedAnswer([...selectedValues, e.target.value]);
     } else {
-      let currSelectedAnswerTemp = [...currSelectedAnswer];
-      currSelectedAnswerTemp = currSelectedAnswerTemp.filter(
-        (item) => item !== e.target.value
+      setCurrSelectedAnswer(
+        selectedValues.filter((item) => item !== e.target.value)
       );
-      setCurrSelectedAnswer(currSelectedAnswerTemp);
     }
   };
   return (
@@ -30,7 +30,8 @@ const SurveyOptionsCheckboxes = ({
           <FormControlLabel
             onChange={selected}
             value={option.name}
-            key={question.name}
+            key={option.name}
+            checked={selectedValues.includes(option.name)}
             name={`optionQ${question.id}`}
             control={<Checkbox />}
             label={option.name}

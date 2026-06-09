@@ -45,6 +45,7 @@ const SurveyOptionsDatePicker = ({
           disableFuture={question.label === "age" ? true : false}
           disablePast={question.label === "age" ? false : true}
           maxDate={maxDate}
+          value={currSelectedAnswer ? dayjs(currSelectedAnswer) : null}
           onChange={selected}
           label="Select a date"
         />

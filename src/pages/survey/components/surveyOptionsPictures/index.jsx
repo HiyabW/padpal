@@ -6,7 +6,21 @@ import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 import IconButton from "@mui/material/IconButton";
 import CancelIcon from "@mui/icons-material/Cancel";
 import CircularProgress from "@mui/material/CircularProgress";
-import { uploadProfileImage } from "../../../../utils/uploadImage";
+import { deleteProfileImage, uploadProfileImage } from "../../../../utils/uploadImage";
+
+const EMPTY_SLOTS = [null, null, null];
+
+const normalizeSlots = (answer) => {
+  if (!Array.isArray(answer)) {
+    return [...EMPTY_SLOTS];
+  }
+
+  return [
+    answer[0] ?? null,
+    answer[1] ?? null,
+    answer[2] ?? null,
+  ];
+};
 
 const SurveyOptionsPictures = ({
   question,
@@ -15,12 +29,9 @@ const SurveyOptionsPictures = ({
   currSelectedAnswer,
   setCurrSelectedAnswer,
 }) => {
-
-  const [image1, setImage1] = React.useState(null);
-  const [image2, setImage2] = React.useState(null);
-  const [image3, setImage3] = React.useState(null);
   const [uploadingSlot, setUploadingSlot] = React.useState(null);
   const [uploadError, setUploadError] = React.useState(null);
+  const slots = normalizeSlots(currSelectedAnswer);
 
   const VisuallyHiddenInput = styled("input")({
     clip: "rect(0 0 0 0)",
@@ -34,41 +45,24 @@ const SurveyOptionsPictures = ({
     width: 1,
   });
 
-  const cancel = (e, imageNumber) => {
-    let currSelectedAnswerTemp = [...currSelectedAnswer];
+  const getImageForSlot = (imageNumber) => slots[imageNumber - 1];
 
-    if (imageNumber === 1) {
-      currSelectedAnswerTemp = currSelectedAnswerTemp.filter(
-        (item) => item !== image1
-      );
-      setImage1(null);
-    }
-    if (imageNumber === 2) {
-      currSelectedAnswerTemp = currSelectedAnswerTemp.filter(
-        (item) => item !== image2
-      );
-      setImage2(null);
-    }
-    if (imageNumber === 3) {
-      currSelectedAnswerTemp = currSelectedAnswerTemp.filter(
-        (item) => item !== image3
-      );
-      setImage3(null);
-    }
+  const cancel = async (e, imageNumber) => {
+    const removedUrl = getImageForSlot(imageNumber);
+    const updatedSlots = normalizeSlots(currSelectedAnswer);
+    updatedSlots[imageNumber - 1] = null;
 
     setUploadError(null);
-    setCurrSelectedAnswer(currSelectedAnswerTemp);
-  };
+    setCurrSelectedAnswer(updatedSlots);
 
-  const setImageForSlot = (imageNumber, imageUrl) => {
-    if (imageNumber === 1) {
-      setImage1(imageUrl);
+    if (!removedUrl) {
+      return;
     }
-    if (imageNumber === 2) {
-      setImage2(imageUrl);
-    }
-    if (imageNumber === 3) {
-      setImage3(imageUrl);
+
+    try {
+      await deleteProfileImage(removedUrl);
+    } catch (error) {
+      setUploadError(error.message || "Failed to delete image");
     }
   };
 
@@ -86,10 +80,17 @@ const SurveyOptionsPictures = ({
     setUploadError(null);
     setUploadingSlot(imageNumber);
 
+    const previousUrl = getImageForSlot(imageNumber);
+
     try {
       const imageUrl = await uploadProfileImage(file);
-      setCurrSelectedAnswer([...currSelectedAnswer, imageUrl]);
-      setImageForSlot(imageNumber, imageUrl);
+      const updatedSlots = normalizeSlots(currSelectedAnswer);
+      updatedSlots[imageNumber - 1] = imageUrl;
+      setCurrSelectedAnswer(updatedSlots);
+
+      if (previousUrl && previousUrl !== imageUrl) {
+        await deleteProfileImage(previousUrl);
+      }
     } catch (error) {
       setUploadError(error.message || "Failed to upload image");
     } finally {
@@ -147,9 +148,9 @@ const SurveyOptionsPictures = ({
     <>
       {uploadError && <p className="surveyImageUploadError">{uploadError}</p>}
       <Grid container className="surveyPictureDiv" spacing={2}>
-        {renderSlot(1, image1)}
-        {renderSlot(2, image2)}
-        {renderSlot(3, image3)}
+        {renderSlot(1, slots[0])}
+        {renderSlot(2, slots[1])}
+        {renderSlot(3, slots[2])}
       </Grid>
     </>
   );

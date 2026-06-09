@@ -1,8 +1,10 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 import { useState, useRef, useEffect } from "react";
 import "./styles.css";
 import Cookies from "js-cookie";
-import { apiFetch } from "../../utils/apiFetch";
+import { apiFetch } from "../../api/client";
+import { useAuth } from "../../context/AuthContext";
 import SurveyOptionsButtons from "./components/surveyOptionsButtons";
 import { surveyQuestions } from "./questions";
 import Button from "@mui/material/Button";
@@ -25,9 +27,9 @@ import HelpOutlineIcon from "@mui/icons-material/HelpOutline";
 import SurveyHelp from "./components/surveyHelp";
 import SurveyOptionsPictures from "./components/surveyOptionsPictures";
 import SurveyFacialVerification from "./components/surveyFacialVerification";
+import { compareFaces } from "./components/surveyFacialVerification/compareFaces";
 import { Player } from '@lordicon/react'; // Import the Player component
 const questionnaireIcon = require(`${process.env.PUBLIC_URL}/public/animatedIcons/questionnaire.json`);
-import * as faceapi from "face-api.js";
 
 const Card = styled(MuiCard)(({ theme }) => ({
   display: "flex",
@@ -57,7 +59,68 @@ const Divider = styled(MuiDivider)(({ theme }) => ({
   backgroundColor: "background.paper",
 }));
 
+const EMPTY_PICTURE_SLOTS = [null, null, null];
+
+const emptyAnswerForQuestion = (q) => {
+  if (q?.type === "pictures") {
+    return [...EMPTY_PICTURE_SLOTS];
+  }
+  if (q?.type === "text" || q?.type === "buttons") {
+    return "";
+  }
+  if (q?.type === "datePicker") {
+    return null;
+  }
+  return [];
+};
+
+const restoreAnswerForQuestion = (q, answers) => {
+  if (!q?.label) {
+    return emptyAnswerForQuestion(q);
+  }
+
+  const saved = answers[q.label];
+  if (saved == null) {
+    return emptyAnswerForQuestion(q);
+  }
+
+  if (q.type === "pictures") {
+    if (!Array.isArray(saved)) {
+      return [...EMPTY_PICTURE_SLOTS];
+    }
+    return [
+      saved[0] ?? null,
+      saved[1] ?? null,
+      saved[2] ?? null,
+    ];
+  }
+
+  if (q.type === "text" || q?.type === "buttons" || q?.type === "datePicker") {
+    return saved;
+  }
+
+  if (Array.isArray(saved)) {
+    return [...saved];
+  }
+
+  return saved;
+};
+
+const hasSurveyAnswer = (question, answer) => {
+  if (question?.type === "pictures") {
+    return Array.isArray(answer) && answer.some(Boolean);
+  }
+
+  if (Array.isArray(answer)) {
+    return answer.length > 0;
+  }
+
+  return answer != null && answer !== "";
+};
+
 const Survey = () => {
+  const navigate = useNavigate();
+  const { user, loading, isAuthenticated } = useAuth();
   let [index, setIndex] = useState(-1);
   let [question, setQuestion] = useState(surveyQuestions[index]);
   let [currSelectedElement, setCurrSelectedElement] = useState(null);
@@ -71,9 +134,14 @@ const Survey = () => {
   const [facialVerificationLoading, setFacialVerificationLoading] =
     React.useState(false);
 
-  const isLoggedIn = Cookies.get("isLoggedIn");
-  if (!isLoggedIn) {
-    window.location = "/";
+  useEffect(() => {
+    if (!loading && !isAuthenticated) {
+      navigate("/", { replace: true });
+    }
+  }, [loading, isAuthenticated, navigate]);
+
+  if (!loading && !isAuthenticated) {
+    return null;
   }
 
   const handleClickOpen = () => {
@@ -85,25 +153,35 @@ const Survey = () => {
   };
 
   const back = () => {
-    /* ... First reset current answer choices and update progress bar */
+    const updatedAnswers = { ...userAnswers };
+    if (question?.label) {
+      updatedAnswers[question.label] = currSelectedAnswer;
+    }
+    setUserAnswers(updatedAnswers);
+
     setCurrSelectedElement(null);
-    setCurrSelectedAnswer([]);
     setProgress((progress -= 6.4));
     setError(null);
 
-    setIndex(--index);
-    setQuestion(surveyQuestions[index]);
+    const newIndex = index - 1;
+    const prevQuestion = surveyQuestions[newIndex];
+    setIndex(newIndex);
+    setQuestion(prevQuestion);
+    setCurrSelectedAnswer(restoreAnswerForQuestion(prevQuestion, updatedAnswers));
   };
 
   const next = async () => {
     let addedUserAnswers = null;
     if (index === -1) {
-      setIndex(++index);
-      setQuestion(surveyQuestions[index]);
+      const newIndex = 0;
+      const firstQuestion = surveyQuestions[newIndex];
+      setIndex(newIndex);
+      setQuestion(firstQuestion);
+      setCurrSelectedAnswer(restoreAnswerForQuestion(firstQuestion, userAnswers));
       return;
     }
     if (
-      (currSelectedAnswer?.length <= 0 || currSelectedAnswer === null) &&
+      !hasSurveyAnswer(question, currSelectedAnswer) &&
       question.type !== "facialVerification"
     ) {
       setError("Please answer the following question before continuing");
@@ -129,7 +207,11 @@ const Survey = () => {
       return;
     }
     if (question?.type === "facialVerification") {
-      const resultOfFacialVerification = await compareFaces();
+      const resultOfFacialVerification = await compareFaces(
+        realTimePhoto,
+        identificationPhoto,
+        setFacialVerificationLoading
+      );
       if (resultOfFacialVerification === 0) {
         setError(`Please upload both photos before continuing.`);
         return;
@@ -162,9 +244,9 @@ const Survey = () => {
     if (index === surveyQuestions.length - 1) {
       setProgress(100);
       // before doing anything, make sure user is signed in or else POST will fail
-      if (!Cookies.get("id")) {
+      if (!user?.id) {
         alert("Session expired, please log back in.");
-        window.location = "/";
+        navigate("/", { replace: true });
         return;
       }
       console.log("FINAL USER ANSWER VALUES: ", addedUserAnswers);
@@ -206,12 +288,12 @@ const Survey = () => {
         apiFetch("/images/addImages", {
           method: "POST",
           body: JSON.stringify({
-            images: addedUserAnswers["pictures"],
+            images: (addedUserAnswers["pictures"] || []).filter(Boolean),
           }),
         })
           .then((response) => response.json())
           .then((data) => {
-            window.location = "/feed";
+            navigate("/feed", { replace: true });
             return data;
           });
       }
@@ -219,8 +301,11 @@ const Survey = () => {
 
     // increment index to change to next question, but we only do this if we aren't at the end of the survey
     if (index !== surveyQuestions.length - 1) {
-      setIndex(++index);
-      setQuestion(surveyQuestions[index]);
+      const newIndex = index + 1;
+      const nextQuestion = surveyQuestions[newIndex];
+      setIndex(newIndex);
+      setQuestion(nextQuestion);
+      setCurrSelectedAnswer(restoreAnswerForQuestion(nextQuestion, addedUserAnswers));
     }
   };
 
@@ -233,60 +318,9 @@ const Survey = () => {
 
   /***********************************************/
 
-  /********************** Facial Verification Functions **********************/
-
-  const compareFaces = async () => {
-    console.log(0, realTimePhoto, identificationPhoto)
-
-    if (!realTimePhoto || !identificationPhoto) return 0;
-
-    console.log(1)
-
-    setFacialVerificationLoading(true);
-    const MODEL_URL = process.env.PUBLIC_URL + "/models";
-    await faceapi.nets.faceRecognitionNet.loadFromUri(MODEL_URL);
-    await faceapi.nets.faceLandmark68Net.loadFromUri(MODEL_URL);
-    await faceapi.nets.ssdMobilenetv1.loadFromUri(MODEL_URL);
-
-    console.log(2)
-
-    const img1 = await faceapi.fetchImage(realTimePhoto);
-    const img2 = await faceapi.fetchImage(identificationPhoto);
-
-    console.log(3)
-
-    const detections1 = await faceapi
-      .detectAllFaces(img1)
-      .withFaceLandmarks()
-      .withFaceDescriptors();
-    const detections2 = await faceapi
-      .detectAllFaces(img2)
-      .withFaceLandmarks()
-      .withFaceDescriptors();
-
-    console.log(4, detections1, detections2)
-
-    if (detections1.length > 0 && detections2.length > 0) {
-      const descriptor1 = detections1[0].descriptor;
-      const descriptor2 = detections2[0].descriptor;
-      const distance = faceapi.euclideanDistance(descriptor1, descriptor2);
-
-      const result = distance < 0.6 ? 2 : 1;
-      if (result) {
-        setFacialVerificationLoading(false);
-      }
-
-      return result;
-    }
-    setFacialVerificationLoading(false);
-    return -1
-  };
-
-  /***************************************************************************/
-
   return (
     <div className="overArchingDiv gradient-background">
-      {isLoggedIn && (
+      {isAuthenticated && (
         <>
           {index === -1 && (
             <motion.div

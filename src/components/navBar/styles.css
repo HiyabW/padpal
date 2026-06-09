@@ -1,13 +1,13 @@
 .navBar {
   position: fixed;
-  top: 0;
+  top: var(--safe-area-top);
   width: 80%;
   display: flex;
   justify-content: space-between;
   padding-top: 0.7rem;
   padding-bottom: 0.7rem;
-  padding-left: 2.2rem;
-  padding-right: 2.2rem;
+  padding-left: calc(2.2rem + var(--safe-area-left));
+  padding-right: calc(2.2rem + var(--safe-area-right));
   transform: translateX(13%);
   color: var(--theme-light-mode-primary-text);
   ;
@@ -45,14 +45,15 @@
 
 @media screen and (max-width: 768px) {
   .navBar {
-    bottom: 0!important;
+    bottom: var(--safe-area-bottom)!important;
     border-bottom-left-radius: 0;
     border-bottom-right-radius: 0;
     border-top-left-radius: 0.5rem;
     border-top-right-radius: 0.5rem;
-    top:auto;
+    top: auto;
     width: 90%;
     transform: translateX(5.5%);
-    background-color:var(--theme-feed-background-color)!important;
+    background-color: var(--theme-feed-background-color)!important;
+    padding-bottom: 0.7rem;
   }
 }

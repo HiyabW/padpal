@@ -3,11 +3,11 @@ import Button from "@mui/material/Button";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
-import { apiFetch } from "../../../../../../utils/apiFetch";
+import { useNavigate } from "react-router-dom";
+import { apiFetch } from "../../../../../../api/client";
 import Modal from 'react-bootstrap/Modal';
-import Cookies from 'js-cookie';
-
 export default function Settings({user}) {
+  const navigate = useNavigate();
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
   
@@ -41,11 +41,11 @@ export default function Settings({user}) {
         console.log(err);
       });
 
-      window.location="/chat"
+      navigate("/chat", { replace: true });
   }
 
   const viewProfile = () => {
-    window.location=`/viewProfile?id=${user.id}`
+    navigate(`/viewProfile?id=${user.id}`);
   }
 
   return (
