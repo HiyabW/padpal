@@ -33,6 +33,22 @@ npm run cap:android
 
 In Xcode, select a simulator or your iPhone and press **Run**. The app runs full-screen (no Safari chrome).
 
+### iOS Simulator keyboard
+
+If tapping a text field shows the **Done** accessory bar but **no on-screen keyboard**, the simulator is using your Mac keyboard. Turn it off:
+
+**I/O → Keyboard → Connect Hardware Keyboard** (or press **⌘⇧K**), then tap the field again.
+
+To force the software keyboard: **I/O → Keyboard → Toggle Software Keyboard** (**⌘K**).
+
+### Safe area / white bands
+
+iOS uses `contentInset: never` in `capacitor.config.ts` so Capacitor does not add extra WebView insets on top of CSS `env(safe-area-inset-*)`. After changing config or web CSS, run `npm run cap:sync` and rebuild in Xcode.
+
+### Page transitions (no white flash)
+
+In-app navigation uses React Router (`useNavigate` / `appNavigate`) instead of `window.location` full reloads. Rebuild and sync after changing routing code.
+
 ## Live reload (optional, dev)
 
 With webpack dev server running (`npm run serve` on port 3000):

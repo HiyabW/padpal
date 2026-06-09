@@ -1,4 +1,5 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 import { useState, useRef, useEffect } from "react";
 import "./styles.css";
 import Cookies from "js-cookie";
@@ -118,6 +119,7 @@ const hasSurveyAnswer = (question, answer) => {
 };
 
 const Survey = () => {
+  const navigate = useNavigate();
   const { user, loading, isAuthenticated } = useAuth();
   let [index, setIndex] = useState(-1);
   let [question, setQuestion] = useState(surveyQuestions[index]);
@@ -132,8 +134,13 @@ const Survey = () => {
   const [facialVerificationLoading, setFacialVerificationLoading] =
     React.useState(false);
 
+  useEffect(() => {
+    if (!loading && !isAuthenticated) {
+      navigate("/", { replace: true });
+    }
+  }, [loading, isAuthenticated, navigate]);
+
   if (!loading && !isAuthenticated) {
-    window.location = "/";
     return null;
   }
 
@@ -239,7 +246,7 @@ const Survey = () => {
       // before doing anything, make sure user is signed in or else POST will fail
       if (!user?.id) {
         alert("Session expired, please log back in.");
-        window.location = "/";
+        navigate("/", { replace: true });
         return;
       }
       console.log("FINAL USER ANSWER VALUES: ", addedUserAnswers);
@@ -286,7 +293,7 @@ const Survey = () => {
         })
           .then((response) => response.json())
           .then((data) => {
-            window.location = "/feed";
+            navigate("/feed", { replace: true });
             return data;
           });
       }

@@ -7,7 +7,8 @@ const config: CapacitorConfig = {
   appName: 'PadPal',
   webDir: 'dist',
   ios: {
-    contentInset: 'automatic',
+    // CSS env(safe-area-inset-*) handles insets; "automatic" double-insets and shows white bands.
+    contentInset: 'never',
     allowsLinkPreview: false,
   },
   android: {

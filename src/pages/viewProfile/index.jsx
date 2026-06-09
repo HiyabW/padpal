@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { useSearchParams } from "react-router-dom";
+import { useSearchParams, useNavigate } from "react-router-dom";
 import UserCard from "../feed/components/UserCard";
 import CircularProgress from "@mui/material/CircularProgress";
 import Box from "@mui/material/Box";
@@ -9,6 +9,7 @@ import './styles.css'
 import { apiFetch } from "../../api/client";
 
 const ViewProfile = () => {
+  const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const [user, setUser] = React.useState(null);
   const [images, setImages] = React.useState(null);
@@ -17,29 +18,27 @@ const ViewProfile = () => {
   const id = searchParams.get("id");
 
   useEffect(() => {
-    if (id=="undefined") {
-      window.location = "/"
+    if (id === "undefined" || !id) {
+      navigate("/", { replace: true });
+      return;
     }
-    else {
 
-      console.log(id)
-      // fetch data on currUser
-      apiFetch("/feed/getUser", {
-        method: "POST",
-        body: JSON.stringify({ id }),
+    console.log(id);
+    apiFetch("/feed/getUser", {
+      method: "POST",
+      body: JSON.stringify({ id }),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        const fetchedUser = data["user"];
+        setUser(fetchedUser);
+        setUsers({ [fetchedUser.email]: fetchedUser });
+        setImages(data["images"]);
       })
-        .then((response) => response.json())
-        .then((data) => {
-          const fetchedUser = data["user"];
-          setUser(fetchedUser);
-          setUsers({ [fetchedUser.email]: fetchedUser });
-          setImages(data["images"]);
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-    }
-  }, []);
+      .catch((err) => {
+        console.log(err);
+      });
+  }, [id, navigate]);
 
 
   return (

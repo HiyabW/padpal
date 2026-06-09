@@ -20,8 +20,10 @@ const Divider = styled(MuiDivider)(({ theme }) => ({
   backgroundColor: "background.paper",
 }));
 
+import { appNavigate } from "../../../../navigation";
+
 function redirectToEditProfile() {
-  window.location = "/editProfile";
+  appNavigate("/editProfile");
 }
 
 /************* Utils functions *************/
