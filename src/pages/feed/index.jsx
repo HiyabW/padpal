@@ -1,10 +1,9 @@
-import React, { useEffect, useRef, useMemo, useCallback } from "react";
-import { useNavigate } from "react-router-dom";
+import React from "react";
 import Cookies from "js-cookie";
-import { apiFetch } from "../../api/client";
-import { useAuth } from "../../context/AuthContext";
+import { apiFetch } from "../../utils/apiFetch";
 import UserCard from "./components/UserCard";
 import "./styles.css";
+import { useEffect, useRef } from "react";
 import { styled } from '@mui/material/styles';
 import Button from "@mui/material/Button";
 import Box from "@mui/material/Box";
@@ -36,8 +35,7 @@ const LightTooltip = styled(({ className, ...props }) => (
 
 
 const Feed = () => {
-  const navigate = useNavigate();
-  const { user, loading, isAuthenticated } = useAuth();
+  const isLoggedIn = Cookies.get("isLoggedIn");
   const [loaded, setLoaded] = React.useState(false);
   const [users, setUsers] = React.useState({});
   const [images, setImages] = React.useState({});
@@ -48,24 +46,22 @@ const Feed = () => {
   const [reject, setReject] = React.useState(false)
   const [openTooltip, setOpenTooltip] = React.useState(false);
 
-  const handleTooltipClose = useCallback(() => {
+  const handleTooltipClose = () => {
     setOpenTooltip(false);
-  }, []);
+  };
 
-  const handleTooltipOpen = useCallback(() => {
+  const handleTooltipOpen = () => {
     setOpenTooltip(true);
-  }, []);
+  };
 
-  const handleClose = useCallback(() => {
+  const handleClose = () => {
     setOpen(false);
-  }, []);
+  };
+
+  let isRotated = 1;
 
   useEffect(() => {
-    if (!loading && !isAuthenticated) {
-      navigate("/", { replace: true });
-      return;
-    }
-    if (isAuthenticated) {
+    if (isLoggedIn) {
       // first fetch data
       apiFetch("/feed/", {
         method: "POST",
@@ -98,11 +94,11 @@ const Feed = () => {
           console.log(err);
         });
     }
-  }, [loading, isAuthenticated, navigate]);
-
-  const closeMatchScreen = useCallback(() => {
-    setMatch(null);
   }, []);
+
+  function closeMatchScreen() {
+    setMatch(null);
+  }
 
   const particlesInit = async (main) => {
     await loadFull(main);
@@ -126,19 +122,6 @@ const Feed = () => {
   }
 
   /***********************************************/
-
-  const userCards = useMemo(() => {
-    let rotated = 1;
-    return Object.entries(users).map(([key, user]) => {
-      rotated += 1;
-      return {
-        key,
-        user,
-        isRotated: rotated,
-        images: images[user.email],
-      };
-    });
-  }, [users, images]);
 
   return (
     <div className="feed gradient-background" style={{height: match ? '100%' : ''}}>
@@ -254,7 +237,7 @@ const Feed = () => {
           </Grid>
         </motion.div>
       )}
-      {isAuthenticated && (
+      {isLoggedIn && (
         <>
           <Onboarding open={open} handleClose={handleClose} />
           {!loaded && (
@@ -311,21 +294,23 @@ const Feed = () => {
               </ClickAwayListener>)
           }
 
-          {userCards.map(({ key, user, isRotated, images: userImages }) => (
-            <UserCard
-              key={key}
-              isRotated={isRotated}
-              user={user}
-              users={users}
-              setUsers={setUsers}
-              setMatch={setMatch}
-              images={userImages}
-              accept={accept}
-              setAccept={setAccept}
-              reject={reject}
-              setReject={setReject}
-            />
-          ))}
+          {Object.entries(users).map(([key, value]) => {
+            isRotated += 1;
+            return (
+              <UserCard
+                isRotated={isRotated}
+                user={users[key]}
+                users={users}
+                setUsers={setUsers}
+                setMatch={setMatch}
+                images={images[users[key].email]}
+                accept={accept}
+                setAccept={setAccept}
+                reject={reject}
+                setReject={setReject}
+              />
+            );
+          })}
 
           {Object.keys(users).length === 0 && loaded && (
             <Box className="p-4">
@@ -334,7 +319,7 @@ const Feed = () => {
           )}
         </>
       )}
-      {!loading && !isAuthenticated && (
+      {!isLoggedIn && (
         <div className="p-4 centeredDiv">
           Session expired, please log back in.
         </div>

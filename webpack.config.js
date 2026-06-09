@@ -32,10 +32,6 @@ const config = smp.wrap({
     },
     output: {
         path: path.resolve(__dirname, 'dist'),
-        publicPath: './',
-        filename: '[name].js',
-        chunkFilename: '[name].js',
-        clean: true,
     },
     devServer: {
         open: true,

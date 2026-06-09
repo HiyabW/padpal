@@ -1,15 +1,15 @@
 import React, { useEffect } from "react";
-import { useSearchParams, useNavigate } from "react-router-dom";
+import { useSearchParams } from "react-router-dom";
 import UserCard from "../feed/components/UserCard";
 import CircularProgress from "@mui/material/CircularProgress";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import { motion } from "framer-motion";
+import Cookies from 'js-cookie'
 import './styles.css'
-import { apiFetch } from "../../api/client";
+import { apiFetch } from "../../utils/apiFetch";
 
 const ViewProfile = () => {
-  const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const [user, setUser] = React.useState(null);
   const [images, setImages] = React.useState(null);
@@ -18,27 +18,29 @@ const ViewProfile = () => {
   const id = searchParams.get("id");
 
   useEffect(() => {
-    if (id === "undefined" || !id) {
-      navigate("/", { replace: true });
-      return;
+    if (id=="undefined") {
+      window.location = "/"
     }
+    else {
 
-    console.log(id);
-    apiFetch("/feed/getUser", {
-      method: "POST",
-      body: JSON.stringify({ id }),
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        const fetchedUser = data["user"];
-        setUser(fetchedUser);
-        setUsers({ [fetchedUser.email]: fetchedUser });
-        setImages(data["images"]);
+      console.log(id)
+      // fetch data on currUser
+      apiFetch("/feed/getUser", {
+        method: "POST",
+        body: JSON.stringify({ id }),
       })
-      .catch((err) => {
-        console.log(err);
-      });
-  }, [id, navigate]);
+        .then((response) => response.json())
+        .then((data) => {
+          const fetchedUser = data["user"];
+          setUser(fetchedUser);
+          setUsers({ [fetchedUser.email]: fetchedUser });
+          setImages(data["images"]);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
+  }, []);
 
 
   return (

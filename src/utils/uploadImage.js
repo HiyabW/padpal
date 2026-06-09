@@ -1,4 +1,4 @@
-import { apiFetch } from '../api/client';
+import { apiFetch } from './apiFetch';
 
 const ALLOWED_CONTENT_TYPES = new Set([
     'image/jpeg',
@@ -20,43 +20,24 @@ export async function uploadProfileImage(file) {
         body: JSON.stringify({ contentType: file.type }),
     });
 
+    if (!presignResponse.ok) {
+        const errorBody = await presignResponse.json().catch(() => ({}));
+        throw new Error(errorBody?.error?.message || 'Failed to prepare image upload');
+    }
+
     const { uploadUrl, imageUrl } = await presignResponse.json();
 
-    if (!uploadUrl || !imageUrl) {
-        throw new Error('Upload preparation returned an invalid response');
-    }
-
-    const uploadHost = new URL(uploadUrl).host;
-
-    let uploadResponse;
-    try {
-        uploadResponse = await fetch(uploadUrl, {
-            method: 'PUT',
-            body: file,
-            headers: {
-                'Content-Type': file.type,
-            },
-        });
-    } catch (error) {
-        throw new Error(
-            `Upload to ${uploadHost} was blocked (network or CORS). Check the S3 bucket region matches AWS_REGION.`
-        );
-    }
+    const uploadResponse = await fetch(uploadUrl, {
+        method: 'PUT',
+        body: file,
+        headers: {
+            'Content-Type': file.type,
+        },
+    });
 
     if (!uploadResponse.ok) {
-        throw new Error(`Upload to ${uploadHost} failed with status ${uploadResponse.status}`);
+        throw new Error('Failed to upload image to storage');
     }
 
     return imageUrl;
-}
-
-export async function deleteProfileImage(imageUrl) {
-    if (!imageUrl || imageUrl.startsWith('data:')) {
-        return;
-    }
-
-    await apiFetch('/images/deleteImage', {
-        method: 'POST',
-        body: JSON.stringify({ imageUrl }),
-    });
 }
