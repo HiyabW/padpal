@@ -181,6 +181,33 @@ Every PR must include all of the following sections:
 
 ---
 
+## Priority Override — Phase 0 Product Launch (ACTIVE)
+
+**Status:** Highest priority · **Effective:** June 8, 2026  
+**Plan:** `docs/product/plans/2026-06-08-design-system-rooms-roadmap.md`
+
+The **Phase 0** initiative (design system, marketing MVP, Rooms feature) **takes precedence over all Phase 1–3 audit tickets** until the marketing milestone (SCRUM-62) and Rooms epic (SCRUM-84) are complete.
+
+| Rule | Detail |
+|------|--------|
+| Work Phase 0 first | SCRUM-49–62, 66, 68–89 unless explicitly told otherwise |
+| Security exception | SCRUM-1, SCRUM-2, SCRUM-3 still run in parallel — required before public beta |
+| Reserved numbers | SCRUM-63, SCRUM-64, SCRUM-65, SCRUM-67 — Capacitor (separate track) |
+| Deferred | SCRUM-4–48 unless a ticket blocks marketing flows or Rooms |
+| Sprint name | **"PadPal V2 - Phase 0 Product Launch"** |
+
+### Phase 0 — Product Launch (SCRUM-49+)
+
+| Epic | SCRUM | Scope |
+|------|-------|-------|
+| Design System v2 | SCRUM-49 (epic), 50–55 | Tokens, SwipeCard, FeedStack, MatchOverlay, BottomNavBar |
+| Marketing MVP | SCRUM-56 (epic), 57–62, 66 | App shell, sign-in, slim onboarding, Home feed, chat, profile — **record videos at SCRUM-62** |
+| Rooms Backend | SCRUM-68 (epic), 69–76 | Listing models, APIs, group chat (`palpal-api`) |
+| Rooms Frontend | SCRUM-77 (epic), 78–84 | Mode entry, wizard, feeds, invites, group chat, lifecycle |
+| Safety & Polish | SCRUM-85 (epic), 86–89 | Report/block, image moderation, T&C, empty states |
+
+---
+
 ## Phase Reference
 
 ### Phase 1 — Critical Fixes (SCRUM-1 to SCRUM-18)
