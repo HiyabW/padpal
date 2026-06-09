@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import "./styles.css"; // Import your CSS file for the fade effect
 import { useAuth } from "../../context/AuthContext";
 import Box from "@mui/material/Box";
@@ -39,6 +40,7 @@ const Card = styled(MuiCard)(({ theme }) => ({
 }));
 
 function SignIn() {
+  const navigate = useNavigate();
   const { user, loading, refreshUser } = useAuth();
   const [name, setName] = useState(null);
   const [email, setEmail] = useState(null);
@@ -59,6 +61,12 @@ function SignIn() {
   const [isLoading, setIsLoading] = React.useState(false)
   const [isMobileIntroVisible, setIsMobileIntroVisible] = useState(true);
   const [shouldAutoComplete, setShouldAutoComplete] = useState(true);
+
+  useEffect(() => {
+    if (!loading && user) {
+      navigate("/feed", { replace: true });
+    }
+  }, [loading, user, navigate]);
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -164,8 +172,8 @@ function SignIn() {
         if (data?.id) {
           await refreshUser();
           data?.gender
-            ? (window.location = "/feed")
-            : (window.location = "/survey");
+            ? navigate("/feed", { replace: true })
+            : navigate("/survey", { replace: true });
         } else {
           setError(data?.error?.message || "Login failed");
           setIsLoading(false);
@@ -192,7 +200,7 @@ function SignIn() {
       .then(async (data) => {
         if (data?.id) {
           await refreshUser();
-          window.location = "/survey";
+          navigate("/survey", { replace: true });
         } else {
           setError(data?.error?.message || "Sign up failed");
           setIsLoading(false);
@@ -218,7 +226,6 @@ function SignIn() {
   }
 
   if (!loading && user) {
-    window.location = "/feed";
     return null;
   }
 
@@ -248,6 +255,7 @@ function SignIn() {
           style={{
             position: 'absolute',
             width: '100%',
+            minHeight: '100dvh',
           }}
         >
           <div className={`signIn`}>

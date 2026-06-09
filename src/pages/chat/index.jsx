@@ -1,3 +1,4 @@
+import { useNavigate } from "react-router-dom";
 import "./styles.css";
 import React, { useCallback, useEffect, useRef } from "react";
 import ChatPreview from "./components/chatPreview";
@@ -98,6 +99,7 @@ function appendMessageToData(prevData, message, myId) {
 }
 
 const Chat = () => {
+  const navigate = useNavigate();
   const { user, loading, isAuthenticated } = useAuth();
   const myId = user?.id;
   const [selectedUser, setSelectedUser] = React.useState(false);
@@ -161,11 +163,11 @@ const Chat = () => {
   useEffect(() => {
     if (loading) return;
     if (!isAuthenticated) {
-      window.location = "/";
+      navigate("/", { replace: true });
       return;
     }
     fetchData();
-  }, [loading, isAuthenticated, fetchData]);
+  }, [loading, isAuthenticated, fetchData, navigate]);
 
   useEffect(() => {
     if (!isAuthenticated) return;

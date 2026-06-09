@@ -24,3 +24,15 @@
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+
+# Capacitor / native tooling
+.DS_Store
+ios/App/Pods/
+ios/App/build/
+ios/DerivedData/
+android/.gradle/
+android/app/build/
+android/build/
+android/.idea/
+*.keystore
+!debug.keystore

@@ -1,10 +1,11 @@
 import './App.css';
-import { Routes, Route, useLocation } from 'react-router-dom';
+import { Routes, Route, useLocation, useNavigate } from 'react-router-dom';
 import NavBar from './components/navBar';
 import React, { Suspense, useEffect } from 'react';
 import CircularProgress from '@mui/material/CircularProgress';
 import { apiFetch } from './api/client';
 import { useAuth } from './context/AuthContext';
+import { setAppNavigate } from './navigation';
 
 const Feed = React.lazy(() => import('./pages/feed'));
 const Chat = React.lazy(() => import('./pages/chat'));
@@ -15,7 +16,13 @@ const SignIn = React.lazy(() => import('./pages/signIn'));
 
 function App() {
   const location = useLocation();
+  const navigate = useNavigate();
   const { user } = useAuth();
+
+  useEffect(() => {
+    setAppNavigate(navigate);
+    return () => setAppNavigate(null);
+  }, [navigate]);
 
   useEffect(() => {
     if (!user) return;
@@ -29,13 +36,13 @@ function App() {
   }, [user, location.pathname]);
 
   return (
-    <>
+    <div className="App">
       {
         (location.pathname !== '/' && location.pathname !== '/survey') &&
         <NavBar />
       }
       <Suspense fallback={
-        <div className="centeredDiv gradient-background2">
+        <div className="centeredDiv gradient-background2" style={{ minHeight: '100dvh' }}>
           <CircularProgress color="inherit" />
         </div>
       }>
@@ -48,7 +55,7 @@ function App() {
           <Route exact path='/editProfile' element={<EditProfile />} />
         </Routes>
       </Suspense>
-    </>
+    </div>
   );
 }
 

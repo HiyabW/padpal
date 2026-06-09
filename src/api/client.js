@@ -1,4 +1,5 @@
 import { updateChatSocketAuth } from './socket';
+import { appNavigate } from '../navigation';
 
 export const baseURL =
   typeof process !== 'undefined' && process.env?.REACT_APP_API_URL
@@ -88,7 +89,7 @@ export async function apiFetch(path, options = {}) {
     const refreshed = await refreshAccessToken();
     if (!refreshed) {
       if (normalizedPath !== '/auth/me') {
-        window.location = '/';
+        appNavigate('/', { replace: true });
       }
       return res;
     }

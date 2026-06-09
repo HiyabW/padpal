@@ -1,4 +1,5 @@
 import React, { useEffect, useRef } from "react";
+import { useNavigate } from "react-router-dom";
 import { apiFetch } from "../../api/client";
 import { useAuth } from "../../context/AuthContext";
 import MuiCard from "@mui/material/Card";
@@ -16,6 +17,7 @@ import Grid from "@mui/material/Grid2";
 import Divider from "@mui/material/Divider";
 
 const EditProfile = () => {
+  const navigate = useNavigate();
   const { user: authUser, loading, isAuthenticated } = useAuth();
   const [user, setUser] = React.useState(null);
   const images = useRef(null);
@@ -98,14 +100,14 @@ const EditProfile = () => {
     })
       .then((response) => response.json())
       .then((data) => {
-        window.location = `/viewProfile?id=${authUser?.id}`;
+        navigate(`/viewProfile?id=${authUser?.id}`, { replace: true });
       });
   }
 
   useEffect(() => {
     if (loading) return;
     if (!isAuthenticated) {
-      window.location = "/";
+      navigate("/", { replace: true });
       return;
     }
     console.log("RERENDER");
@@ -148,7 +150,7 @@ const EditProfile = () => {
           console.log(err);
         });
     }
-  }, [loading, isAuthenticated]);
+  }, [loading, isAuthenticated, navigate]);
 
   function getAge(birthdayStr) {
     const today = new Date();

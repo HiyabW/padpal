@@ -4,10 +4,10 @@ import App from './App';
 import reportWebVitals from './reportWebVitals';
 import { BrowserRouter } from 'react-router-dom';
 import { AuthProvider } from './context/AuthContext';
+import { initCapacitorNative } from './native/capacitor';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './index.css';
 
-console.log("ROOT: ", document.getElementById('root'))
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
@@ -18,6 +18,8 @@ root.render(
     </BrowserRouter>
   </React.StrictMode>
 );
+
+initCapacitorNative();
 
 // If you want to start measuring performance in your app, pass a function
 // to log results (for example: reportWebVitals(console.log))

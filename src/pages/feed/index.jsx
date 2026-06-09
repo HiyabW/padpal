@@ -1,10 +1,10 @@
-import React from "react";
+import React, { useEffect, useRef, useMemo, useCallback } from "react";
+import { useNavigate } from "react-router-dom";
 import Cookies from "js-cookie";
 import { apiFetch } from "../../api/client";
 import { useAuth } from "../../context/AuthContext";
 import UserCard from "./components/UserCard";
 import "./styles.css";
-import { useEffect, useRef, useMemo, useCallback } from "react";
 import { styled } from '@mui/material/styles';
 import Button from "@mui/material/Button";
 import Box from "@mui/material/Box";
@@ -36,6 +36,7 @@ const LightTooltip = styled(({ className, ...props }) => (
 
 
 const Feed = () => {
+  const navigate = useNavigate();
   const { user, loading, isAuthenticated } = useAuth();
   const [loaded, setLoaded] = React.useState(false);
   const [users, setUsers] = React.useState({});
@@ -61,7 +62,7 @@ const Feed = () => {
 
   useEffect(() => {
     if (!loading && !isAuthenticated) {
-      window.location = "/";
+      navigate("/", { replace: true });
       return;
     }
     if (isAuthenticated) {
@@ -97,7 +98,7 @@ const Feed = () => {
           console.log(err);
         });
     }
-  }, [loading, isAuthenticated]);
+  }, [loading, isAuthenticated, navigate]);
 
   const closeMatchScreen = useCallback(() => {
     setMatch(null);

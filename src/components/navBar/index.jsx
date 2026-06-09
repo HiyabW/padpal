@@ -6,27 +6,28 @@ import GroupsIcon from "@mui/icons-material/Groups";
 import React from "react";
 import LogoutIcon from "@mui/icons-material/Logout";
 import "./styles.css";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { destroyChatSocket } from "../../api/socket";
 import { apiFetch } from "../../api/client";
 import { useAuth } from "../../context/AuthContext";
 
 function NavBar() {
   const location = useLocation();
+  const navigate = useNavigate();
   const { user, clearUser } = useAuth();
   const chatOrFeedButton = location.pathname === "/chat" ? "feed" : "chat";
 
   function redirectToFeed() {
-    window.location = "/feed";
+    navigate("/feed");
   }
 
   function redirectToViewProfile() {
     if (!user?.id) return;
-    window.location = `/viewProfile?id=${user.id}`;
+    navigate(`/viewProfile?id=${user.id}`);
   }
 
   function redirectToChat() {
-    window.location = "/chat";
+    navigate("/chat");
   }
 
   async function logout() {
@@ -37,7 +38,7 @@ function NavBar() {
       // Still redirect if logout request fails
     }
     clearUser();
-    window.location = "/";
+    navigate("/", { replace: true });
   }
 
   return (

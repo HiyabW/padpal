@@ -1,7 +1,10 @@
 .Chat {
   height: 100%;
+  height: 100dvh;
+  min-height: 100dvh;
   padding: 1rem;
   padding-top: 3rem;
+  padding-bottom: calc(1rem + var(--safe-area-bottom));
   color: var(--theme-dark-mode-primary-text);
 
   h1 {
@@ -238,6 +241,7 @@
     flex-shrink: 0;
     align-self: center;
     padding-top: 1rem;
+    padding-bottom: var(--safe-area-bottom);
 
     .messageInput {
       color: var(--theme-dark-mode-primary-text) !important;
@@ -256,6 +260,7 @@
     .messageInputBox {
       width: 85%!important;
       padding-top: 0.75rem;
+      padding-bottom: calc(0.75rem + var(--safe-area-bottom));
     }
   }
 }
