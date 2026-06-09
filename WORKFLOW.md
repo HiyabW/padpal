@@ -16,10 +16,10 @@
 | File | Purpose |
 |------|---------|
 | `AUDIT.md` | Full system bottleneck and scalability audit — root causes and fix directions |
-| `PRD.md` | Product requirements and intended system behavior |
+| `docs/product/PRD.md` | Product requirements and intended system behavior |
 | `WORKFLOW.md` | This file — the development process and conventions |
 
-Always read `AUDIT.md` and `PRD.md` before starting any ticket. If a ticket's fix direction conflicts with what is described in either document, update the relevant document first.
+Always read `AUDIT.md` and `docs/product/PRD.md` before starting any ticket. If a ticket's fix direction conflicts with what is described in either document, update the relevant document first.
 
 ---
 
@@ -258,7 +258,7 @@ If during any ticket you discover:
 - Unclear product behavior
 - Incorrect assumptions in the codebase
 
-You **MUST** update `PRD.md` to reflect the correct system understanding before or alongside the code change.
+You **MUST** update `docs/product/PRD.md` to reflect the correct system understanding before or alongside the code change.
 
 ---
 

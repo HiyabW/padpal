@@ -1,7 +1,8 @@
 # PadPal — Product Requirements Document
 
-**Version 1.0 | May 10, 2026**  
-**Repositories:** `padpal` (frontend) · `palpal-api` (backend)
+**Version 2.0 | June 8, 2026**  
+**Repositories:** `padpal` (frontend) · `palpal-api` (backend)  
+**Design spec:** `docs/product/specs/2026-06-08-vacancy-listings-design.md`
 
 ---
 
@@ -25,12 +26,19 @@
 16. [Recommendations for Production Readiness](#16-recommendations-for-production-readiness)
 17. [Future Feature Opportunities](#17-future-feature-opportunities)
 18. [Data Model Reference](#18-data-model-reference)
+19. [Competitive Analysis](#19-competitive-analysis)
 
 ---
 
 ## 1. Product Overview
 
-PadPal is a mobile-first web application for roommate discovery and pairing. Modeled after swipe-based dating apps (Hinge/Tinder), it allows users to create profiles around their housing and lifestyle preferences, receive ranked compatibility matches from other users, swipe to accept or reject candidates, form mutual matches, and then communicate directly via in-app chat. An AI chatbot (powered by Google Gemini) is always present as an introductory conversation partner.
+PadPal is a mobile-first web application for roommate discovery and pairing. Modeled after swipe-based dating apps (Hinge/Tinder), it serves **three distinct matching intents** via separate feeds:
+
+1. **Home (User ↔ User)** — Find one compatible roommate and search for housing together.
+2. **Rooms — Listing → User** — Households with a vacancy create a listing, invite current tenants, and swipe on individuals open to filling an existing room.
+3. **Rooms — User → Listing** — Individuals looking to join an existing home swipe on vacancy listings ranked by compatibility.
+
+All feeds share ranked compatibility scoring, swipe-card UX, mutual-match gating, and in-app chat. An AI chatbot (powered by Google Gemini) is always present as an introductory conversation partner. **Match means permission to start a conversation — not a lease commitment.**
 
 ---
 
@@ -38,10 +46,12 @@ PadPal is a mobile-first web application for roommate discovery and pairing. Mod
 
 Traditional roommate search is unstructured and unsafe. PadPal solves this by:
 
-- Collecting deep lifestyle preference data at onboarding (budget, cleanliness, pets, smoking, guests, hobbies, city, move-in date, lease type)
-- Running a server-side compatibility scoring algorithm that ranks all potential matches before surfacing them
-- Presenting candidates in a familiar swipe-card UI that filters out bad fits before the user ever sees them
-- Providing a match-gated chat that only opens when both users swipe right — reducing unsolicited contact
+- Separating **intent** into dedicated feeds (find a roommate + apartment vs. fill a vacancy vs. join an existing home) so users never see irrelevant recommendations
+- Collecting core matching data at signup (age, city, budget, gender prefs, `@username`) with optional lifestyle enrichment in Settings to reduce onboarding burnout
+- Running a server-side compatibility scoring algorithm that ranks candidates and listings before surfacing them
+- Presenting familiar swipe-card UI that hard-filters incompatible fits before the user sees them
+- Providing match-gated chat (1:1 or household group chat) that only opens on mutual interest — reducing unsolicited contact
+- Supporting **household vacancy listings** with co-tenant invites, equal admin rights, and privacy-preserving location display (neighborhood only)
 
 ---
 
@@ -50,6 +60,8 @@ Traditional roommate search is unstructured and unsafe. PadPal solves this by:
 - College students and young adults (18–30) searching for first or next-year housing
 - Urban renters looking for roommates in specific cities
 - People relocating who need both housing and a compatible living partner
+- **Households with one open room** replacing a departing roommate (3-bed/2-bath with one vacancy)
+- **Individuals open to joining an existing home** rather than signing a new lease with one stranger
 - Users who want structured lifestyle compatibility screening rather than open classifieds
 
 ---
@@ -64,28 +76,27 @@ Traditional roommate search is unstructured and unsafe. PadPal solves this by:
 - **Logout:** Clears both cookies, redirects to `/`.
 - **Token refresh:** Refresh token endpoint exists on the backend (`POST /auth/refreshToken`) but is not called by the frontend.
 
-### 4.2 Onboarding / Survey
+### 4.2 Onboarding / Profile Setup
 
-A 16-step questionnaire collected at `/survey`. Steps in order:
+Onboarding is a **short required core** followed by optional enrichment in Settings (beta).
 
-1. Match gender preferences (checkboxes)
-2. Self-identified gender (buttons)
-3. Acceptable roommate age range (slider)
-4. User's own age/DOB (date picker)
-5. City (select from static list)
-6. Monthly budget range (slider)
-7. Lease type preferences (checkboxes: month-to-month, 6-month, 12-month, etc.)
-8. Expected move-out/move-in date (date picker)
-9. Cleanliness level (buttons)
-10. Pet preferences (buttons)
-11. Smoking preferences (buttons)
-12. Guest preferences (buttons)
-13. Bio / written introduction (text)
-14. Profile photos (upload)
-15. Hobbies (multi-select)
-16. Facial verification (webcam + uploaded ID compared client-side via `face-api.js`)
+**Required at signup** (gates feed access):
 
-Survey data is submitted to `POST /auth/survey` as a single JSON blob and images to `POST /images/addImages`. After submission a `needsOnboarding` cookie is set to trigger a two-step UI tutorial on first feed visit.
+- Gender and gender preferences
+- Age and acceptable roommate age range
+- City and monthly budget range
+- `@username` (unique handle for roommate invites)
+- Phone number (for SMS listing invites)
+- Terms & Conditions acceptance (link on sign-up page)
+
+**Optional in Settings** (improves soft scoring and compatibility badges):
+
+- Lease type preferences and move-in/move-out timing
+- Cleanliness, pet, smoking, and guest preferences
+- Bio, profile photos, hobbies
+- Identity verification (webcam + ID via `face-api.js`)
+
+Legacy `/survey` route may still host multi-step UI; data submits via `POST /auth/survey` and images via `POST /images/addImages`. A `needsOnboarding` cookie triggers a brief swipe tutorial on first Home feed visit.
 
 ### 4.3 Compatibility Feed (Swiping)
 
@@ -138,9 +149,52 @@ All logic lives in `palpal-api/routes/feed.js`. Hard filters are applied first, 
 
 ### 4.7 Navigation
 
-- Persistent `NavBar` visible on all routes except `/` and `/survey`
-- NavBar links: Feed, Chat, View Profile (own profile), Logout
-- Routes: `/` (sign in/register), `/survey`, `/feed`, `/chat`, `/viewProfile`, `/editProfile`
+- Persistent `NavBar` visible on all routes except `/` and onboarding
+- NavBar links: **Home** (user↔user feed), **Rooms** (vacancy feeds), Chat, Profile, Logout
+- Routes: `/` (sign in/register), `/survey` or onboarding, `/feed` (Home), `/rooms`, `/chat`, `/viewProfile`, `/editProfile`, `/settings`
+
+**Rooms tab behavior:**
+
+- First visit: entry screen — "I have a vacancy in my home" vs "I want to fill a vacancy"
+- After setup: routes directly to active feed (`Listing → User` or `User → Listing`)
+- Mode switch via Settings with confirmation (archive/transfer rules apply)
+- Home feed always available independently of Rooms mode
+
+### 4.8 Vacancy Listings (Rooms Feed)
+
+See `docs/product/specs/2026-06-08-vacancy-listings-design.md` for full spec.
+
+**Listing creation wizard** (draft-save at every step):
+
+1. Home basics — private full address (dedup), bed/bath, public neighborhood, rent, move-in, lease
+2. Photos + "About the Home"
+3. Ideal candidate preferences
+4. Co-tenant invites (`@username`, SMS preferred, email fallback)
+5. Review
+
+**Go-live gate:** all required fields + creator + ≥1 accepted co-tenant. Pending invitees show as "Pending" on card.
+
+**Listing states:** `DRAFT` → `LIVE` → `ARCHIVED` (manual "Vacancy filled", 2–3 weeks inactivity, or mode switch). Instant reactivation on login (Depop-style popup).
+
+**Dedup:** one live listing per normalized address; duplicate → join prompt; new listing only after archive.
+
+**Swipe rules (beta):**
+
+- Per-tenant pass (silent; removes from that tenant's feed only)
+- Match when any accepted tenant swipes right AND seeker swipes right on listing
+- Auto group chat with seeker + all accepted tenants
+- Household-wide unmatch (confirmation required)
+- Unlimited concurrent listing matches until vacancy filled
+
+**Compatibility badge:** top 3–4 traits shared between seeker and the most tenants; copy: "You and one or more roommates like: …"
+
+**Privacy:** neighborhood + city on card; full address never shown in-app (shared in chat manually).
+
+### 4.9 Safety & Moderation (Beta)
+
+- Report and block users and listings
+- Automated image moderation on upload (Google Cloud Vision SafeSearch or AWS Rekognition) for profile and home photos
+- Terms & Conditions at signup (fair-housing language in legal draft)
 
 ---
 
@@ -282,6 +336,12 @@ All frontend-to-backend communication is via `POST` with JSON bodies. No REST co
 | `editProfile/index.jsx`     | `POST /auth/survey`         | all profile fields + `_id`        |
 | `editProfile/index.jsx`     | `POST /images/deleteImages` | `userId`                          |
 | `editProfile/index.jsx`     | `POST /images/addImages`    | `owner`, `images[]`               |
+| `rooms/*` (planned)         | `POST /listings/create`     | listing fields                    |
+| `rooms/*` (planned)         | `POST /listings/feed`       | seeker feed (ranked listings)     |
+| `rooms/*` (planned)         | `POST /listings/candidates` | creator feed (ranked seekers)     |
+| `rooms/*` (planned)         | `POST /listings/invite`     | phone, email, or username         |
+| `rooms/*` (planned)         | `POST /match/saveListingSwipe` | listingId, direction           |
+| `rooms/*` (planned)         | `POST /chat/sendGroupMessage` | matchId, message               |
 
 ---
 
@@ -361,7 +421,7 @@ All frontend-to-backend communication is via `POST` with JSON bodies. No REST co
 - **Server-side authentication enforcement** — no route requires a valid JWT
 - **Photo moderation** — no content filtering on uploaded images
 - **Push notifications** — no mechanism to alert users of new matches or messages
-- **Block/report user** — no safety or moderation tools
+- **Block/report user** — planned for beta (see §4.9); not yet implemented
 - **Profile completeness indicator** — no feedback on what's missing from a profile
 - **Location-based search** — city is a hard filter; no radius/proximity search
 - **Seen/read receipts** in chat
@@ -369,7 +429,7 @@ All frontend-to-backend communication is via `POST` with JSON bodies. No REST co
 - **Account deletion / data export**
 - **Email verification** on registration
 - **Password reset flow**
-- **Terms of Service / Privacy Policy** screens
+- **Terms of Service / Privacy Policy** — link at signup planned; full legal pages in progress
 - **Accessibility (a11y)** — no ARIA labels observed, no keyboard trap management in modals
 - **`/auth/onboarded` endpoint call** — commented out in the frontend onboarding component; backend behavior is never triggered
 
@@ -428,7 +488,7 @@ All frontend-to-backend communication is via `POST` with JSON bodies. No REST co
 - **Mutual friends / social graph** — optional social sign-in to surface LinkedIn/Instagram mutual connections
 - **Background check integration** — opt-in identity and background screening for trust-building
 - **Smart notifications** — ML-based optimal send-time for match/message alerts
-- **Group housing** — matching 3+ people for multi-bedroom units
+- **Household-wide pass veto** — optional setting for listings with 3+ tenants (per-tenant pass in beta)
 - **Landlord mode** — allow property managers to list units and receive applications from matched pairs
 - **Premium tier** — unlimited swipes, see who liked you, priority in feed scoring
 
@@ -443,7 +503,6 @@ All frontend-to-backend communication is via `POST` with JSON bodies. No REST co
 | `email`                  | String (unique)   | Lowercase, required                            |
 | `password`               | String            | Bcrypt-hashed via pre-save hook                |
 | `name`                   | String            |                                                |
-| `phone`                  | String            | Optional                                       |
 | `age`                    | Date              | Stored as birth date; age computed at runtime  |
 | `gender`                 | String            | Used as hard filter in feed                    |
 | `genderPreferences`      | [String]          | Candidate's gender must be in this array       |
@@ -458,23 +517,62 @@ All frontend-to-backend communication is via `POST` with JSON bodies. No REST co
 | `guestPreferences`       | String            | Soft score factor                              |
 | `hobbies`                | [String]          | Each shared hobby adds 1 point to score        |
 | `bio`                    | String            | Free-text profile description                  |
+| `username`               | String (unique)   | `@handle` for invites; case-insensitive        |
+| `phone`                  | String            | Required for SMS listing invites               |
+| `roomsMode`              | String            | `null` \| `creator` \| `seeker`                |
+| `lastActiveAt`           | Date              | Inactivity archive job                         |
+
+### Listing
+
+| Field                 | Type              | Notes                                           |
+| --------------------- | ----------------- | ----------------------------------------------- |
+| `addressNormalized`   | String            | Private; dedup key                              |
+| `neighborhood`        | String            | Public on card                                  |
+| `city`                | String            | Hard filter                                     |
+| `bed` / `bath`        | Number            | Display on card                                 |
+| `rent`                | Number            | Open room rent; budget hard filter              |
+| `moveInDate`          | Date              | Hard filter                                     |
+| `leaseType`           | String            | Required listing field                          |
+| `about`               | String            | "About the Home"                                |
+| `idealCandidatePrefs` | Object            | Gender prefs, lifestyle fields                  |
+| `photos`              | [String]          | Home images; moderated on upload                |
+| `status`              | String            | `draft` \| `live` \| `archived`                 |
+| `createdBy`           | ObjectId → User   | Initial creator                                 |
+| `tenants`             | [Object]          | Accepted + pending co-tenants                     |
+
+### ListingInvite
+
+| Field       | Type            | Notes                              |
+| ----------- | --------------- | ---------------------------------- |
+| `listingId` | ObjectId        | Target listing                     |
+| `inviterId` | ObjectId → User | Who sent invite                    |
+| `invitee`   | String          | Phone, email, or username          |
+| `status`    | String          | `pending` \| `accepted` \| `declined` |
 
 ### Match
 
-| Field      | Type              | Notes                          |
-| ---------- | ----------------- | ------------------------------ |
-| `from`     | ObjectId → User   | The user who swiped            |
-| `to`       | ObjectId → User   | The user who was swiped on     |
-| `isAMatch` | Boolean           | True = swiped right            |
+| Field      | Type              | Notes                                          |
+| ---------- | ----------------- | ---------------------------------------------- |
+| `type`     | String            | `user` \| `listing`                            |
+| `from`     | ObjectId → User   | The user who swiped                            |
+| `to`       | ObjectId → User   | Swiped user (user matches)                     |
+| `listingId`| ObjectId → Listing| Listing (listing matches)                      |
+| `seekerId` | ObjectId → User   | Seeker in listing match                        |
+| `triggeringTenantId` | ObjectId → User | Tenant whose right-swipe completed match |
+| `isAMatch` | Boolean           | True = swiped right                            |
 
 ### Chat
 
-| Field     | Type            | Notes                      |
-| --------- | --------------- | -------------------------- |
-| `message` | String          | Message content            |
-| `from`    | ObjectId → User | Sender                     |
-| `to`      | ObjectId → User | Recipient                  |
-| `date`    | Date            | Used for grouping and sort |
+| Field          | Type            | Notes                                |
+| -------------- | --------------- | ------------------------------------ |
+| `type`         | String          | `direct` \| `group`                  |
+| `participants` | [ObjectId]      | Group chat members                   |
+| `listingId`    | ObjectId        | Optional; listing group chats        |
+| `matchId`      | ObjectId        | Associated match                     |
+| `message`      | String          | Message content                      |
+| `from`         | ObjectId → User | Sender                               |
+| `to`           | ObjectId → User | Recipient (direct chats)             |
+| `date`         | Date            | Used for grouping and sort           |
 
 ### Image
 
@@ -482,3 +580,44 @@ All frontend-to-backend communication is via `POST` with JSON bodies. No REST co
 | ------- | --------------- | ----------------------------------------- |
 | `owner` | ObjectId → User | References the user this image belongs to |
 | `image` | String          | Base64-encoded image or URL               |
+
+---
+
+## 19. Competitive Analysis
+
+### Positioning
+
+PadPal is a **people-first compatibility matcher**, not a classifieds board. It competes with free informal channels (Facebook, Craigslist) and legacy roommate apps (Roomi, Roommates.com, SpareRoom) by combining dating-app UX, ranked matching, and vacancy-specific flows.
+
+### Feature Comparison
+
+| Capability | Facebook Groups / Craigslist | Roomi | Roommates.com / SpareRoom | PadPal |
+| --- | --- | --- | --- | --- |
+| **UX paradigm** | Feed/posts, manual DM | Listings + search filters | Searchable profiles/listings | Swipe cards (Hinge-like) |
+| **Compatibility ranking** | None | Basic filters only | Filters; no ranked stack | Server-side scoring + hard filters |
+| **Mutual-match gating** | No — anyone can message | Partial / open contact | Open messaging common | Chat only on mutual match |
+| **Fill-one-vacancy flow** | Manual posts in groups | Mixed with whole-unit listings | Listing-centric; weak household coordination | Dedicated **Rooms** feed with co-tenant invites |
+| **Household coordination** | Group chat off-platform | None native | None native | Equal tenant admin, group chat on match |
+| **Intent separation** | All posts in one feed | Roommates + rentals mixed | Profiles + listings mixed | Home vs Rooms feeds by intent |
+| **Identity / trust** | None | Optional verification | Email/phone confirm | Optional ID verify + image moderation + report/block |
+| **Location privacy** | Often full address public | Varies | Varies | Neighborhood on card; address never in-app |
+| **Onboarding depth** | None | Moderate | Moderate | Required core + optional lifestyle enrichment |
+| **AI assistance** | None | None | None | Gemini onboarding bot |
+
+### Why PadPal Wins (When Density Exists)
+
+1. **Right problem, right feed** — Filling one room in an existing lease is the most common young-renter scenario; incumbents treat it as a footnote to whole-apartment search.
+2. **Familiar mechanics** — Users already know swipe → match → chat from dating apps; Roomi/Roommates.com require learning search-and-message workflows.
+3. **No spam inbox** — Facebook/Craigslist expose users to unsolicited DMs; PadPal's mutual gate and household group chat reduce harassment surface.
+4. **Household as first-class entity** — Co-tenant invites, equal edit rights, and group chat mirror how vacancy fills actually happen; competitors treat listings as a single poster.
+5. **Compatibility before conversation** — Hard filters + soft scoring mean users spend time talking to plausible fits, not parsing 200-word Craigslist posts.
+6. **Safety stack** — Image moderation, report/block, optional verification, and T&C at signup vs. unmoderated Facebook groups.
+
+### Competitive Risks
+
+| Risk | Mitigation |
+| --- | --- |
+| Free alternatives good enough | Lead with UX, matching depth, and vacancy-specific flows |
+| Chicken-and-egg density | City-by-city launch; Rooms feed targets narrower high-intent pool |
+| Roomi adds swiping | PadPal's moat is integrated Home + Rooms intents and household coordination |
+| Users want full addresses early | Neighborhood-first builds trust; address shared in chat when ready |

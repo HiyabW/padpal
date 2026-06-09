@@ -52,4 +52,4 @@ Types: `feat` · `fix` · `perf` · `refactor` · `chore` · `docs`
 |------|-------------|
 | `WORKFLOW.md` | Start of every session involving a ticket |
 | `AUDIT.md` | Before implementing any fix — understand root cause |
-| `PRD.md` | Before implementing any feature — understand intended behavior |
+| `docs/product/PRD.md` | Before implementing any feature — understand intended behavior |
