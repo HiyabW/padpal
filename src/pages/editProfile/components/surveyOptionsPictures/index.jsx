@@ -6,7 +6,7 @@ import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 import IconButton from "@mui/material/IconButton";
 import CancelIcon from "@mui/icons-material/Cancel";
 import CircularProgress from "@mui/material/CircularProgress";
-import { deleteProfileImage, uploadProfileImage } from "../../../../utils/uploadImage";
+import { uploadProfileImage } from "../../../../utils/uploadImage";
 
 const SurveyOptionsPictures = ({
   images,
@@ -32,40 +32,29 @@ const SurveyOptionsPictures = ({
     width: 1,
   });
 
-  const getImageForSlot = (imageNumber) => {
-    if (imageNumber === 1) {
-      return image1;
-    }
-    if (imageNumber === 2) {
-      return image2;
-    }
-    return image3;
-  };
-
-  const cancel = async (e, imageNumber) => {
-    const removedUrl = getImageForSlot(imageNumber);
-
+  const cancel = (e, imageNumber) => {
     if (imageNumber === 1) {
       setImage1(null);
+      if (images.current) {
+        console.log("BEFORE: ", images.current);
+        images.current = images.current.splice(0, 1);
+        console.log("AFTER: ", images.current);
+      }
     }
     if (imageNumber === 2) {
       setImage2(null);
+      if (images.current) {
+        images.current = images.current.splice(1, 1);
+      }
     }
     if (imageNumber === 3) {
       setImage3(null);
+      if (images.current) {
+        images.current = images.current.splice(2, 1);
+      }
     }
 
     setUploadError(null);
-
-    if (!removedUrl) {
-      return;
-    }
-
-    try {
-      await deleteProfileImage(removedUrl);
-    } catch (error) {
-      setUploadError(error.message || "Failed to delete image");
-    }
   };
 
   const setImageForSlot = (imageNumber, imageUrl) => {
@@ -90,15 +79,9 @@ const SurveyOptionsPictures = ({
     setUploadError(null);
     setUploadingSlot(imageNumber);
 
-    const previousUrl = getImageForSlot(imageNumber);
-
     try {
       const imageUrl = await uploadProfileImage(file);
       setImageForSlot(imageNumber, imageUrl);
-
-      if (previousUrl && previousUrl !== imageUrl) {
-        await deleteProfileImage(previousUrl);
-      }
     } catch (error) {
       setUploadError(error.message || "Failed to upload image");
     } finally {

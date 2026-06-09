@@ -16,31 +16,32 @@ const SurveyOptionsSlider = ({
   currSelectedAnswer,
   setCurrSelectedAnswer,
 }) => {
-  const savedRange =
-    Array.isArray(currSelectedAnswer) &&
-    currSelectedAnswer[0]?.min != null &&
-    currSelectedAnswer[0]?.max != null
-      ? currSelectedAnswer[0]
-      : null;
-
-  const value = savedRange
-    ? [savedRange.min, savedRange.max]
-    : [question.min, question.max];
+  // Util functions for slider
+  const [value, setValue] = React.useState([question.min, question.max]);
 
   const handleChange = (e, newValue, activeThumb) => {
+    // First update min value...
     setCurrSelectedElement(e.target);
 
+    // ... then update slider itself
     if (!Array.isArray(newValue)) {
       return;
     }
 
     if (activeThumb === 0) {
-      const nextMin = Math.min(newValue[0], value[1] - minDistance);
-      setCurrSelectedAnswer([{ min: nextMin, max: value[1] }]);
+      setValue([Math.min(newValue[0], value[1] - minDistance), value[1]]);
+      setCurrSelectedAnswer([{
+        min: Math.min(newValue[0], value[1] - minDistance),
+        max: value[1],
+      }]);
     } else {
-      const nextMax = Math.max(newValue[1], value[0] + minDistance);
-      setCurrSelectedAnswer([{ min: value[0], max: nextMax }]);
+      setValue([value[0], Math.max(newValue[1], value[0] + minDistance)]);
+      setCurrSelectedAnswer([{
+        min: value[0],
+        max: Math.max(newValue[1], value[0] + minDistance),
+      }]);
     }
+    console.log(currSelectedAnswer);
   };
 
   return (

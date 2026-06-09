@@ -1,7 +1,6 @@
 import React, { useEffect, useRef } from "react";
-import { useNavigate } from "react-router-dom";
-import { apiFetch } from "../../api/client";
-import { useAuth } from "../../context/AuthContext";
+import Cookies from "js-cookie";
+import { apiFetch } from "../../utils/apiFetch";
 import MuiCard from "@mui/material/Card";
 import styled from "@mui/material/styles/styled";
 import { motion } from "framer-motion";
@@ -17,10 +16,9 @@ import Grid from "@mui/material/Grid2";
 import Divider from "@mui/material/Divider";
 
 const EditProfile = () => {
-  const navigate = useNavigate();
-  const { user: authUser, loading, isAuthenticated } = useAuth();
   const [user, setUser] = React.useState(null);
   const images = useRef(null);
+  const isLoggedIn = Cookies.get("isLoggedIn");
   const [image1, setImage1] = React.useState(null);
   const [image2, setImage2] = React.useState(null);
   const [image3, setImage3] = React.useState(null);
@@ -29,6 +27,8 @@ const EditProfile = () => {
   const [budget, setBudgetPreferences] = React.useState(null);
   const [genderPreferences, setGenderPreferences] = React.useState([]);
   const [isLoading, setIsLoading] = React.useState(true);
+
+  const id = Cookies.get("id");
 
   const Card = styled(MuiCard)(({ theme }) => ({
     display: "flex",
@@ -100,18 +100,13 @@ const EditProfile = () => {
     })
       .then((response) => response.json())
       .then((data) => {
-        navigate(`/viewProfile?id=${authUser?.id}`, { replace: true });
+        window.location = `/viewProfile?id=${Cookies.get("id")}`;
       });
   }
 
   useEffect(() => {
-    if (loading) return;
-    if (!isAuthenticated) {
-      navigate("/", { replace: true });
-      return;
-    }
     console.log("RERENDER");
-    if (isAuthenticated) {
+    if (isLoggedIn) {
       // fetch data on currUser
       apiFetch("/feed/getUser", {
         method: "POST",
@@ -150,7 +145,7 @@ const EditProfile = () => {
           console.log(err);
         });
     }
-  }, [loading, isAuthenticated, navigate]);
+  }, []);
 
   function getAge(birthdayStr) {
     const today = new Date();
@@ -173,7 +168,7 @@ const EditProfile = () => {
       className="editProfile gradient-background"
       style={{ height: `${isLoading ? "100%" : ""}` }}
     >
-      {isAuthenticated && user && images && !isLoading && (
+      {isLoggedIn && user && images && !isLoading && (
         <Card className="userFeedCardDiv">
           <div class="userInfo">
             <h1>
@@ -304,7 +299,7 @@ const EditProfile = () => {
           </div>
         </motion.div>
       )}
-      {!loading && !isAuthenticated && (
+      {!isLoggedIn && (
         <div className="centeredDiv">Session expired, please log back in.</div>
       )}
     </div>

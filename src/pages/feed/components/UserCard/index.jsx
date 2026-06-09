@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useCallback } from "react";
 import { motion, useMotionValue, useTransform } from "framer-motion";
-import { apiFetch } from "../../../../api/client";
+import { apiFetch } from "../../../../utils/apiFetch";
 import "./styles.css";
 import AttachMoneyIcon from "@mui/icons-material/AttachMoney";
 import MuiDivider from "@mui/material/Divider";
@@ -8,8 +8,8 @@ import styled from "@mui/material/styles/styled";
 import AccessTime from "@mui/icons-material/AccessTime";
 import Button from "@mui/material/Button";
 import DotProgress from "./components/DotProgress";
+import Cookies from "js-cookie";
 import Grid from "@mui/material/Grid2";
-import { useAuth } from "../../../../context/AuthContext";
 
 const Divider = styled(MuiDivider)(({ theme }) => ({
   marginTop: "1rem",
@@ -20,10 +20,8 @@ const Divider = styled(MuiDivider)(({ theme }) => ({
   backgroundColor: "background.paper",
 }));
 
-import { appNavigate } from "../../../../navigation";
-
 function redirectToEditProfile() {
-  appNavigate("/editProfile");
+  window.location = "/editProfile";
 }
 
 /************* Utils functions *************/
@@ -88,8 +86,6 @@ const UserCard = ({
   setReject,
   feedOrViewProfile = "feed",
 }) => {
-  const { user: authUser } = useAuth();
-  const currentUserId = authUser?.id;
   console.log(users);
 
   const [imageIndex, setImageIndex] = React.useState(0);
@@ -129,7 +125,7 @@ const UserCard = ({
           setReject(false)
         }, "1000");
       }
-      // save swipe first, then check for mutual match
+      // first POST req to /saveMatch
       apiFetch("/match/saveMatch", {
         method: "POST",
         body: JSON.stringify({
@@ -138,12 +134,21 @@ const UserCard = ({
         }),
       })
         .then((response) => response.json())
-        .then(() =>
-          apiFetch("/match/getMatch", {
-            method: "POST",
-            body: JSON.stringify({ to: user._id }),
-          })
-        )
+        .then((data) => {
+          console.log(data);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+
+      // ...then GET /getMatch to see if they've matched back. if so, call foundMatch to que match screen
+      apiFetch("/match/getMatch", {
+        method: "POST",
+        body: JSON.stringify({
+          from: user._id,
+          isAMatch,
+        }),
+      })
         .then((response) => response.json())
         .then((data) => {
           if (data.isAMatch) {
@@ -295,15 +300,15 @@ const UserCard = ({
       </motion.div>
       <motion.div className="userFeedInfoDiv">
         {/* If AI BOT, don't show budget or expected move out */}
-        <Grid container spacing={2} sx={{marginBottom: user._id === currentUserId ? "1rem" : ""}}>
-          <Grid size={{ lg: 12, md: 12, sm: 12, xs: user._id === currentUserId ? 6 : 12 }} sx={{overflowWrap: 'break-word'}}>
+        <Grid container spacing={2} sx={{marginBottom: user._id === Cookies.get("id") ? "1rem" : ""}}>
+          <Grid size={{ lg: 12, md: 12, sm: 12, xs: user._id === Cookies.get("id") ? 6 : 12 }} sx={{overflowWrap: 'break-word'}}>
             <h2>
               {user.name}
               {user._id !== "673eed0fd24e7b1c05d6616e" && user?.age ? `, ${getAge(user.age)}` : ``}
             </h2>
           </Grid>
           <Grid size={{ lg: 12, md: 12, sm: 12, xs: 6 }} sx={{ display: 'flex' }}>
-            {user._id === currentUserId &&
+            {user._id === Cookies.get("id") &&
               <Button variant="contained" disableElevation className="editProfileButton" onClick={redirectToEditProfile}>Edit Profile</Button>
             }
           </Grid>
@@ -355,4 +360,4 @@ const UserCard = ({
   );
 };
 
-export default React.memo(UserCard);
+export default UserCard;

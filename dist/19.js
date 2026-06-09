@@ -1,1 +1,0 @@
-(self.webpackChunkpadpal=self.webpackChunkpadpal||[]).push([[19],{8082:()=>{},7318:()=>{},3126:()=>{}}]);

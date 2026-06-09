@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
 import "./styles.css"; // Import your CSS file for the fade effect
-import { useAuth } from "../../context/AuthContext";
+import Cookies from "js-cookie";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Checkbox from "@mui/material/Checkbox";
@@ -22,7 +21,7 @@ import Alert from "@mui/material/Alert";
 import MobileIntro from "./components/MobileIntro";
 import IconButton from "@mui/material/IconButton";
 import CircularProgress from "@mui/material/CircularProgress"
-import { apiFetch } from "../../api/client";
+import { apiFetch } from "../../utils/apiFetch";
 
 const Card = styled(MuiCard)(({ theme }) => ({
   display: "flex",
@@ -40,8 +39,6 @@ const Card = styled(MuiCard)(({ theme }) => ({
 }));
 
 function SignIn() {
-  const navigate = useNavigate();
-  const { user, loading, refreshUser } = useAuth();
   const [name, setName] = useState(null);
   const [email, setEmail] = useState(null);
   const [password, setPassword] = useState(null);
@@ -63,18 +60,15 @@ function SignIn() {
   const [shouldAutoComplete, setShouldAutoComplete] = useState(true);
 
   useEffect(() => {
-    if (!loading && user) {
-      navigate("/feed", { replace: true });
-    }
-  }, [loading, user, navigate]);
-
-  useEffect(() => {
     const timer = setTimeout(() => {
       setIsMobileIntroVisible(false);
       setShouldAutoComplete(true);
     }, 2000);
     return () => clearTimeout(timer);
   }, []);
+
+  // Before doing anything, if user is logged in already redirect them to feed page
+  const isLoggedIn = Cookies.get("isLoggedIn");
 
   const handleClickShowPassword = () => setShowPassword((show) => !show);
 
@@ -168,15 +162,25 @@ function SignIn() {
       }),
     })
       .then((response) => response.json())
-      .then(async (data) => {
-        if (data?.id) {
-          await refreshUser();
+      .then((data) => {
+        console.log(data, data["id"]);
+        // IF LOGIN WORKED
+        if (data.accessToken) {
+          var inOneHour = new Date(new Date().getTime() + 60 * 60 * 1000);
+          Cookies.set("isLoggedIn", `${data.accessToken}`, {
+            expires: inOneHour,
+          });
+          Cookies.set("id", `${data["id"]}`, {
+            expires: inOneHour,
+          });
+
           data?.gender
-            ? navigate("/feed", { replace: true })
-            : navigate("/survey", { replace: true });
+            ? (window.location = "/feed")
+            : (window.location = "/survey");
         } else {
-          setError(data?.error?.message || "Login failed");
-          setIsLoading(false);
+          console.log(data.error.message);
+          setError(data.error.message);
+          setIsLoading(false)
         }
       })
       .catch((error) => {
@@ -197,13 +201,23 @@ function SignIn() {
       }),
     })
       .then((response) => response.json()) // Assuming the API returns JSON data
-      .then(async (data) => {
-        if (data?.id) {
-          await refreshUser();
-          navigate("/survey", { replace: true });
+      .then((data) => {
+        console.log(data);
+        // IF SIGN UP WORKED
+        if (data.accessToken) {
+          var inOneHour = new Date(new Date().getTime() + 15 * 60 * 1000);
+          Cookies.set("isLoggedIn", `${data.accessToken}`, {
+            expires: inOneHour,
+          });
+          Cookies.set("id", `${data["id"]}`, {
+            expires: inOneHour,
+          });
+
+          window.location = "/survey";
         } else {
-          setError(data?.error?.message || "Sign up failed");
-          setIsLoading(false);
+          console.log(data.error.message);
+          setError(data.error.message);
+          setIsLoading(false)
         }
       })
       .catch((error) => {
@@ -225,11 +239,10 @@ function SignIn() {
     setPhone(e.target.value);
   }
 
-  if (!loading && user) {
-    return null;
-  }
-
-  return (
+  if (isLoggedIn) {
+    window.location = "/feed";
+  } else {
+    return (
       <>
         <motion.div initial={{ opacity: 1 }}          // Start fully visible
           animate={{ opacity: isMobileIntroVisible ? 1 : 0 }} // Fade in/out
@@ -255,7 +268,6 @@ function SignIn() {
           style={{
             position: 'absolute',
             width: '100%',
-            minHeight: '100dvh',
           }}
         >
           <div className={`signIn`}>
@@ -568,7 +580,8 @@ function SignIn() {
     <Button onClick={signInUser}>Sign In</Button> */}
           </div>
         </motion.div></>
-  );
+    );
+  }
 }
 
 export default SignIn;
