@@ -39,10 +39,14 @@ Cut all branches from `padpal-v2`.
 
 Types: `feat` · `fix` · `perf` · `refactor` · `chore` · `docs`
 
+## Design System v2 (SCRUM-74–86)
+
+Before any Phase 0 design-system ticket (SCRUM-74–86), read `docs/design/v2-mockup-reference.md` and `src/design/README.md`. Update the mockup reference **decision log** when choices are locked during brainstorming or implementation. Delete `v2-mockup-reference.md` when SCRUM-79 + SCRUM-86 are merged.
+
 ## Execution Order Per Ticket
 
 1. Read the Jira ticket and `AUDIT.md` reference
-2. Read relevant source files before touching anything
+2. Read relevant source files before touching anything (design-system tickets: include `docs/design/v2-mockup-reference.md`)
 3. Create feature branch off `padpal-v2`
 4. Implement only the scoped change with atomic commits
 5. Push branch and open PR using the mandatory template in `WORKFLOW.md`
@@ -56,3 +60,5 @@ Types: `feat` · `fix` · `perf` · `refactor` · `chore` · `docs`
 | `WORKFLOW.md` | Start of every session involving a ticket |
 | `AUDIT.md` | Before implementing any fix — understand root cause |
 | `docs/product/PRD.md` | Before implementing any feature — understand intended behavior |
+| `docs/design/v2-mockup-reference.md` | Phase 0 design-system tickets (SCRUM-74–86) — mockup inventory + decision log; update incrementally |
+| `src/design/README.md` | Phase 0 design-system tickets — token catalog |
