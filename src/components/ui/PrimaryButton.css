@@ -1,0 +1,86 @@
+.pp-btn {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 48px;
+  padding: var(--pp-space-3) var(--pp-space-6);
+  border: none;
+  border-radius: var(--pp-radius-full);
+  font-family: var(--pp-font-body);
+  font-size: var(--pp-text-base);
+  font-weight: var(--pp-font-semibold);
+  line-height: var(--pp-leading-tight);
+  cursor: pointer;
+  transition: background-color 0.15s ease, opacity 0.15s ease;
+}
+
+.pp-btn--primary {
+  background-color: var(--pp-color-accent);
+  color: var(--pp-color-text-on-surface);
+}
+
+.pp-btn--primary:hover:not(:disabled) {
+  background-color: var(--pp-color-accent-muted);
+}
+
+.pp-btn--secondary {
+  background-color: var(--pp-color-bg-input);
+  color: var(--pp-color-text-primary);
+}
+
+.pp-btn--secondary:hover:not(:disabled) {
+  background-color: var(--pp-color-bg-input-hover);
+}
+
+.pp-btn--ghost {
+  background-color: transparent;
+  color: var(--pp-color-text-primary);
+}
+
+.pp-btn--ghost:hover:not(:disabled) {
+  background-color: var(--pp-color-bg-elevated);
+}
+
+.pp-btn--full-width {
+  width: 100%;
+}
+
+.pp-btn--disabled {
+  opacity: var(--pp-opacity-disabled);
+  pointer-events: none;
+  cursor: not-allowed;
+}
+
+.pp-btn:focus-visible {
+  outline: 2px solid var(--pp-color-border-focus);
+  outline-offset: 2px;
+}
+
+.pp-btn--loading .pp-btn__label {
+  visibility: hidden;
+}
+
+.pp-btn__spinner {
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  border: 2px solid currentColor;
+  border-right-color: transparent;
+  border-radius: 50%;
+  animation: pp-btn-spin 0.6s linear infinite;
+}
+
+@keyframes pp-btn-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pp-btn__spinner {
+    animation: none;
+    border-right-color: currentColor;
+    opacity: 0.6;
+  }
+}
