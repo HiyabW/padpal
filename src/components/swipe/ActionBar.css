@@ -1,0 +1,59 @@
+.pp-action-bar {
+  display: flex;
+  flex-direction: column;
+  gap: var(--pp-space-3);
+  padding: var(--pp-space-4);
+  background: var(--pp-color-bg-surface);
+  border-top: 1px solid var(--pp-color-border);
+  position: sticky;
+  bottom: 0;
+}
+
+.pp-action-bar--disabled {
+  opacity: var(--pp-opacity-disabled);
+  pointer-events: none;
+}
+
+.pp-action-bar__row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--pp-space-3);
+}
+
+.pp-action-bar__btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--pp-space-2);
+  min-height: 48px;
+  padding: var(--pp-space-3) var(--pp-space-4);
+  border: none;
+  border-radius: var(--pp-radius-full);
+  font-family: var(--pp-font-body);
+  font-size: var(--pp-text-base);
+  font-weight: var(--pp-font-semibold);
+  cursor: pointer;
+  transition: opacity 0.15s ease;
+}
+
+.pp-action-bar__btn--reject {
+  background: var(--pp-color-action-reject-bg);
+  color: var(--pp-color-action-reject-text);
+}
+
+.pp-action-bar__btn--match {
+  background: var(--pp-color-action-match-bg);
+  color: var(--pp-color-text-on-surface);
+}
+
+.pp-action-bar__btn--share {
+  width: 100%;
+  background: var(--pp-color-bg-app);
+  color: var(--pp-color-text-primary);
+}
+
+.pp-action-bar__btn--report {
+  width: 100%;
+  background: var(--pp-color-danger-subtle);
+  color: var(--pp-color-danger);
+}

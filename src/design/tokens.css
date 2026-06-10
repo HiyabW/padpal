@@ -15,6 +15,9 @@
   --pp-color-border: rgba(0, 0, 0, 0.08);
   --pp-color-action-reject-bg: #e8e8e8;
   --pp-color-action-reject-text: #000000;
+  --pp-color-stamp-pass: var(--pp-color-danger);
+  --pp-color-stamp-match: var(--pp-color-success);
+  --pp-color-action-match-bg: var(--pp-color-success);
   --pp-color-danger-subtle: #fee2e2;
   --pp-color-danger: #dc2626;
   --pp-color-bg-input: #1c1c1e;
