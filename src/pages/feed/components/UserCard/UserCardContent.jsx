@@ -85,7 +85,12 @@ const petTranslation = {
   "Don't care": "Neutral on pets",
 };
 
-const UserCardContent = ({ user, images, feedOrViewProfile = "feed" }) => {
+const UserCardContent = ({
+  user,
+  images,
+  feedOrViewProfile = "feed",
+  isActive = true,
+}) => {
   const { user: authUser } = useAuth();
   const currentUserId = authUser?.id;
   const [imageIndex, setImageIndex] = React.useState(0);
@@ -102,6 +107,8 @@ const UserCardContent = ({ user, images, feedOrViewProfile = "feed" }) => {
   }, []);
 
   useEffect(() => {
+    if (!isActive) return;
+
     const handleKeyDown = (event) => {
       if (event.key === "ArrowDown") {
         nextPicture();
@@ -115,7 +122,7 @@ const UserCardContent = ({ user, images, feedOrViewProfile = "feed" }) => {
     return () => {
       document.removeEventListener("keydown", handleKeyDown);
     };
-  }, [nextPicture, previousPicture]);
+  }, [isActive, nextPicture, previousPicture]);
 
   return (
     <>

@@ -14,7 +14,10 @@
 .userFeedCardDiv {
   grid-row: 1;
   grid-column: 1;
+  display: flex;
+  flex-direction: column;
   width: 85vw;
+  max-width: var(--pp-layout-max-card);
   height: 80vh;
   background-color: white;
   border: 0.2px solid black;
@@ -22,6 +25,36 @@
   overflow: hidden;
   background: var(--theme-feed-background-color);
   margin-top: 7rem;
+}
+
+.userFeedCardDiv .pp-swipe-card {
+  flex: 1;
+  min-height: 0;
+  max-width: none;
+  border-radius: 0;
+}
+
+.userFeedCardDiv .pp-swipe-card--stacked {
+  box-shadow: none;
+}
+
+.userFeedCardScroll {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  display: flex;
+  flex-direction: column;
+}
+
+.userFeedCardScroll .pp-swipe-card__content {
+  overflow-y: visible;
+}
+
+.userFeedCardScroll .pp-action-bar {
+  position: sticky;
+  bottom: 0;
+  z-index: var(--pp-z-overlay);
 }
 .viewProfile {
   margin-top: 5rem!important;

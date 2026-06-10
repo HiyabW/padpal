@@ -65,23 +65,33 @@ const UserCard = ({
   });
 
   return (
-    <div className={feedOrViewProfile !== "feed" ? "viewProfile" : ""}>
-      <SwipeCard gesture={gesture} isStacked={!isFront} isFront={isFront}>
-        <UserCardContent
-          user={user}
-          images={images}
-          feedOrViewProfile={feedOrViewProfile}
-        />
-      </SwipeCard>
-      {enabled && (
-        <ActionBar
-          onReject={() => gesture.swipeProgrammatic("left")}
-          onMatch={() => gesture.swipeProgrammatic("right")}
-          onShare={() => {}}
-          onReport={() => {}}
-          disabled={!isFront}
-        />
-      )}
+    <div
+      className={[
+        "userFeedCardDiv",
+        feedOrViewProfile !== "feed" ? "viewProfile" : "",
+      ]
+        .filter(Boolean)
+        .join(" ")}
+    >
+      <div className="userFeedCardScroll">
+        <SwipeCard gesture={gesture} isStacked={!isFront}>
+          <UserCardContent
+            user={user}
+            images={images}
+            feedOrViewProfile={feedOrViewProfile}
+            isActive={isFront}
+          />
+        </SwipeCard>
+        {enabled && (
+          <ActionBar
+            onReject={() => gesture.swipeProgrammatic("left")}
+            onMatch={() => gesture.swipeProgrammatic("right")}
+            onShare={() => {}}
+            onReport={() => {}}
+            disabled={!isFront}
+          />
+        )}
+      </div>
     </div>
   );
 };

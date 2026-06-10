@@ -2,7 +2,8 @@ import React from "react";
 import { motion, useTransform } from "framer-motion";
 import "./SwipeCard.css";
 
-const SwipeCard = ({ gesture, isStacked = false, isFront = true, className = "", children }) => {
+const SwipeCard = ({ gesture, isStacked = false, className = "", children }) => {
+  const isFront = !isStacked;
   const { x, threshold } = gesture;
   const passOpacity = useTransform(x, (v) => {
     if (v >= -10) return 0;

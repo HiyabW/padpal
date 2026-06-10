@@ -28,6 +28,10 @@ export function useSwipeGesture({
   const rotateRaw = useTransform(x, [-150, 150], [-18, 18]);
   const rotate = useTransform(() => `${rotateRaw.get() + stackRotateOffset}deg`);
   const stampOpacity = useTransform(x, [-threshold, -10, 0, 10, threshold], [1, 0.3, 0, 0.3, 1]);
+  const stampDirection = useTransform(x, (v) => {
+    if (Math.abs(v) < 10) return null;
+    return v < 0 ? "left" : "right";
+  });
 
   const commitSwipe = useCallback(
     async (direction) => {
@@ -132,6 +136,7 @@ export function useSwipeGesture({
     x,
     rotate,
     stampOpacity,
+    stampDirection,
     dragProps,
     swipeProgrammatic,
     isDragging,
