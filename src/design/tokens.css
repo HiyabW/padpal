@@ -1,0 +1,98 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap");
+
+:root {
+  /* Colors — core */
+  --pp-color-bg-app: #000000;
+  --pp-color-bg-surface: #ffffff;
+  --pp-color-bg-elevated: rgba(255, 255, 255, 0.08);
+  --pp-color-accent: #dfff00;
+  --pp-color-accent-muted: #c8e600;
+  --pp-color-success: #68ed76;
+  --pp-color-text-primary: #ffffff;
+  --pp-color-text-on-surface: #000000;
+  --pp-color-text-muted: #6b7280;
+  --pp-color-text-subtle: rgba(255, 255, 255, 0.7);
+  --pp-color-border: rgba(0, 0, 0, 0.08);
+  --pp-color-action-reject-bg: #e8e8e8;
+  --pp-color-action-reject-text: #000000;
+  --pp-color-danger-subtle: #fee2e2;
+  --pp-color-danger: #dc2626;
+
+  /* Colors — attribute tags */
+  --pp-color-tag-purple: #e9d5ff;
+  --pp-color-tag-grey: #e5e7eb;
+  --pp-color-tag-orange: #ffedd5;
+  --pp-color-tag-red: #fecaca;
+  --pp-color-tag-yellow: #fef08a;
+  --pp-color-tag-teal: #ccfbf1;
+  --pp-color-tag-text: #000000;
+
+  /* Typography */
+  --pp-font-body: "Inter", sans-serif;
+  --pp-font-logo: var(--pp-font-body);
+  --pp-font-logo-weight: 900;
+  --pp-logo-letter-spacing: -0.01em;
+  --pp-font-regular: 400;
+  --pp-font-medium: 500;
+  --pp-font-semibold: 600;
+  --pp-font-bold: 700;
+  --pp-font-black: 900;
+  --pp-text-xs: 0.75rem;
+  --pp-text-sm: 0.875rem;
+  --pp-text-base: 1rem;
+  --pp-text-lg: 1.125rem;
+  --pp-text-xl: 1.25rem;
+  --pp-text-2xl: 1.5rem;
+  --pp-text-3xl: 1.875rem;
+  --pp-text-4xl: 2.25rem;
+  --pp-leading-tight: 1.2;
+  --pp-leading-normal: 1.5;
+  --pp-leading-relaxed: 1.625;
+
+  /* Spacing */
+  --pp-space-1: 4px;
+  --pp-space-2: 8px;
+  --pp-space-3: 12px;
+  --pp-space-4: 16px;
+  --pp-space-5: 20px;
+  --pp-space-6: 24px;
+  --pp-space-8: 32px;
+  --pp-space-10: 40px;
+  --pp-space-12: 48px;
+
+  /* Radii */
+  --pp-radius-sm: 8px;
+  --pp-radius-md: 16px;
+  --pp-radius-lg: 24px;
+  --pp-radius-xl: 32px;
+  --pp-radius-full: 9999px;
+
+  /* Shadows */
+  --pp-shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+  --pp-shadow-card: 0 10px 30px rgba(0, 0, 0, 0.15);
+  --pp-shadow-nav: 0 4px 24px rgba(0, 0, 0, 0.4);
+
+  /* Z-index */
+  --pp-z-base: 0;
+  --pp-z-card: 10;
+  --pp-z-header: 20;
+  --pp-z-nav: 30;
+  --pp-z-overlay: 40;
+  --pp-z-modal: 50;
+
+  /* Safe area */
+  --pp-safe-top: env(safe-area-inset-top, 0px);
+  --pp-safe-right: env(safe-area-inset-right, 0px);
+  --pp-safe-bottom: env(safe-area-inset-bottom, 0px);
+  --pp-safe-left: env(safe-area-inset-left, 0px);
+
+  /* Layout */
+  --pp-layout-max-card: 480px;
+  --pp-layout-max-nav: 400px;
+}
+
+.pp-logo {
+  font-family: var(--pp-font-logo);
+  font-weight: var(--pp-font-logo-weight);
+  letter-spacing: var(--pp-logo-letter-spacing);
+}
