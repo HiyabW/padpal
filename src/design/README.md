@@ -2,7 +2,7 @@
 
 Single source of truth for PadPal v2 visual design. All new components must use `--pp-*` tokens — no hardcoded hex or rgb in new code.
 
-**Spec:** `docs/superpowers/specs/2026-06-09-design-tokens-design.md`  
+**Specs:** `docs/superpowers/specs/2026-06-09-design-tokens-design.md` · `docs/superpowers/specs/2026-06-09-form-primitives-design.md`  
 **Mockup scratch notes (temporary):** `docs/design/v2-mockup-reference.md`
 
 ## Usage
@@ -46,6 +46,10 @@ Apply the `.pp-logo` class for the PadPal wordmark (Inter Black / weight 900):
 | `--pp-color-success` | Match actions |
 | `--pp-color-text-primary` | Text on dark |
 | `--pp-color-text-muted` | Section labels |
+| `--pp-color-bg-input` | Dark pill input background |
+| `--pp-color-bg-input-hover` | Input hover state |
+| `--pp-color-border-focus` | Focus ring (lime accent) |
+| `--pp-opacity-disabled` | Disabled controls |
 
 Tag pill colors: `--pp-color-tag-purple` through `--pp-color-tag-teal`.
 

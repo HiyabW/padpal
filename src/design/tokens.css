@@ -17,6 +17,10 @@
   --pp-color-action-reject-text: #000000;
   --pp-color-danger-subtle: #fee2e2;
   --pp-color-danger: #dc2626;
+  --pp-color-bg-input: #1c1c1e;
+  --pp-color-bg-input-hover: #2c2c2e;
+  --pp-color-border-focus: var(--pp-color-accent);
+  --pp-opacity-disabled: 0.45;
 
   /* Colors — attribute tags */
   --pp-color-tag-purple: #e9d5ff;
