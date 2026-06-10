@@ -1,0 +1,55 @@
+.pp-form-field {
+  display: flex;
+  flex-direction: column;
+  gap: var(--pp-space-2);
+}
+
+.pp-form-field__label {
+  font-family: var(--pp-font-body);
+  color: var(--pp-color-text-primary);
+}
+
+.pp-form-field__label--sm {
+  font-size: var(--pp-text-sm);
+  font-weight: var(--pp-font-medium);
+  color: var(--pp-color-text-muted);
+}
+
+.pp-form-field__label--lg {
+  font-size: var(--pp-text-2xl);
+  font-weight: var(--pp-font-bold);
+  color: var(--pp-color-text-primary);
+  line-height: var(--pp-leading-tight);
+}
+
+.pp-form-field__subtitle {
+  margin: 0;
+  font-family: var(--pp-font-body);
+  font-size: var(--pp-text-sm);
+  font-weight: var(--pp-font-regular);
+  color: var(--pp-color-text-subtle);
+  line-height: var(--pp-leading-normal);
+}
+
+.pp-form-field__control {
+  display: flex;
+  flex-direction: column;
+}
+
+.pp-form-field__error {
+  margin: 0;
+  font-family: var(--pp-font-body);
+  font-size: var(--pp-text-sm);
+  font-weight: var(--pp-font-medium);
+  color: var(--pp-color-danger);
+  line-height: var(--pp-leading-normal);
+}
+
+.pp-form-field__helper {
+  margin: 0;
+  font-family: var(--pp-font-body);
+  font-size: var(--pp-text-sm);
+  font-weight: var(--pp-font-regular);
+  color: var(--pp-color-text-muted);
+  line-height: var(--pp-leading-normal);
+}
