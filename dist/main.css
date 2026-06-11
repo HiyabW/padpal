@@ -21,6 +21,27 @@
   overflow: hidden;
 }
 
+@media screen and (max-width: 768px) {
+  html:has(.feed),
+  body:has(.feed) {
+    height: auto;
+    min-height: 100dvh;
+    overflow-x: hidden;
+    overflow-y: auto;
+  }
+
+  #root:has(.feed) {
+    height: auto;
+    min-height: 100dvh;
+  }
+
+  .App:has(.feed) {
+    height: auto;
+    min-height: 100dvh;
+    overflow: visible;
+  }
+}
+
 .navBar {
   position: fixed;
   top: var(--safe-area-top);
@@ -508,6 +529,14 @@ body {
 .userFeedCardScroll .pp-swipe-card__content {
   overflow-y: visible;
 }
+
+@media screen and (min-width: 769px) {
+  .userFeedCardScroll .pp-action-bar {
+    position: sticky;
+    bottom: 0;
+    z-index: var(--pp-z-overlay);
+  }
+}
 .viewProfile {
   margin-top: 5rem!important;
   margin-bottom: 3.5rem;
@@ -660,11 +689,29 @@ body {
 
 @media screen and (max-width: 768px) {
   .userFeedCardDiv {
-    height: fit-content;
+    height: auto;
     width: 95%;
-    margin-bottom: 0;
+    margin-bottom: 2rem;
     margin-top: 0;
-    max-height: calc(100dvh - 4.5rem - 5rem - var(--pp-safe-bottom, 0px));
+    max-height: none;
+  }
+
+  .userFeedCardClip {
+    flex: none;
+    min-height: auto;
+    overflow: hidden;
+  }
+
+  .userFeedCardScroll {
+    flex: none;
+    min-height: auto;
+    overflow-y: visible;
+    overscroll-behavior: auto;
+  }
+
+  .userFeedCardDiv .pp-swipe-card {
+    flex: 0 0 auto;
+    min-height: auto;
   }
   .viewProfile {
     margin-top: 1rem!important;
@@ -683,7 +730,7 @@ body {
     }
 
     padding: 1.5rem;
-    height: 50%;
+    height: auto;
     width: 100%;
     overflow-y: visible;
   }
@@ -691,6 +738,7 @@ body {
   .userFeedImageDiv {
     height: 30rem;
     width: 100%;
+    flex-shrink: 0;
   }
 
   .pp-swipe-card__content {
@@ -738,60 +786,6 @@ body {
     right: 8%!important;
   }
 
-  .matchedScreen {
-    background-color: #68ed76;
-    display: flex;
-    justify-content: center;
-    text-align: center;
-    align-items: center;
-    color: white;
-    height: 100%;
-    width: 100%;
-    position: absolute;
-    z-index: 20000;
-
-    .matchedImg {
-      width: 20rem!important;
-      height: 20rem!important;
-      object-fit: cover;
-      border-radius: 2rem;
-      border: 0.5rem solid white
-    }
-
-    .currUserPfp {
-      margin-left: 5rem;
-    }
-
-    .userPfp {
-      margin-right: 5rem;
-    }
-
-    .matchedScreenText {
-      h1 {
-        font-size: 6rem;
-        font-weight: bold;
-      }
-  
-      h2 {
-        font-size: 2rem;
-        width: 70%;
-        margin: 0 auto;
-        margin-top: 2rem;
-      }
-      
-      .gotIt {
-        margin-top: 3rem;
-        background-color: white;
-        color: #68ed76;
-        box-shadow: none;
-        width: 40%;
-        height: 3rem;
-        font-size: 1rem;
-      }
-    }
-
-  }
-
   h1 {
     font-size: 1.5rem;
     color: white;
@@ -816,53 +810,20 @@ body {
   }
 
   @media screen and (max-width: 768px) {
+    height: auto;
+    min-height: 100dvh;
+    max-height: none;
+    overflow: visible;
+    overscroll-behavior: auto;
+    align-items: start;
+    justify-items: center;
+    padding-bottom: calc(6.5rem + var(--pp-safe-bottom, 0px));
+
     .helpTooltip {
       color: white!important;
       position: absolute!important;
       top: 2%!important;
       right: 2%!important;
-    }
-
-    .matchedScreen {
-      height: 100%;
-      overflow: hidden!important;
-      .matchedImg {
-        width: 10rem!important;
-        height: 10rem!important;
-      }
-
-      .currUserPfp {
-        margin-left: 0rem;
-      }
-  
-      .userPfp {
-        margin-right: 0rem;
-      }
-
-      .matchedScreenText {
-        h1 {
-          font-size: 3.5rem;
-          font-weight: bold;
-        }
-    
-        h2 {
-          font-size: 1rem;
-          line-height: 2rem;
-          width: 70%;
-          margin: 0 auto;
-          margin-top: 0.5rem;
-        }
-        
-        .gotIt {
-          margin-top: 3rem;
-          background-color: white;
-          color: #68ed76;
-          box-shadow: none;
-          width: 40%;
-          height: 3rem;
-          font-size: 1rem;
-        }
-      }
     }
 
   }
@@ -874,3 +835,545 @@ body {
     color: white;
     background-color: transparent;
 }
+/*
+ * Liquid-glass avatar bubble — thin rim, photo-tinted ring, sharp center.
+ * Exact copy from padpal-landing-page/src/app/globals.css (FeatureGlassBubble.tsx).
+ * Rim uses a masked backdrop layer over a full-bleed photo for color reflection.
+ * Float animation lives on a wrapper so translateY stays GPU-smooth without
+ * applying transform to the backdrop-filter layers inside the bubble.
+ * Match-overlay layout overrides live in MatchOverlay.css.
+ */
+
+.feature-glass-bubble-float {
+  position: absolute;
+  pointer-events: auto;
+  cursor: pointer;
+  animation: feature-bubble-float-a 4s ease-in-out infinite;
+  will-change: transform;
+  filter:
+    drop-shadow(0 0 26px rgba(255, 255, 255, 0.3))
+    drop-shadow(0 8px 24px rgba(0, 0, 0, 0.36));
+}
+
+.feature-glass-bubble-float--1 {
+  animation-name: feature-bubble-float-b;
+  animation-duration: 3s;
+  animation-delay: -1.6s;
+}
+
+.feature-glass-bubble-float--2 {
+  animation-name: feature-bubble-float-c;
+  animation-duration: 2s;
+  animation-delay: -2.75s;
+}
+
+@keyframes feature-bubble-float-a {
+  0%,
+  100% {
+    transform: translateY(2%);
+  }
+  50% {
+    transform: translateY(-2%);
+  }
+}
+
+@keyframes feature-bubble-float-b {
+  0%,
+  100% {
+    transform: translateY(3%);
+  }
+  50% {
+    transform: translateY(-3%);
+  }
+}
+
+@keyframes feature-bubble-float-c {
+  0%,
+  100% {
+    transform: translateY(4%);
+  }
+  50% {
+    transform: translateY(-4%);
+  }
+}
+
+.feature-glass-bubble {
+  --bubble-rim: 8%;
+  --bubble-inner-edge: 40%;
+  --bubble-tx: 0;
+  --bubble-ty: 0;
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  height: auto;
+  border-radius: 50%;
+  overflow: hidden;
+  background: transparent;
+  transform: translate(var(--bubble-tx), var(--bubble-ty));
+  transition: transform 0.45s cubic-bezier(0.33, 1, 0.68, 1);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .feature-glass-bubble-float:hover {
+    z-index: 12;
+    animation: none;
+    transform: translateY(0);
+    filter:
+      drop-shadow(0 0 32px rgba(255, 255, 255, 0.36))
+      drop-shadow(0 10px 28px rgba(0, 0, 0, 0.42));
+  }
+
+  .feature-glass-bubble-float:hover .feature-glass-bubble {
+    transform: translate(var(--bubble-tx), var(--bubble-ty)) translateY(-5%) scale(1.07);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .feature-glass-bubble-float {
+    animation: none;
+    transform: none;
+  }
+
+  .feature-glass-bubble {
+    transition-duration: 0.2s;
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    .feature-glass-bubble-float:hover {
+      transform: translateY(-2%);
+    }
+
+    .feature-glass-bubble-float:hover .feature-glass-bubble {
+      transform: translate(var(--bubble-tx), var(--bubble-ty)) scale(1.05);
+    }
+  }
+}
+
+.feature-glass-bubble__photo {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: none !important;
+}
+
+/* Blurred/color source for the glass ring */
+.feature-glass-bubble__fill {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+  border-radius: 50%;
+}
+
+.feature-glass-bubble__fill .feature-glass-bubble__photo {
+  transform: scale(1.2);
+}
+
+/* Glass rim: refracted color + soft edge glow */
+.feature-glass-bubble__lens {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  border-radius: 50%;
+  pointer-events: none;
+  -webkit-backdrop-filter: blur(14px) saturate(2) brightness(1.1);
+  backdrop-filter: blur(14px) saturate(2) brightness(1.1);
+  background: radial-gradient(
+    circle at 50% 50%,
+    transparent var(--bubble-inner-edge),
+    rgba(255, 255, 255, 0.04) calc(var(--bubble-inner-edge) + 6%),
+    transparent 54%
+  );
+  -webkit-mask-image: radial-gradient(
+    circle at 50% 50%,
+    transparent 0,
+    transparent var(--bubble-inner-edge),
+    #000 calc(var(--bubble-inner-edge) + 1%)
+  );
+  mask-image: radial-gradient(
+    circle at 50% 50%,
+    transparent 0,
+    transparent var(--bubble-inner-edge),
+    #000 calc(var(--bubble-inner-edge) + 1%)
+  );
+}
+
+.feature-glass-bubble__inner {
+  position: absolute;
+  inset: var(--bubble-rim);
+  z-index: 2;
+  overflow: hidden;
+  border-radius: 50%;
+  box-shadow: inset 0 0 0 0.5px rgba(255, 255, 255, 0.15);
+}
+
+.feature-glass-bubble__inner .feature-glass-bubble__photo {
+  transform: scale(1.2);
+}
+
+/* Subtle dome haze — keeps the portrait readable under glass */
+.feature-glass-bubble__frost {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  border-radius: 50%;
+  pointer-events: none;
+  -webkit-backdrop-filter: saturate(1.12) brightness(1.04);
+  backdrop-filter: saturate(1.12) brightness(1.04);
+  background: radial-gradient(
+    circle at 50% 44%,
+    transparent 18%,
+    rgba(255, 255, 255, 0.05) 58%,
+    rgba(255, 255, 255, 0.14) 88%,
+    rgba(255, 255, 255, 0.18) 100%
+  );
+}
+
+/*
+ * Volume: rim bevel + bottom shadow — masked to the glass ring only (same annulus as
+ * __lens). Portrait dome vignette lives on __inner::after so it never paints a dark
+ * band over the photo edge.
+ */
+.feature-glass-bubble__depth {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  border-radius: 50%;
+  pointer-events: none;
+  -webkit-mask-image: radial-gradient(
+    circle at 50% 50%,
+    transparent 0,
+    transparent var(--bubble-inner-edge),
+    #000 calc(var(--bubble-inner-edge) + 1%)
+  );
+  mask-image: radial-gradient(
+    circle at 50% 50%,
+    transparent 0,
+    transparent var(--bubble-inner-edge),
+    #000 calc(var(--bubble-inner-edge) + 1%)
+  );
+  background:
+    radial-gradient(
+      circle at 50% 50%,
+      transparent 58%,
+      rgba(0, 0, 0, 0.22) 66%,
+      rgba(0, 0, 0, 0.1) 72%,
+      transparent 80%
+    ),
+    radial-gradient(
+      ellipse 90% 70% at 50% 115%,
+      rgba(0, 0, 0, 0.28) 0%,
+      rgba(0, 0, 0, 0.08) 35%,
+      transparent 62%
+    );
+}
+
+/* Soft dome curve on portrait — inside __inner only, fades out before photo edge */
+.feature-glass-bubble__inner::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  border-radius: 50%;
+  pointer-events: none;
+  background: radial-gradient(
+    circle at 50% 48%,
+    transparent 38%,
+    rgba(0, 0, 0, 0.06) 72%,
+    transparent 92%
+  );
+}
+
+/* Specular shine — soft radial glints (no conic streaks) */
+.feature-glass-bubble__shine {
+  position: absolute;
+  inset: 0;
+  z-index: 4;
+  border-radius: 50%;
+  pointer-events: none;
+  background:
+    radial-gradient(
+      circle at 70% 16%,
+      rgba(255, 255, 255, 0.62) 0%,
+      rgba(255, 255, 255, 0.35) 2%,
+      rgba(255, 255, 255, 0.06) 5%,
+      transparent 8%
+    ),
+    radial-gradient(
+      ellipse 48% 12% at 70% 16%,
+      rgba(255, 255, 255, 0.22) 0%,
+      transparent 100%
+    ),
+    radial-gradient(
+      ellipse 12% 42% at 70% 16%,
+      rgba(255, 255, 255, 0.16) 0%,
+      transparent 100%
+    ),
+    radial-gradient(
+      ellipse 95% 40% at 50% -2%,
+      rgba(255, 255, 255, 0.55) 0%,
+      rgba(255, 255, 255, 0.12) 28%,
+      transparent 58%
+    ),
+    radial-gradient(
+      ellipse 42% 68% at 112% 42%,
+      rgba(255, 255, 255, 0.85) 0%,
+      rgba(255, 255, 255, 0.35) 22%,
+      transparent 52%
+    ),
+    radial-gradient(
+      ellipse 38% 52% at -8% 28%,
+      rgba(255, 255, 255, 0.35) 0%,
+      rgba(255, 255, 255, 0.1) 28%,
+      transparent 55%
+    ),
+    radial-gradient(
+      ellipse 70% 28% at 50% 108%,
+      rgba(255, 255, 255, 0.22) 0%,
+      rgba(255, 255, 255, 0.06) 35%,
+      transparent 62%
+    ),
+    radial-gradient(
+      circle at 50% 50%,
+      transparent 90%,
+      rgba(255, 255, 255, 0.7) 94%,
+      rgba(255, 255, 255, 0.25) 97%,
+      transparent 100%
+    );
+}
+
+.pp-match-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: var(--pp-z-overlay);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: var(--pp-color-bg-app);
+  padding: var(--pp-space-6);
+  padding-top: calc(var(--pp-space-6) + var(--pp-safe-top));
+  padding-bottom: calc(var(--pp-space-6) + var(--pp-safe-bottom));
+  text-align: center;
+  contain: layout style;
+}
+
+.pp-match-overlay--animated {
+  animation: pp-match-overlay-fade-in 0.3s ease-out forwards;
+}
+
+@keyframes pp-match-overlay-fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.pp-match-overlay__bubbles-placeholder {
+  width: 252px;
+  height: 140px;
+}
+
+.pp-match-overlay__glow {
+  position: absolute;
+  width: 220px;
+  height: 220px;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle,
+    rgba(255, 255, 255, 0.12) 0%,
+    transparent 70%
+  );
+  pointer-events: none;
+}
+
+.pp-match-overlay__bubbles {
+  --pp-match-bubble-size: 140px;
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: var(--pp-space-8);
+  height: 200px;
+}
+
+.pp-match-overlay__bubble-slot {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.pp-match-overlay__bubble-slot--left {
+  margin-right: -28px;
+  z-index: 1;
+}
+
+.pp-match-overlay__bubble-slot--right {
+  z-index: 2;
+}
+
+/*
+ * Match context: flex layout — override landing page position:absolute.
+ * Fixed square size so rim % matches landing page proportions.
+ */
+.pp-match-overlay__bubble-slot .feature-glass-bubble-float {
+  position: relative;
+  width: var(--pp-match-bubble-size) !important;
+  aspect-ratio: 1 / 1;
+  flex-shrink: 0;
+  pointer-events: none;
+  cursor: default;
+}
+
+/* Entrance on slot; ends at transform:none so glass rim renders correctly */
+.pp-match-overlay--animated .pp-match-overlay__bubble-slot--left {
+  animation: pp-match-bubble-enter-left 0.55s cubic-bezier(0.33, 1, 0.68, 1) 0.2s
+    both;
+}
+
+.pp-match-overlay--animated .pp-match-overlay__bubble-slot--right {
+  animation: pp-match-bubble-enter-right 0.55s cubic-bezier(0.33, 1, 0.68, 1) 0.28s
+    both;
+}
+
+@keyframes pp-match-bubble-enter-left {
+  from {
+    opacity: 0;
+    transform: translateX(-80px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes pp-match-bubble-enter-right {
+  from {
+    opacity: 0;
+    transform: translateX(80px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.pp-match-overlay__headline {
+  position: relative;
+  z-index: 1;
+  margin: 0 0 var(--pp-space-2);
+  font-family: var(--pp-font-body);
+  font-weight: var(--pp-font-black);
+  font-size: var(--pp-text-3xl);
+  line-height: var(--pp-leading-tight);
+  letter-spacing: -0.03em;
+  color: var(--pp-color-text-primary);
+}
+
+.pp-match-overlay__subtext {
+  position: relative;
+  z-index: 1;
+  margin: 0 0 var(--pp-space-8);
+  max-width: 280px;
+  font-family: var(--pp-font-body);
+  font-size: var(--pp-text-base);
+  line-height: var(--pp-leading-normal);
+  color: var(--pp-color-text-subtle);
+}
+
+.pp-match-overlay__cta {
+  position: relative;
+  z-index: 1;
+  margin-bottom: var(--pp-space-4);
+  padding: var(--pp-space-4) var(--pp-space-8);
+  border: none;
+  border-radius: var(--pp-radius-full);
+  background: var(--pp-color-bg-surface);
+  color: var(--pp-color-text-on-surface);
+  font-family: var(--pp-font-body);
+  font-weight: var(--pp-font-bold);
+  font-size: var(--pp-text-base);
+  cursor: pointer;
+}
+
+.pp-match-overlay__dismiss {
+  position: relative;
+  z-index: 1;
+  border: none;
+  background: transparent;
+  color: var(--pp-color-text-subtle);
+  opacity: 0.45;
+  font-family: var(--pp-font-body);
+  font-size: var(--pp-text-sm);
+  cursor: pointer;
+}
+
+.pp-match-overlay--animated .pp-match-overlay__headline {
+  animation: pp-match-copy-rise 0.35s ease-out 0.5s both;
+}
+
+.pp-match-overlay--animated .pp-match-overlay__subtext {
+  animation: pp-match-copy-rise 0.35s ease-out 0.65s both;
+}
+
+.pp-match-overlay--animated .pp-match-overlay__cta {
+  animation: pp-match-copy-fade 0.3s ease-out 0.8s both;
+}
+
+.pp-match-overlay--animated .pp-match-overlay__dismiss {
+  animation: pp-match-copy-fade 0.3s ease-out 0.85s both;
+}
+
+@keyframes pp-match-copy-rise {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes pp-match-copy-fade {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@media screen and (min-width: 769px) {
+  .pp-match-overlay__headline {
+    font-size: var(--pp-text-4xl);
+  }
+
+  .pp-match-overlay__bubbles {
+    height: 230px;
+  }
+
+  .pp-match-overlay__bubbles {
+    --pp-match-bubble-size: 161px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pp-match-overlay--animated {
+    animation: none;
+  }
+
+  .pp-match-overlay--animated .pp-match-overlay__bubble-slot--left,
+  .pp-match-overlay--animated .pp-match-overlay__bubble-slot--right,
+  .pp-match-overlay--animated .pp-match-overlay__headline,
+  .pp-match-overlay--animated .pp-match-overlay__subtext,
+  .pp-match-overlay--animated .pp-match-overlay__cta,
+  .pp-match-overlay--animated .pp-match-overlay__dismiss {
+    animation: none;
+  }
+}
+
