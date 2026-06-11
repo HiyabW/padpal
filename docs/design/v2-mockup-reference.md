@@ -28,6 +28,38 @@ Scratch notes for downstream design-system and feed tickets. Permanent values li
 | SelectionPill | SCRUM-85 | Single-select option row (gender, etc.) — **not SCRUM-75** |
 | OnboardingProgressBar | SCRUM-85 | Thin top progress track — **not SCRUM-75** |
 | OnboardingNavFAB | SCRUM-85 | Circular next chevron — **not SCRUM-75** |
+| GlassBubble | SCRUM-78 | Liquid-glass avatar; port from landing page `FeatureGlassBubble` |
+| MatchOverlay | SCRUM-78 | Mutual-match celebration; 2× GlassBubble + white CTAs (confetti deferred) |
+
+## Match overlay patterns (SCRUM-78)
+
+Source: landing page `FeatureGlassBubble`
+
+### Canvas
+
+- **Background:** solid black (`--pp-color-bg-app`)
+- **Color on screen:** profile photos in glass bubbles only — no lime, no success-green chrome
+- **Confetti:** deferred — removed for performance; revisit in a later ticket
+
+### GlassBubble (SCRUM-78)
+
+- Liquid-glass rim: `backdrop-filter` over full-bleed photo, frost dome, specular shine
+- Float animation on outer wrapper (3 desynced keyframe variants)
+- Match overlay uses two `lg` bubbles overlapping at center
+
+### MatchOverlay copy + CTAs
+
+| Element | Style |
+|---|---|
+| Headline | `"It's a match!"` — Inter Black, white |
+| Subtext | `"You and {name} liked each other."` — `--pp-color-text-subtle` |
+| Primary CTA | White pill **Send a message** → `onChat` callback |
+| Dismiss | Ghost **Keep swiping** → `onClose` callback |
+
+### Feed wiring (SCRUM-78)
+
+- `feed/index.jsx` opens `MatchOverlay` on mutual match; preloads `currPfp` + candidate photos while swiping
+- **Send a message** → `/chat`; **Keep swiping** → dismiss overlay
 
 ## Onboarding form patterns (SCRUM-75 / SCRUM-85)
 
@@ -142,3 +174,5 @@ Source: `docs/design/assets/feed-card-mobile.png`
 - Drag stamps: corner PASS/MATCH labels (Tinder-style), opacity scales with drag distance
 - ActionBar buttons: Reject/Match fire programmatic swipe; Share/Report stubbed until SCRUM-86
 - SCRUM-77: FeedStack only; SCRUM-86: v2 profile content + page chrome + Share/Report wiring
+- MatchOverlay (SCRUM-78): glass bubble collision layout; photo-only color; white CTAs; port GlassBubble from landing page; confetti deferred for perf
+- MatchOverlay feed wiring (SCRUM-78): replaces legacy `matchedScreen`; chat CTA navigates to `/chat`

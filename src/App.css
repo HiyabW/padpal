@@ -19,3 +19,24 @@
 .App:has(.feed) {
   overflow: hidden;
 }
+
+@media screen and (max-width: 768px) {
+  html:has(.feed),
+  body:has(.feed) {
+    height: auto;
+    min-height: 100dvh;
+    overflow-x: hidden;
+    overflow-y: auto;
+  }
+
+  #root:has(.feed) {
+    height: auto;
+    min-height: 100dvh;
+  }
+
+  .App:has(.feed) {
+    height: auto;
+    min-height: 100dvh;
+    overflow: visible;
+  }
+}

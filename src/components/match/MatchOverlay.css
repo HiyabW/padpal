@@ -1,0 +1,233 @@
+.pp-match-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: var(--pp-z-overlay);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: var(--pp-color-bg-app);
+  padding: var(--pp-space-6);
+  padding-top: calc(var(--pp-space-6) + var(--pp-safe-top));
+  padding-bottom: calc(var(--pp-space-6) + var(--pp-safe-bottom));
+  text-align: center;
+  contain: layout style;
+}
+
+.pp-match-overlay--animated {
+  animation: pp-match-overlay-fade-in 0.3s ease-out forwards;
+}
+
+@keyframes pp-match-overlay-fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.pp-match-overlay__bubbles-placeholder {
+  width: 252px;
+  height: 140px;
+}
+
+.pp-match-overlay__glow {
+  position: absolute;
+  width: 220px;
+  height: 220px;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle,
+    rgba(255, 255, 255, 0.12) 0%,
+    transparent 70%
+  );
+  pointer-events: none;
+}
+
+.pp-match-overlay__bubbles {
+  --pp-match-bubble-size: 140px;
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: var(--pp-space-8);
+  height: 200px;
+}
+
+.pp-match-overlay__bubble-slot {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.pp-match-overlay__bubble-slot--left {
+  margin-right: -28px;
+  z-index: 1;
+}
+
+.pp-match-overlay__bubble-slot--right {
+  z-index: 2;
+}
+
+/*
+ * Match context: flex layout — override landing page position:absolute.
+ * Fixed square size so rim % matches landing page proportions.
+ */
+.pp-match-overlay__bubble-slot .feature-glass-bubble-float {
+  position: relative;
+  width: var(--pp-match-bubble-size) !important;
+  aspect-ratio: 1 / 1;
+  flex-shrink: 0;
+  pointer-events: none;
+  cursor: default;
+}
+
+/* Entrance on slot; ends at transform:none so glass rim renders correctly */
+.pp-match-overlay--animated .pp-match-overlay__bubble-slot--left {
+  animation: pp-match-bubble-enter-left 0.55s cubic-bezier(0.33, 1, 0.68, 1) 0.2s
+    both;
+}
+
+.pp-match-overlay--animated .pp-match-overlay__bubble-slot--right {
+  animation: pp-match-bubble-enter-right 0.55s cubic-bezier(0.33, 1, 0.68, 1) 0.28s
+    both;
+}
+
+@keyframes pp-match-bubble-enter-left {
+  from {
+    opacity: 0;
+    transform: translateX(-80px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes pp-match-bubble-enter-right {
+  from {
+    opacity: 0;
+    transform: translateX(80px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.pp-match-overlay__headline {
+  position: relative;
+  z-index: 1;
+  margin: 0 0 var(--pp-space-2);
+  font-family: var(--pp-font-body);
+  font-weight: var(--pp-font-black);
+  font-size: var(--pp-text-3xl);
+  line-height: var(--pp-leading-tight);
+  letter-spacing: -0.03em;
+  color: var(--pp-color-text-primary);
+}
+
+.pp-match-overlay__subtext {
+  position: relative;
+  z-index: 1;
+  margin: 0 0 var(--pp-space-8);
+  max-width: 280px;
+  font-family: var(--pp-font-body);
+  font-size: var(--pp-text-base);
+  line-height: var(--pp-leading-normal);
+  color: var(--pp-color-text-subtle);
+}
+
+.pp-match-overlay__cta {
+  position: relative;
+  z-index: 1;
+  margin-bottom: var(--pp-space-4);
+  padding: var(--pp-space-4) var(--pp-space-8);
+  border: none;
+  border-radius: var(--pp-radius-full);
+  background: var(--pp-color-bg-surface);
+  color: var(--pp-color-text-on-surface);
+  font-family: var(--pp-font-body);
+  font-weight: var(--pp-font-bold);
+  font-size: var(--pp-text-base);
+  cursor: pointer;
+}
+
+.pp-match-overlay__dismiss {
+  position: relative;
+  z-index: 1;
+  border: none;
+  background: transparent;
+  color: var(--pp-color-text-subtle);
+  opacity: 0.45;
+  font-family: var(--pp-font-body);
+  font-size: var(--pp-text-sm);
+  cursor: pointer;
+}
+
+.pp-match-overlay--animated .pp-match-overlay__headline {
+  animation: pp-match-copy-rise 0.35s ease-out 0.5s both;
+}
+
+.pp-match-overlay--animated .pp-match-overlay__subtext {
+  animation: pp-match-copy-rise 0.35s ease-out 0.65s both;
+}
+
+.pp-match-overlay--animated .pp-match-overlay__cta {
+  animation: pp-match-copy-fade 0.3s ease-out 0.8s both;
+}
+
+.pp-match-overlay--animated .pp-match-overlay__dismiss {
+  animation: pp-match-copy-fade 0.3s ease-out 0.85s both;
+}
+
+@keyframes pp-match-copy-rise {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes pp-match-copy-fade {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@media screen and (min-width: 769px) {
+  .pp-match-overlay__headline {
+    font-size: var(--pp-text-4xl);
+  }
+
+  .pp-match-overlay__bubbles {
+    height: 230px;
+  }
+
+  .pp-match-overlay__bubbles {
+    --pp-match-bubble-size: 161px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pp-match-overlay--animated {
+    animation: none;
+  }
+
+  .pp-match-overlay--animated .pp-match-overlay__bubble-slot--left,
+  .pp-match-overlay--animated .pp-match-overlay__bubble-slot--right,
+  .pp-match-overlay--animated .pp-match-overlay__headline,
+  .pp-match-overlay--animated .pp-match-overlay__subtext,
+  .pp-match-overlay--animated .pp-match-overlay__cta,
+  .pp-match-overlay--animated .pp-match-overlay__dismiss {
+    animation: none;
+  }
+}

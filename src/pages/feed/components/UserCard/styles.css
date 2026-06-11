@@ -71,6 +71,14 @@
 .userFeedCardScroll .pp-swipe-card__content {
   overflow-y: visible;
 }
+
+@media screen and (min-width: 769px) {
+  .userFeedCardScroll .pp-action-bar {
+    position: sticky;
+    bottom: 0;
+    z-index: var(--pp-z-overlay);
+  }
+}
 .viewProfile {
   margin-top: 5rem!important;
   margin-bottom: 3.5rem;
@@ -223,11 +231,29 @@
 
 @media screen and (max-width: 768px) {
   .userFeedCardDiv {
-    height: fit-content;
+    height: auto;
     width: 95%;
-    margin-bottom: 0;
+    margin-bottom: 2rem;
     margin-top: 0;
-    max-height: calc(100dvh - 4.5rem - 5rem - var(--pp-safe-bottom, 0px));
+    max-height: none;
+  }
+
+  .userFeedCardClip {
+    flex: none;
+    min-height: auto;
+    overflow: hidden;
+  }
+
+  .userFeedCardScroll {
+    flex: none;
+    min-height: auto;
+    overflow-y: visible;
+    overscroll-behavior: auto;
+  }
+
+  .userFeedCardDiv .pp-swipe-card {
+    flex: 0 0 auto;
+    min-height: auto;
   }
   .viewProfile {
     margin-top: 1rem!important;
@@ -246,7 +272,7 @@
     }
 
     padding: 1.5rem;
-    height: 50%;
+    height: auto;
     width: 100%;
     overflow-y: visible;
   }
@@ -254,6 +280,7 @@
   .userFeedImageDiv {
     height: 30rem;
     width: 100%;
+    flex-shrink: 0;
   }
 
   .pp-swipe-card__content {
