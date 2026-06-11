@@ -44,7 +44,7 @@
     "build:dev": "webpack --mode=development",
     "build:prod": "webpack --mode=production --node-env=production",
     "watch": "webpack --watch",
-    "serve": "webpack serve --mode development",
+    "serve": "webpack serve --mode development --history-api-fallback",
     "cap:sync": "npm run build:prod && npx cap sync",
     "cap:copy": "npx cap copy",
     "cap:ios": "npx cap open ios",

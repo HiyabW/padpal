@@ -26,13 +26,15 @@ const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:3007';
 
 
 const config = smp.wrap({
-    entry: ['./src/index.js', './src/pages/feed/index.jsx'],
+    entry: ['./src/index.js'],
     resolve: {
         extensions: ['.jsx', '.js', '.tsx']
     },
     output: {
         path: path.resolve(__dirname, 'dist'),
-        publicPath: './',
+        // Dev server needs absolute publicPath so /feed loads /main.js, not /feed/main.js.
+        // Production/Capacitor keeps relative paths for file:// and packaged assets.
+        publicPath: isProduction ? './' : '/',
         filename: '[name].js',
         chunkFilename: '[name].js',
         clean: true,
@@ -40,6 +42,18 @@ const config = smp.wrap({
     devServer: {
         open: true,
         host: 'localhost',
+        port: 3000,
+        historyApiFallback: true,
+        static: {
+            directory: path.join(__dirname, 'public'),
+        },
+        client: {
+            overlay: {
+                errors: false,
+                warnings: false,
+            },
+        },
+        compress: true,
     },
     optimization: {
         minimize: true,
@@ -63,20 +77,6 @@ const config = smp.wrap({
         // Add your plugins here
         // Learn more about plugins from https://webpack.js.org/configuration/plugins/
     ],
-    devServer: {
-        historyApiFallback: true,
-        static: {
-            directory: path.join(__dirname, 'public'),
-        },
-        client: {
-            overlay: {
-                errors: false,
-                warnings: false,
-            },
-        },
-        compress: true,
-        port: 3000,
-    },
     module: {
         rules: [
             {
