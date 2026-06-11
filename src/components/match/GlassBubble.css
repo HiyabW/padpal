@@ -1,0 +1,307 @@
+/*
+ * Liquid-glass avatar bubble — thin rim, photo-tinted ring, sharp center.
+ * Exact copy from padpal-landing-page/src/app/globals.css (FeatureGlassBubble.tsx).
+ * Rim uses a masked backdrop layer over a full-bleed photo for color reflection.
+ * Float animation lives on a wrapper so translateY stays GPU-smooth without
+ * applying transform to the backdrop-filter layers inside the bubble.
+ * Match-overlay layout overrides live in MatchOverlay.css.
+ */
+
+.feature-glass-bubble-float {
+  position: absolute;
+  pointer-events: auto;
+  cursor: pointer;
+  animation: feature-bubble-float-a 4s ease-in-out infinite;
+  will-change: transform;
+  filter:
+    drop-shadow(0 0 26px rgba(255, 255, 255, 0.3))
+    drop-shadow(0 8px 24px rgba(0, 0, 0, 0.36));
+}
+
+.feature-glass-bubble-float--1 {
+  animation-name: feature-bubble-float-b;
+  animation-duration: 3s;
+  animation-delay: -1.6s;
+}
+
+.feature-glass-bubble-float--2 {
+  animation-name: feature-bubble-float-c;
+  animation-duration: 2s;
+  animation-delay: -2.75s;
+}
+
+@keyframes feature-bubble-float-a {
+  0%,
+  100% {
+    transform: translateY(2%);
+  }
+  50% {
+    transform: translateY(-2%);
+  }
+}
+
+@keyframes feature-bubble-float-b {
+  0%,
+  100% {
+    transform: translateY(3%);
+  }
+  50% {
+    transform: translateY(-3%);
+  }
+}
+
+@keyframes feature-bubble-float-c {
+  0%,
+  100% {
+    transform: translateY(4%);
+  }
+  50% {
+    transform: translateY(-4%);
+  }
+}
+
+.feature-glass-bubble {
+  --bubble-rim: 8%;
+  --bubble-inner-edge: 40%;
+  --bubble-tx: 0;
+  --bubble-ty: 0;
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  height: auto;
+  border-radius: 50%;
+  overflow: hidden;
+  background: transparent;
+  transform: translate(var(--bubble-tx), var(--bubble-ty));
+  transition: transform 0.45s cubic-bezier(0.33, 1, 0.68, 1);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .feature-glass-bubble-float:hover {
+    z-index: 12;
+    animation: none;
+    transform: translateY(0);
+    filter:
+      drop-shadow(0 0 32px rgba(255, 255, 255, 0.36))
+      drop-shadow(0 10px 28px rgba(0, 0, 0, 0.42));
+  }
+
+  .feature-glass-bubble-float:hover .feature-glass-bubble {
+    transform: translate(var(--bubble-tx), var(--bubble-ty)) translateY(-5%) scale(1.07);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .feature-glass-bubble-float {
+    animation: none;
+    transform: none;
+  }
+
+  .feature-glass-bubble {
+    transition-duration: 0.2s;
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    .feature-glass-bubble-float:hover {
+      transform: translateY(-2%);
+    }
+
+    .feature-glass-bubble-float:hover .feature-glass-bubble {
+      transform: translate(var(--bubble-tx), var(--bubble-ty)) scale(1.05);
+    }
+  }
+}
+
+.feature-glass-bubble__photo {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: none !important;
+}
+
+/* Blurred/color source for the glass ring */
+.feature-glass-bubble__fill {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+  border-radius: 50%;
+}
+
+.feature-glass-bubble__fill .feature-glass-bubble__photo {
+  transform: scale(1.2);
+}
+
+/* Glass rim: refracted color + soft edge glow */
+.feature-glass-bubble__lens {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  border-radius: 50%;
+  pointer-events: none;
+  -webkit-backdrop-filter: blur(14px) saturate(2) brightness(1.1);
+  backdrop-filter: blur(14px) saturate(2) brightness(1.1);
+  background: radial-gradient(
+    circle at 50% 50%,
+    transparent var(--bubble-inner-edge),
+    rgba(255, 255, 255, 0.04) calc(var(--bubble-inner-edge) + 6%),
+    transparent 54%
+  );
+  -webkit-mask-image: radial-gradient(
+    circle at 50% 50%,
+    transparent 0,
+    transparent var(--bubble-inner-edge),
+    #000 calc(var(--bubble-inner-edge) + 1%)
+  );
+  mask-image: radial-gradient(
+    circle at 50% 50%,
+    transparent 0,
+    transparent var(--bubble-inner-edge),
+    #000 calc(var(--bubble-inner-edge) + 1%)
+  );
+}
+
+.feature-glass-bubble__inner {
+  position: absolute;
+  inset: var(--bubble-rim);
+  z-index: 2;
+  overflow: hidden;
+  border-radius: 50%;
+  box-shadow: inset 0 0 0 0.5px rgba(255, 255, 255, 0.15);
+}
+
+.feature-glass-bubble__inner .feature-glass-bubble__photo {
+  transform: scale(1.2);
+}
+
+/* Subtle dome haze — keeps the portrait readable under glass */
+.feature-glass-bubble__frost {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  border-radius: 50%;
+  pointer-events: none;
+  -webkit-backdrop-filter: saturate(1.12) brightness(1.04);
+  backdrop-filter: saturate(1.12) brightness(1.04);
+  background: radial-gradient(
+    circle at 50% 44%,
+    transparent 18%,
+    rgba(255, 255, 255, 0.05) 58%,
+    rgba(255, 255, 255, 0.14) 88%,
+    rgba(255, 255, 255, 0.18) 100%
+  );
+}
+
+/*
+ * Volume: rim bevel + bottom shadow — masked to the glass ring only (same annulus as
+ * __lens). Portrait dome vignette lives on __inner::after so it never paints a dark
+ * band over the photo edge.
+ */
+.feature-glass-bubble__depth {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  border-radius: 50%;
+  pointer-events: none;
+  -webkit-mask-image: radial-gradient(
+    circle at 50% 50%,
+    transparent 0,
+    transparent var(--bubble-inner-edge),
+    #000 calc(var(--bubble-inner-edge) + 1%)
+  );
+  mask-image: radial-gradient(
+    circle at 50% 50%,
+    transparent 0,
+    transparent var(--bubble-inner-edge),
+    #000 calc(var(--bubble-inner-edge) + 1%)
+  );
+  background:
+    radial-gradient(
+      circle at 50% 50%,
+      transparent 58%,
+      rgba(0, 0, 0, 0.22) 66%,
+      rgba(0, 0, 0, 0.1) 72%,
+      transparent 80%
+    ),
+    radial-gradient(
+      ellipse 90% 70% at 50% 115%,
+      rgba(0, 0, 0, 0.28) 0%,
+      rgba(0, 0, 0, 0.08) 35%,
+      transparent 62%
+    );
+}
+
+/* Soft dome curve on portrait — inside __inner only, fades out before photo edge */
+.feature-glass-bubble__inner::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  border-radius: 50%;
+  pointer-events: none;
+  background: radial-gradient(
+    circle at 50% 48%,
+    transparent 38%,
+    rgba(0, 0, 0, 0.06) 72%,
+    transparent 92%
+  );
+}
+
+/* Specular shine — soft radial glints (no conic streaks) */
+.feature-glass-bubble__shine {
+  position: absolute;
+  inset: 0;
+  z-index: 4;
+  border-radius: 50%;
+  pointer-events: none;
+  background:
+    radial-gradient(
+      circle at 70% 16%,
+      rgba(255, 255, 255, 0.62) 0%,
+      rgba(255, 255, 255, 0.35) 2%,
+      rgba(255, 255, 255, 0.06) 5%,
+      transparent 8%
+    ),
+    radial-gradient(
+      ellipse 48% 12% at 70% 16%,
+      rgba(255, 255, 255, 0.22) 0%,
+      transparent 100%
+    ),
+    radial-gradient(
+      ellipse 12% 42% at 70% 16%,
+      rgba(255, 255, 255, 0.16) 0%,
+      transparent 100%
+    ),
+    radial-gradient(
+      ellipse 95% 40% at 50% -2%,
+      rgba(255, 255, 255, 0.55) 0%,
+      rgba(255, 255, 255, 0.12) 28%,
+      transparent 58%
+    ),
+    radial-gradient(
+      ellipse 42% 68% at 112% 42%,
+      rgba(255, 255, 255, 0.85) 0%,
+      rgba(255, 255, 255, 0.35) 22%,
+      transparent 52%
+    ),
+    radial-gradient(
+      ellipse 38% 52% at -8% 28%,
+      rgba(255, 255, 255, 0.35) 0%,
+      rgba(255, 255, 255, 0.1) 28%,
+      transparent 55%
+    ),
+    radial-gradient(
+      ellipse 70% 28% at 50% 108%,
+      rgba(255, 255, 255, 0.22) 0%,
+      rgba(255, 255, 255, 0.06) 35%,
+      transparent 62%
+    ),
+    radial-gradient(
+      circle at 50% 50%,
+      transparent 90%,
+      rgba(255, 255, 255, 0.7) 94%,
+      rgba(255, 255, 255, 0.25) 97%,
+      transparent 100%
+    );
+}
