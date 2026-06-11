@@ -95,6 +95,15 @@
   }
 
   @media screen and (max-width: 768px) {
+    height: auto;
+    min-height: 100dvh;
+    max-height: none;
+    overflow: visible;
+    overscroll-behavior: auto;
+    align-items: start;
+    justify-items: center;
+    padding-bottom: calc(6.5rem + var(--pp-safe-bottom, 0px));
+
     .helpTooltip {
       color: white!important;
       position: absolute!important;
