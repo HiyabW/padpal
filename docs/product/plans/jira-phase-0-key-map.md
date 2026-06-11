@@ -41,8 +41,8 @@ Plan references (`P0-XX`) in `2026-06-08-design-system-rooms-roadmap.md` map to 
 |------|------|---------|
 | P0-50 | [SCRUM-74](https://hiyabwoldegebriel.atlassian.net/browse/SCRUM-74) | Design token sheet |
 | P0-51 | [SCRUM-75](https://hiyabwoldegebriel.atlassian.net/browse/SCRUM-75) | Form primitives |
-| P0-52 | [SCRUM-76](https://hiyabwoldegebriel.atlassian.net/browse/SCRUM-76) | SwipeCard primitive |
-| P0-53 | [SCRUM-77](https://hiyabwoldegebriel.atlassian.net/browse/SCRUM-77) | FeedStack container |
+| P0-52 | [SCRUM-76](https://hiyabwoldegebriel.atlassian.net/browse/SCRUM-76) | SwipeCard + ActionBar + useSwipeGesture; wire live feed (legacy content); remove Lottie |
+| P0-53 | [SCRUM-77](https://hiyabwoldegebriel.atlassian.net/browse/SCRUM-77) | FeedStack container — stack layout, loading/empty slots |
 | P0-54 | [SCRUM-78](https://hiyabwoldegebriel.atlassian.net/browse/SCRUM-78) | MatchOverlay |
 | P0-55 | [SCRUM-79](https://hiyabwoldegebriel.atlassian.net/browse/SCRUM-79) | BottomNavBar |
 | P0-69 | [SCRUM-80](https://hiyabwoldegebriel.atlassian.net/browse/SCRUM-80) | User model extensions |
@@ -56,7 +56,7 @@ Plan references (`P0-XX`) in `2026-06-08-design-system-rooms-roadmap.md` map to 
 | P0-57 | [SCRUM-83](https://hiyabwoldegebriel.atlassian.net/browse/SCRUM-83) | AppShell layout |
 | P0-58 | [SCRUM-84](https://hiyabwoldegebriel.atlassian.net/browse/SCRUM-84) | Sign-in redesign |
 | P0-59 | [SCRUM-85](https://hiyabwoldegebriel.atlassian.net/browse/SCRUM-85) | Slim onboarding |
-| P0-60 | [SCRUM-86](https://hiyabwoldegebriel.atlassian.net/browse/SCRUM-86) | Home feed migration |
+| P0-60 | [SCRUM-86](https://hiyabwoldegebriel.atlassian.net/browse/SCRUM-86) | Home feed v2 content (FeedHeader, HeroOverlay, AboutMe, PromptCard) + page chrome |
 | P0-61 | [SCRUM-87](https://hiyabwoldegebriel.atlassian.net/browse/SCRUM-87) | Match flow integration |
 | P0-62 | [SCRUM-89](https://hiyabwoldegebriel.atlassian.net/browse/SCRUM-89) | Chat redesign — **marketing milestone** |
 | P0-66 | [SCRUM-91](https://hiyabwoldegebriel.atlassian.net/browse/SCRUM-91) | Profile view redesign |

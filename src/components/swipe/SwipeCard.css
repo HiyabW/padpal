@@ -1,0 +1,29 @@
+.pp-swipe-card {
+  position: relative;
+  width: 100%;
+  max-width: var(--pp-layout-max-card);
+  background: var(--pp-color-bg-surface);
+  border-radius: var(--pp-radius-lg);
+  overflow: hidden;
+  touch-action: pan-y;
+}
+
+.pp-swipe-card--front {
+  box-shadow: var(--pp-shadow-card);
+  cursor: grab;
+}
+
+.pp-swipe-card--front:active {
+  cursor: grabbing;
+}
+
+.pp-swipe-card--stacked {
+  box-shadow: none;
+}
+
+.pp-swipe-card__content {
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
+}
+

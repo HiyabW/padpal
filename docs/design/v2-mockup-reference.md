@@ -6,7 +6,8 @@ Scratch notes for downstream design-system and feed tickets. Permanent values li
 
 ## Screenshot sources
 
-- Feed card (full scroll): `assets/image-b40cc62a-f172-4443-be5e-10a04d7b514d.png`
+- Feed card (full scroll, mobile): `docs/design/assets/feed-card-mobile.png`
+- Feed card (alt): `assets/image-b40cc62a-f172-4443-be5e-10a04d7b514d.png`
 - Feed with bottom nav: `assets/image-4b299347-8142-486c-b3ac-99d5ffcd2028.png`
 - Onboarding form inputs (4 screens): `assets/IMG_9758-9374248f-df91-4236-9197-26ed43d84856.png`
 
@@ -18,7 +19,8 @@ Scratch notes for downstream design-system and feed tickets. Permanent values li
 | HeroImageOverlay | SCRUM-86 | Share, "New here", name/age, distance, socials, compatibility box |
 | AboutMeSection | SCRUM-86 | Muted label, bold bio, attribute pills |
 | PromptCard | SCRUM-86 | Icon + title + answer |
-| ActionBar | SCRUM-76/86 | Reject/Match ovals, Share/Report full-width |
+| SwipeCard | SCRUM-76 | Drag shell, direction lock, PASS/MATCH corner stamps |
+| ActionBar | SCRUM-76 | Reject/Match ovals, Share/Report full-width — Share/Report wired in SCRUM-86 |
 | BottomNavBar | SCRUM-79 | Glass pill, lime active Home tab |
 | PrimaryButton | SCRUM-75 | Pill CTA; see onboarding patterns below |
 | FormField | SCRUM-75 | Label + subtitle + error/helper wrapper |
@@ -87,12 +89,45 @@ Onboarding mockup uses **selection pills** and a **circular FAB** for navigation
 
 **Not yet provided.** SCRUM-84 sign-in redesign may differ (roadmap mentions gradient). Form primitives should work on both black onboarding and sign-in page chrome.
 
+## Feed card patterns (SCRUM-76 / SCRUM-86)
+
+Source: `docs/design/assets/feed-card-mobile.png`
+
+### SwipeCard shell (SCRUM-76)
+
+- **Shape:** white card (`--pp-color-bg-surface`), `--pp-radius-lg`, `--pp-shadow-card`
+- **Scroll:** card content scrolls vertically; horizontal swipe uses direction lock (10px threshold)
+- **Stamps:** rotated "PASS" (top-left, `--pp-color-stamp-pass`) / "MATCH" (top-right, `--pp-color-stamp-match`) during drag
+- **Stack:** back card `scale(0.95)` + slight rotate offset (unchanged from legacy)
+
+### ActionBar (SCRUM-76)
+
+| Button | Background | Text |
+|---|---|---|
+| Reject | `--pp-color-action-reject-bg` | `--pp-color-action-reject-text` |
+| Match | `--pp-color-action-match-bg` | `--pp-color-text-on-surface` |
+| Share | `--pp-color-bg-app` | `--pp-color-text-primary` |
+| Report | `--pp-color-danger-subtle` | `--pp-color-danger` |
+
+- Row 1: two equal ovals (`--pp-radius-full`); row 2–3: full-width pills
+- Sticky at bottom of card scroll area on desktop
+- Reject/Match buttons trigger same swipe animation as drag
+
+### Out of scope for SCRUM-76 (→ SCRUM-86)
+
+- FeedHeader (black bar, logo, rewind, menu)
+- HeroImageOverlay (share icon, "New here", name/age, distance, socials, compatibility box)
+- AboutMeSection, PromptCard, attribute tag colors
+- Black shell page background (legacy gradient may remain until SCRUM-86)
+- FeedStack container (SCRUM-77)
+
 ## Desktop (mobile-first)
 
 - Card max-width 480px (`--pp-layout-max-card`), centered on black bg
 - Action bar sticky at bottom of card column
 - Bottom nav floating pill, max-width 400px (`--pp-layout-max-nav`), centered
 - Onboarding: full-bleed mobile; no card column wrapper
+- No desktop mockup — stamp/button sizes unchanged on large viewports
 
 ## Decision log
 
@@ -102,3 +137,8 @@ Onboarding mockup uses **selection pills** and a **circular FAB** for navigation
 - Onboarding page background: solid black (not legacy `gradient-background2`)
 - Form primitive visual authority: onboarding mockup strip + token sheet (sign-in mockup TBD)
 - Form primitive implementation: native HTML + co-located CSS (`src/components/ui/`); no MUI in new components
+- SwipeCard scope (SCRUM-76): SwipeCard + useSwipeGesture + ActionBar; wire live feed with legacy UserCardContent; remove Lottie overlays
+- Swipe vs scroll: direction lock on first 10px pointer movement
+- Drag stamps: corner PASS/MATCH labels (Tinder-style), opacity scales with drag distance
+- ActionBar buttons: Reject/Match fire programmatic swipe; Share/Report stubbed until SCRUM-86
+- SCRUM-77: FeedStack only; SCRUM-86: v2 profile content + page chrome + Share/Report wiring

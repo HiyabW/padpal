@@ -50,6 +50,9 @@ Apply the `.pp-logo` class for the PadPal wordmark (Inter Black / weight 900):
 | `--pp-color-bg-input-hover` | Input hover state |
 | `--pp-color-border-focus` | Focus ring (lime accent) |
 | `--pp-opacity-disabled` | Disabled controls |
+| `--pp-color-stamp-pass` | PASS stamp during drag |
+| `--pp-color-stamp-match` | MATCH stamp during drag |
+| `--pp-color-action-match-bg` | Match button fill in ActionBar |
 
 Tag pill colors: `--pp-color-tag-purple` through `--pp-color-tag-teal`.
 

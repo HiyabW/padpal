@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useMemo, useCallback } from "react";
+import React, { useEffect, useMemo, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import Cookies from "js-cookie";
 import { apiFetch } from "../../api/client";
@@ -15,12 +15,9 @@ import { loadFull } from "tsparticles";
 import { loadConfettiPreset } from "tsparticles-preset-confetti";
 import Onboarding from "./components/onboarding";
 import Grid from "@mui/material/Grid2";
-import { Player } from '@lordicon/react'; // Import the Player component
 import HelpOutlineOutlinedIcon from '@mui/icons-material/HelpOutlineOutlined';
-import Tooltip, { TooltipProps, tooltipClasses } from '@mui/material/Tooltip';
+import Tooltip, { tooltipClasses } from '@mui/material/Tooltip';
 import ClickAwayListener from '@mui/material/ClickAwayListener';
-const thumbDownIcon = require(`${process.env.PUBLIC_URL}/public/animatedIcons/thumbDownIcon.json`);
-const heartIcon = require(`${process.env.PUBLIC_URL}/public/animatedIcons/heartIcon.json`);
 
 const LightTooltip = styled(({ className, ...props }) => (
   <Tooltip {...props} classes={{ popper: className }} />
@@ -37,15 +34,13 @@ const LightTooltip = styled(({ className, ...props }) => (
 
 const Feed = () => {
   const navigate = useNavigate();
-  const { user, loading, isAuthenticated } = useAuth();
+  const { loading, isAuthenticated } = useAuth();
   const [loaded, setLoaded] = React.useState(false);
   const [users, setUsers] = React.useState({});
   const [images, setImages] = React.useState({});
   const [match, setMatch] = React.useState(null);
   const [currPfp, setCurrPfp] = React.useState(null);
   const [open, setOpen] = React.useState(false);
-  const [accept, setAccept] = React.useState(false)
-  const [reject, setReject] = React.useState(false)
   const [openTooltip, setOpenTooltip] = React.useState(false);
 
   const handleTooltipClose = useCallback(() => {
@@ -113,20 +108,6 @@ const Feed = () => {
     console.log(container);
   };
 
-  /************* Animated Icon Stuff *************/
-
-  const playerRefHeartIcon = useRef(null);
-  if (accept) {
-    playerRefHeartIcon.current?.playFromBeginning();
-  }
-
-  const playerRefThumbDownIcon = useRef(null);
-  if (reject) {
-    playerRefThumbDownIcon.current?.playFromBeginning();
-  }
-
-  /***********************************************/
-
   const userCards = useMemo(() => {
     let rotated = 1;
     return Object.entries(users).map(([key, user]) => {
@@ -142,23 +123,6 @@ const Feed = () => {
 
   return (
     <div className="feed gradient-background" style={{height: match ? '100%' : ''}}>
-      {/* --------------- ICONS --------------- */}
-      {<div class="thumbsDown" style={{ position: "fixed", top: "40%", zIndex: "100", display: reject ? 'flex' : 'none', justifyContent: 'center', width: '100%' }}>
-        <Player
-          ref={playerRefThumbDownIcon}
-          icon={thumbDownIcon}
-          size={window.innerWidth <= 900 ? 100 : 300}
-        />
-      </div>}
-
-      {<div class="heart" style={{ position: "fixed", top: "40%", zIndex: "100", display: accept ? 'flex' : 'none', justifyContent: 'center', width: '100%' }}>
-        <Player
-          ref={playerRefHeartIcon}
-          icon={heartIcon}
-          size={window.innerWidth <= 900 ? 100 : 300}
-        />
-      </div>}
-      {/* ------------------------------------- */}
       {match && (
         <motion.div
           initial={{ opacity: 0 }}
@@ -320,10 +284,6 @@ const Feed = () => {
               setUsers={setUsers}
               setMatch={setMatch}
               images={userImages}
-              accept={accept}
-              setAccept={setAccept}
-              reject={reject}
-              setReject={setReject}
             />
           ))}
 

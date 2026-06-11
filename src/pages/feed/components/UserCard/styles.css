@@ -5,6 +5,8 @@
   grid-row: 1;
   grid-column: 1;
   transform-origin: bottom;
+  user-select: none;
+  -webkit-user-drag: none;
 
   .hover\:cursor-grab:hover {
     cursor: grab;
@@ -14,14 +16,60 @@
 .userFeedCardDiv {
   grid-row: 1;
   grid-column: 1;
+  display: flex;
+  flex-direction: column;
   width: 85vw;
+  max-width: var(--pp-layout-max-card);
   height: 80vh;
-  background-color: white;
+  margin-top: 7rem;
+}
+
+.userFeedCardDiv--front .userFeedCardClip {
+  box-shadow: var(--pp-shadow-card);
+}
+
+.userFeedCardClip {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-height: 0;
+  overflow: hidden;
+  background: var(--pp-color-bg-surface);
   border: 0.2px solid black;
   border-radius: 1rem;
-  overflow: hidden;
-  background: var(--theme-feed-background-color);
-  margin-top: 7rem;
+}
+
+.userFeedCardDiv--back {
+  pointer-events: none;
+}
+
+.userFeedCardDiv .pp-swipe-card {
+  flex: 1;
+  min-height: 0;
+  max-width: none;
+  border-radius: 0;
+}
+
+.userFeedCardDiv .pp-swipe-card--front {
+  box-shadow: none;
+}
+
+.userFeedCardDiv .pp-swipe-card--stacked {
+  box-shadow: none;
+}
+
+.userFeedCardScroll {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
+  display: flex;
+  flex-direction: column;
+}
+
+.userFeedCardScroll .pp-swipe-card__content {
+  overflow-y: visible;
 }
 .viewProfile {
   margin-top: 5rem!important;
@@ -34,6 +82,7 @@
 }
 
 .userFeedImageDiv {
+  position: relative;
   width: 60%;
   height: 100%;
   float: left;
@@ -113,12 +162,72 @@
   background-color: rgba(0, 0, 0, 0.5);
 }
 
+/* Desktop: same tall scrollable column as mobile (legacy content until SCRUM-86) */
+@media screen and (min-width: 769px) {
+  .userFeedCardDiv {
+    width: min(92vw, var(--pp-layout-max-card));
+    height: auto;
+    max-height: calc(100dvh - 4.5rem - 2rem - var(--pp-safe-bottom, 0px));
+    margin-top: 0;
+    margin-bottom: 0;
+  }
+
+  .userFeedCardDiv .pp-swipe-card {
+    flex: 0 0 auto;
+    min-height: auto;
+  }
+
+  .pp-swipe-card__content {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .userFeedImageDiv,
+  .userFeedInfoDiv {
+    float: none;
+    width: 100%;
+  }
+
+  .userFeedImageDiv {
+    height: 22rem;
+    flex-shrink: 0;
+  }
+
+  .userFeedInfoDiv {
+    height: auto;
+    padding: 1.5rem 2rem;
+    overflow-y: visible;
+
+    h2 {
+      font-size: 2rem;
+      line-height: 2.6rem;
+      display: block;
+    }
+
+    h3 {
+      font-size: 1rem;
+      line-height: 1.75rem;
+    }
+  }
+
+  .dot-progress {
+    position: absolute !important;
+    bottom: 1rem !important;
+    top: auto !important;
+    width: 100% !important;
+    display: flex !important;
+    align-items: center;
+    justify-content: center;
+  }
+}
+
 @media screen and (max-width: 768px) {
   .userFeedCardDiv {
     height: fit-content;
     width: 95%;
-    margin-bottom: 2rem;
-    margin-top: 4rem;
+    margin-bottom: 0;
+    margin-top: 0;
+    max-height: calc(100dvh - 4.5rem - 5rem - var(--pp-safe-bottom, 0px));
   }
   .viewProfile {
     margin-top: 1rem!important;
@@ -147,6 +256,16 @@
     width: 100%;
   }
 
+  .pp-swipe-card__content {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .userFeedImageDiv,
+  .userFeedInfoDiv {
+    float: none;
+  }
+
   .dot-progress {
     position: absolute !important;
     top: 26rem;
@@ -155,11 +274,11 @@
     width: 100% !important;
     display: flex !important;
     align-items: center;
+    justify-content: center;
   }
 
+  /* Mockup uses vertical scroll — no legacy carousel arrows on mobile feed */
   .mobilePictureCaroselButtons {
-    display: block !important;
-    width: 3rem;
-    height: 3rem;
+    display: none !important;
   }
 }
