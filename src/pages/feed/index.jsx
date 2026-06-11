@@ -6,18 +6,16 @@ import { useAuth } from "../../context/AuthContext";
 import UserCard from "./components/UserCard";
 import "./styles.css";
 import { styled } from '@mui/material/styles';
-import Button from "@mui/material/Button";
 import Box from "@mui/material/Box";
 import CircularProgress from "@mui/material/CircularProgress";
 import { motion } from "framer-motion";
-import Particles from "react-tsparticles";
-import { loadFull } from "tsparticles";
-import { loadConfettiPreset } from "tsparticles-preset-confetti";
 import Onboarding from "./components/onboarding";
-import Grid from "@mui/material/Grid2";
 import HelpOutlineOutlinedIcon from '@mui/icons-material/HelpOutlineOutlined';
 import Tooltip, { tooltipClasses } from '@mui/material/Tooltip';
 import ClickAwayListener from '@mui/material/ClickAwayListener';
+import Button from "@mui/material/Button";
+import { MatchOverlay } from "../../components/match";
+import { preloadImage } from "../../components/match/preloadImage";
 
 const LightTooltip = styled(({ className, ...props }) => (
   <Tooltip {...props} classes={{ popper: className }} />
@@ -61,7 +59,6 @@ const Feed = () => {
       return;
     }
     if (isAuthenticated) {
-      // first fetch data
       apiFetch("/feed/", {
         method: "POST",
         body: JSON.stringify({}),
@@ -72,7 +69,6 @@ const Feed = () => {
           if (Cookies.get("needsOnboarding")) {
             setOpen(true);
           }
-          console.log("IMAGES: ", data["images"]);
           setImages(data["images"]);
           setLoaded(true);
         })
@@ -80,14 +76,17 @@ const Feed = () => {
           console.log(err);
         });
 
-      // ... then fetch currUser Pfp
       apiFetch("/feed/getUser", {
         method: "POST",
         body: JSON.stringify({}),
       })
         .then((response) => response.json())
         .then((data) => {
-          setCurrPfp(data["images"][0]["image"]);
+          const pfp = data["images"]?.[0]?.image;
+          if (pfp) {
+            preloadImage(pfp);
+            setCurrPfp(pfp);
+          }
         })
         .catch((err) => {
           console.log(err);
@@ -99,14 +98,21 @@ const Feed = () => {
     setMatch(null);
   }, []);
 
-  const particlesInit = async (main) => {
-    await loadFull(main);
-    await loadConfettiPreset(main);
-  };
+  const handleMatchChat = useCallback(() => {
+    setMatch(null);
+    navigate("/chat");
+  }, [navigate]);
 
-  const particlesLoaded = (container) => {
-    console.log(container);
-  };
+  useEffect(() => {
+    if (currPfp) preloadImage(currPfp);
+  }, [currPfp]);
+
+  useEffect(() => {
+    Object.values(users).forEach((user) => {
+      const src = images[user.email]?.[0]?.image;
+      if (src) preloadImage(src);
+    });
+  }, [users, images]);
 
   const userCards = useMemo(() => {
     let rotated = 1;
@@ -122,102 +128,17 @@ const Feed = () => {
   }, [users, images]);
 
   return (
-    <div className="feed gradient-background" style={{height: match ? '100%' : ''}}>
-      {match && (
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1, duration: "1" }}
-          transition={{ ease: "easeInOut" }}
-          className="matchedScreen"
-        >
-          <Particles
-            id="tsparticles"
-            init={particlesInit}
-            loaded={particlesLoaded}
-            style={{ position: "absolute", top: 0 }}
-            options={{
-              preset: "confetti",
-              fullScreen: {
-                enable: true,
-                zIndex: -1, // Ensure it's behind other elements
-              },
-              emitters: {
-                position: { x: 50, y: -10 }, // Adjust to control emitter position
-                size: {
-                  width: 100, // Adjust to control emitter width
-                  height: 0,
-                },
-                rate: {
-                  quantity: 20, // Adjust to control number of particles emitted at once
-                  delay: 0.1, // Adjust to control emission frequency
-                },
-                life: {
-                  duration: 1, // Adjust to control how long particles stay on screen
-                  count: 1, // Only emit once for a single burst
-                },
-              },
-            }}
-          />
-          <Grid container spacing={{lg:10, md: 10, sm: 3, xs: 3}}>
-            <Grid size={{ md: 3, sm: 12, xs: 12 }} sx={{ display: 'flex', justifyContent: 'center' }}>
-              <motion.img
-                initial={{ opacity: 0 }}
-                animate={{
-                  opacity: 1,
-                  x: [-100, 0],
-                  rotate: -15,
-                }}
-                transition={{ delay: 0.5 }}
-                src={currPfp}
-                className="currUserPfp matchedImg"
-              />
-            </Grid>
-
-            <Grid size={{ md: 6, sm: 12, xs: 12 }}>
-              <motion.div initial={0} className="matchedScreenText">
-                <motion.h1
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1, y: [100, 0] }}
-                  transition={{ delay: 0.5 }}
-                >
-                  It's a match!
-                </motion.h1>
-                <motion.div
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1, y: [-100, 0] }}
-                  transition={{ delay: 0.5 }}
-                >
-                  <h2>
-                    Head over to your chats to start a new conversation with{" "}
-                    {match.name}.
-                  </h2>
-                  <Button
-                    className="gotIt"
-                    variant="contained"
-                    onClick={closeMatchScreen}
-                  >
-                    Got it!
-                  </Button>
-                </motion.div>
-              </motion.div>
-            </Grid>
-
-            <Grid size={{ md: 3, sm: 12, xs: 12 }} sx={{ display: 'flex', justifyContent: 'center' }}>
-              <motion.img
-                initial={{ opacity: 0 }}
-                transition={{ delay: 0.5 }}
-                animate={{
-                  opacity: 1,
-                  x: [100, 0],
-                  rotate: 15,
-                }}
-                src={match.pfp}
-                className="userPfp matchedImg"
-              />
-            </Grid>
-          </Grid>
-        </motion.div>
-      )}
+    <div className="feed gradient-background">
+      <MatchOverlay
+        open={Boolean(match && currPfp)}
+        currentUser={{ image: currPfp }}
+        matchedUser={{
+          name: match?.name ?? "",
+          image: match?.pfp ?? "",
+        }}
+        onChat={handleMatchChat}
+        onClose={closeMatchScreen}
+      />
       {isAuthenticated && (
         <>
           <Onboarding open={open} handleClose={handleClose} />
