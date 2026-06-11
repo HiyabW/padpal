@@ -23,35 +23,7 @@
 
 .pp-swipe-card__content {
   overflow-y: auto;
+  overscroll-behavior: contain;
   -webkit-overflow-scrolling: touch;
 }
 
-.pp-swipe-stamp {
-  position: absolute;
-  z-index: var(--pp-z-overlay);
-  pointer-events: none;
-  padding: var(--pp-space-2) var(--pp-space-4);
-  border: 3px solid;
-  border-radius: var(--pp-radius-sm);
-  font-family: var(--pp-font-body);
-  font-size: var(--pp-text-xl);
-  font-weight: var(--pp-font-black);
-  letter-spacing: 0.05em;
-  text-transform: uppercase;
-}
-
-.pp-swipe-stamp--pass {
-  top: var(--pp-space-4);
-  left: var(--pp-space-4);
-  transform: rotate(-15deg);
-  color: var(--pp-color-stamp-pass);
-  border-color: var(--pp-color-stamp-pass);
-}
-
-.pp-swipe-stamp--match {
-  top: var(--pp-space-4);
-  right: var(--pp-space-4);
-  transform: rotate(15deg);
-  color: var(--pp-color-stamp-match);
-  border-color: var(--pp-color-stamp-match);
-}

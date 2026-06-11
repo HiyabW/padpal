@@ -8,6 +8,8 @@ import {
 
 const DEFAULT_THRESHOLD = 120;
 const DEFAULT_DIRECTION_LOCK_PX = 10;
+const DRAG_COMMIT_DURATION = 0.2;
+const PROGRAMMATIC_COMMIT_DURATION = 0.45;
 
 export function useSwipeGesture({
   enabled = true,
@@ -27,18 +29,15 @@ export function useSwipeGesture({
 
   const rotateRaw = useTransform(x, [-150, 150], [-18, 18]);
   const rotate = useTransform(() => `${rotateRaw.get() + stackRotateOffset}deg`);
-  const stampOpacity = useTransform(x, [-threshold, -10, 0, 10, threshold], [1, 0.3, 0, 0.3, 1]);
-  const stampDirection = useTransform(x, (v) => {
-    if (Math.abs(v) < 10) return null;
-    return v < 0 ? "left" : "right";
-  });
-
   const commitSwipe = useCallback(
-    async (direction) => {
+    async (direction, { slow = false } = {}) => {
       if (isCommittingRef.current || !enabled) return;
       isCommittingRef.current = true;
       const target = direction === "right" ? window.innerWidth : -window.innerWidth;
-      await animate(x, target, { duration: 0.2, ease: "easeIn" });
+      await animate(x, target, {
+        duration: slow ? PROGRAMMATIC_COMMIT_DURATION : DRAG_COMMIT_DURATION,
+        ease: slow ? "easeInOut" : "easeIn",
+      });
       if (direction === "right") {
         onSwipeRight?.();
       } else {
@@ -51,7 +50,7 @@ export function useSwipeGesture({
   );
 
   const swipeProgrammatic = useCallback(
-    (direction) => commitSwipe(direction),
+    (direction, options = {}) => commitSwipe(direction, options),
     [commitSwipe]
   );
 
@@ -69,6 +68,7 @@ export function useSwipeGesture({
   const handlePointerDown = useCallback(
     (event) => {
       if (!enabled || isCommittingRef.current) return;
+      if (event.target.closest(".pp-action-bar")) return;
       pointerStartRef.current = { x: event.clientX, y: event.clientY };
       axisLockedRef.current = null;
 
@@ -121,22 +121,24 @@ export function useSwipeGesture({
     return () => document.removeEventListener("keydown", handleKeyDown);
   }, [enabled, isActive, swipeProgrammatic]);
 
+  const shellStyle = { x, rotate };
+
   const dragProps = {
     drag: enabled ? "x" : false,
     dragControls,
     dragListener: false,
     dragConstraints: { left: 0, right: 0 },
     dragElastic: 0.9,
+    dragMomentum: false,
+    onDrag: (_, info) => x.set(info.offset.x),
     onDragEnd: handleDragEnd,
     onPointerDown: handlePointerDown,
-    style: { x, rotate },
   };
 
   return {
     x,
     rotate,
-    stampOpacity,
-    stampDirection,
+    shellStyle,
     dragProps,
     swipeProgrammatic,
     isDragging,

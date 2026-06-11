@@ -1,0 +1,31 @@
+.pp-swipe-edge-glow {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 5;
+}
+
+.pp-swipe-edge-glow__panel {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: min(36vw, 9rem);
+}
+
+.pp-swipe-edge-glow__panel--pass {
+  left: 0;
+  background: linear-gradient(
+    to right,
+    color-mix(in srgb, var(--pp-color-danger) 55%, transparent),
+    transparent
+  );
+}
+
+.pp-swipe-edge-glow__panel--match {
+  right: 0;
+  background: linear-gradient(
+    to left,
+    color-mix(in srgb, var(--pp-color-success) 55%, transparent),
+    transparent
+  );
+}

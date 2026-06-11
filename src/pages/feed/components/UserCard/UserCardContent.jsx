@@ -140,7 +140,12 @@ const UserCardContent = ({
             />
           </div>
         )}
-        <img className="userFeedImage" src={images[imageIndex].image} />
+        <img
+          className="userFeedImage"
+          src={images[imageIndex].image}
+          alt=""
+          draggable={false}
+        />
       </div>
       <div className="userFeedInfoDiv">
         <Grid

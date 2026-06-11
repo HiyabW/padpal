@@ -5,8 +5,7 @@
   padding: var(--pp-space-4);
   background: var(--pp-color-bg-surface);
   border-top: 1px solid var(--pp-color-border);
-  position: sticky;
-  bottom: 0;
+  flex-shrink: 0;
 }
 
 .pp-action-bar--disabled {
