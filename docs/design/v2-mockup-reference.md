@@ -174,6 +174,7 @@ Source: `docs/design/assets/feed-card-mobile.png`
 - Drag stamps: corner PASS/MATCH labels (Tinder-style), opacity scales with drag distance
 - ActionBar buttons: Reject/Match fire programmatic swipe; Share/Report stubbed until SCRUM-86
 - SCRUM-77: FeedStack only; SCRUM-86: v2 profile content + page chrome + Share/Report wiring
+- FeedStack: top-2 render, `renderCard` API, loading/empty slots; desktop back-card ±4deg via `itemIndex`
 - MatchOverlay (SCRUM-78): glass bubble collision layout; photo-only color; white CTAs; port GlassBubble from landing page; confetti deferred for perf
 - MatchOverlay feed wiring (SCRUM-78): replaces legacy `matchedScreen`; chat CTA navigates to `/chat`
 - BottomNavBar (SCRUM-79): iOS glassmorphism dock; icon-only tabs; MUI Home/Groups/ChatBubble/Person (outlined→filled on active); light-grey active pill (`rgba(255,255,255,0.26)`); sliding indicator (no overshoot) + subtle dock bounce; lime unread dot on Chat (no border); `overflow:hidden` on dock; fixed 52px tabs; desktop max-width `--pp-layout-max-nav` centered floating

@@ -4,9 +4,9 @@ import Cookies from "js-cookie";
 import { apiFetch } from "../../api/client";
 import { useAuth } from "../../context/AuthContext";
 import UserCard from "./components/UserCard";
+import { FeedStack } from "../../components/feed";
 import "./styles.css";
 import { styled } from '@mui/material/styles';
-import Box from "@mui/material/Box";
 import CircularProgress from "@mui/material/CircularProgress";
 import { motion } from "framer-motion";
 import Onboarding from "./components/onboarding";
@@ -115,16 +115,11 @@ const Feed = () => {
   }, [users, images]);
 
   const userCards = useMemo(() => {
-    let rotated = 1;
-    return Object.entries(users).map(([key, user]) => {
-      rotated += 1;
-      return {
-        key,
-        user,
-        isRotated: rotated,
-        images: images[user.email],
-      };
-    });
+    return Object.entries(users).map(([key, user]) => ({
+      key,
+      user,
+      images: images[user.email],
+    }));
   }, [users, images]);
 
   return (
@@ -142,77 +137,81 @@ const Feed = () => {
       {isAuthenticated && (
         <>
           <Onboarding open={open} handleClose={handleClose} />
-          {!loaded && (
-            <motion.div
-              initial={{ opacity: 0, y: 50 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, ease: "easeInOut" }}
-              style={{ textAlign: "center" }}
-            >
-              <CircularProgress
-                size="10rem"
-                style={{ color: "white", marginBottom: "2rem" }}
-                sx={{
-                  "--CircularProgress-thickness": "24px",
-                }}
-              />
-              <h1>Gathering Candidates...</h1>
-            </motion.div>
-          )}
 
-          {
-            loaded && Object.keys(users).length > 0 && (
-              <ClickAwayListener onClickAway={handleTooltipClose}>
-                <div>
-                  <LightTooltip placement='left-start' title={
+          {loaded && Object.keys(users).length > 0 && (
+            <ClickAwayListener onClickAway={handleTooltipClose}>
+              <div>
+                <LightTooltip
+                  placement="left-start"
+                  title={
                     <React.Fragment>
-                      {window.innerWidth > 900 && "Click the ← arrow on your keyboard to decline, and → to match. Use the ↑ and ↓ arrows to toggle through pictures."}
-                      {window.innerWidth <= 900 && "Swipe left to decline, and swipe right to match."}
+                      {window.innerWidth > 900 &&
+                        "Click the ← arrow on your keyboard to decline, and → to match. Use the ↑ and ↓ arrows to toggle through pictures."}
+                      {window.innerWidth <= 900 &&
+                        "Swipe left to decline, and swipe right to match."}
                     </React.Fragment>
                   }
-                    onClose={handleTooltipClose}
-                    open={openTooltip}
-                    disableFocusListener
-                    disableHoverListener
-                    disableTouchListener
-                    slotProps={{
-                      popper: {
-                        modifiers: [
-                          {
-                            name: 'offset',
-                            options: {
-                              offset: window.innerWidth <= 900 ? [0, -14] : [0, 0],
-                            },
+                  onClose={handleTooltipClose}
+                  open={openTooltip}
+                  disableFocusListener
+                  disableHoverListener
+                  disableTouchListener
+                  slotProps={{
+                    popper: {
+                      modifiers: [
+                        {
+                          name: "offset",
+                          options: {
+                            offset:
+                              window.innerWidth <= 900 ? [0, -14] : [0, 0],
                           },
-                        ],
-                      },
-                    }}
-                  >
-                    <Button className='helpTooltip' onClick={handleTooltipOpen}>
-                      <HelpOutlineOutlinedIcon fontSize="large" />
-                    </Button>
-                  </LightTooltip>
-                </div>
-              </ClickAwayListener>)
-          }
-
-          {userCards.map(({ key, user, isRotated, images: userImages }) => (
-            <UserCard
-              key={key}
-              isRotated={isRotated}
-              user={user}
-              users={users}
-              setUsers={setUsers}
-              setMatch={setMatch}
-              images={userImages}
-            />
-          ))}
-
-          {Object.keys(users).length === 0 && loaded && (
-            <Box className="p-4">
-              <h1>no more candidates, come back later!</h1>
-            </Box>
+                        },
+                      ],
+                    },
+                  }}
+                >
+                  <Button className="helpTooltip" onClick={handleTooltipOpen}>
+                    <HelpOutlineOutlinedIcon fontSize="large" />
+                  </Button>
+                </LightTooltip>
+              </div>
+            </ClickAwayListener>
           )}
+
+          <FeedStack
+            items={userCards}
+            isLoading={!loaded}
+            isEmpty={loaded && userCards.length === 0}
+            loadingSlot={
+              <motion.div
+                initial={{ opacity: 0, y: 50 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, ease: "easeInOut" }}
+                style={{ textAlign: "center" }}
+              >
+                <CircularProgress
+                  size="10rem"
+                  style={{ color: "white", marginBottom: "2rem" }}
+                  sx={{
+                    "--CircularProgress-thickness": "24px",
+                  }}
+                />
+                <h1>Gathering Candidates...</h1>
+              </motion.div>
+            }
+            renderCard={(item, meta) => (
+              <UserCard
+                key={item.key}
+                user={item.user}
+                users={users}
+                setUsers={setUsers}
+                setMatch={setMatch}
+                images={item.images}
+                isFront={meta.isFront}
+                stackRotateOffset={meta.stackRotateOffset}
+              />
+            )}
+          />
         </>
       )}
       {!loading && !isAuthenticated && (

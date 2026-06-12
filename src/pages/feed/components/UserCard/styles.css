@@ -14,17 +14,19 @@
 }
 
 .userFeedCardDiv {
-  grid-row: 1;
-  grid-column: 1;
   display: flex;
   flex-direction: column;
-  width: 85vw;
+  width: 100%;
   max-width: var(--pp-layout-max-card);
   height: 80vh;
-  margin-top: 7rem;
+  margin-top: 0;
+  border: 0.5px solid #0000005d;
+  border-radius: 1rem;
+  overflow: hidden;
+  background: var(--pp-color-bg-surface);
 }
 
-.userFeedCardDiv--front .userFeedCardClip {
+.userFeedCardDiv--front {
   box-shadow: var(--pp-shadow-card);
 }
 
@@ -35,12 +37,6 @@
   min-height: 0;
   overflow: hidden;
   background: var(--pp-color-bg-surface);
-  border: 0.2px solid black;
-  border-radius: 1rem;
-}
-
-.userFeedCardDiv--back {
-  pointer-events: none;
 }
 
 .userFeedCardDiv .pp-swipe-card {
@@ -173,7 +169,7 @@
 /* Desktop: same tall scrollable column as mobile (legacy content until SCRUM-86) */
 @media screen and (min-width: 769px) {
   .userFeedCardDiv {
-    width: min(92vw, var(--pp-layout-max-card));
+    width: 100%;
     height: auto;
     max-height: calc(100dvh - 4.5rem - 2rem - var(--pp-safe-bottom, 0px));
     margin-top: 0;
@@ -232,8 +228,8 @@
 @media screen and (max-width: 768px) {
   .userFeedCardDiv {
     height: auto;
-    width: 95%;
-    margin-bottom: 2rem;
+    width: 100%;
+    margin-bottom: 1rem;
     margin-top: 0;
     max-height: none;
   }
