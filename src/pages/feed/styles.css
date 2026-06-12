@@ -1,6 +1,6 @@
 .feed {
-  display: grid;
-  place-items: center;
+  display: flex;
+  flex-direction: column;
   align-items: center;
   width: 100%;
   height: 100dvh;
@@ -46,8 +46,7 @@
     max-height: none;
     overflow: visible;
     overscroll-behavior: auto;
-    align-items: start;
-    justify-items: center;
+    align-items: center;
     padding-bottom: calc(72px + var(--pp-safe-bottom, 0px));
 
     .helpTooltip {
