@@ -47,14 +47,11 @@ const ViewProfile = () => {
         {user && (
           <Box className="centeredDiv" sx={{ color: 'black', flexDirection: 'column' }}>
             <UserCard
-              isRotated={null}
               user={user}
               users={users}
               setUsers={setUsers}
-              match={null}
-              setMatch={null}
               images={images}
-              feedOrViewProfile={'view profile'}
+              feedOrViewProfile="view profile"
             />
           </Box>
         )}

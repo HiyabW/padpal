@@ -10,15 +10,9 @@ import {
 import UserCardContent from "./UserCardContent";
 import "./styles.css";
 
-function isKeyLast(obj, key) {
-  const keys = Object.keys(obj);
-  return obj[keys[keys.length - 1]]["email"] === obj[key]["email"];
-}
-
-/*******************************************/
-
 const UserCard = ({
-  isRotated,
+  isFront: isFrontProp,
+  stackRotateOffset: stackRotateOffsetProp = 0,
   user,
   users,
   setUsers,
@@ -26,10 +20,10 @@ const UserCard = ({
   setMatch,
   feedOrViewProfile = "feed",
 }) => {
-  const isFront =
-    feedOrViewProfile === "view profile" ? true : isKeyLast(users, user.email);
+  const isViewProfile = feedOrViewProfile === "view profile";
+  const isFront = isViewProfile ? true : Boolean(isFrontProp);
   const enabled = feedOrViewProfile === "feed";
-  const stackRotateOffset = 0;
+  const stackRotateOffset = isViewProfile ? 0 : stackRotateOffsetProp;
 
   const handleSwipe = useCallback(
     (isAMatch) => {
@@ -73,37 +67,41 @@ const UserCard = ({
     <>
       <SwipeEdgeGlow gesture={gesture} active={enabled && isFront} />
       <motion.div
-      className={[
-        "userFeedCardDiv",
-        isFront && "userFeedCardDiv--front",
-        !isFront && "userFeedCardDiv--back",
-        feedOrViewProfile !== "feed" ? "viewProfile" : "",
-      ]
-        .filter(Boolean)
-        .join(" ")}
-      style={gesture.shellStyle}
-    >
-      <div className="userFeedCardClip">
-        <div className="userFeedCardScroll">
-          <SwipeCard gesture={gesture} isStacked={!isFront}>
-            <UserCardContent
-              user={user}
-              images={images}
-              feedOrViewProfile={feedOrViewProfile}
-              isActive={isFront}
-            />
-            {enabled && (
-              <ActionBar
-                onReject={() => gesture.swipeProgrammatic("left", { slow: true })}
-                onMatch={() => gesture.swipeProgrammatic("right", { slow: true })}
-                onShare={() => {}}
-                onReport={() => {}}
-                disabled={!isFront}
+        className={[
+          "userFeedCardDiv",
+          isFront && "userFeedCardDiv--front",
+          !isFront && "userFeedCardDiv--back",
+          feedOrViewProfile !== "feed" ? "viewProfile" : "",
+        ]
+          .filter(Boolean)
+          .join(" ")}
+        style={gesture.shellStyle}
+      >
+        <div className="userFeedCardClip">
+          <div className="userFeedCardScroll">
+            <SwipeCard gesture={gesture} isStacked={!isFront}>
+              <UserCardContent
+                user={user}
+                images={images}
+                feedOrViewProfile={feedOrViewProfile}
+                isActive={isFront}
               />
-            )}
-          </SwipeCard>
+              {enabled && (
+                <ActionBar
+                  onReject={() =>
+                    gesture.swipeProgrammatic("left", { slow: true })
+                  }
+                  onMatch={() =>
+                    gesture.swipeProgrammatic("right", { slow: true })
+                  }
+                  onShare={() => {}}
+                  onReport={() => {}}
+                  disabled={!isFront}
+                />
+              )}
+            </SwipeCard>
+          </div>
         </div>
-      </div>
       </motion.div>
     </>
   );
