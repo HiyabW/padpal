@@ -101,6 +101,7 @@
   /* Layout */
   --pp-layout-max-card: 480px;
   --pp-layout-max-nav: 400px;
+  --pp-layout-nav-clearance: calc(72px + var(--pp-safe-bottom));
 }
 
 .pp-logo {

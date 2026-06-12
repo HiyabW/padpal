@@ -179,4 +179,4 @@ Source: `docs/design/assets/feed-card-mobile.png`
 - MatchOverlay feed wiring (SCRUM-78): replaces legacy `matchedScreen`; chat CTA navigates to `/chat`
 - BottomNavBar (SCRUM-79): iOS glassmorphism dock; icon-only tabs; MUI Home/Groups/ChatBubble/Person (outlined→filled on active); light-grey active pill (`rgba(255,255,255,0.26)`); sliding indicator (no overshoot) + subtle dock bounce; lime unread dot on Chat (no border); `overflow:hidden` on dock; fixed 52px tabs; desktop max-width `--pp-layout-max-nav` centered floating
 - BottomNavBar routes: Home→`/feed`, Rooms→`/rooms` (placeholder), Chat→`/chat`, Profile→`/viewProfile`; logout removed from nav (profile/settings later)
-- AppShell layout wrapper deferred to SCRUM-83; SCRUM-79 swaps legacy top `NavBar` for `BottomNavBar` in `App.js`
+- AppShell (SCRUM-83): `src/layouts/AppShell.jsx` wraps authenticated routes with `BottomNavBar` + `<Outlet />`; nav clearance via `--pp-layout-nav-clearance`; legacy `navBar/` removed

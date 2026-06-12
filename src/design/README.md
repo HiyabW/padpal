@@ -74,6 +74,14 @@ Tag pill colors: `--pp-color-tag-purple` through `--pp-color-tag-teal`.
 
 `--pp-safe-top/right/bottom/left` — use for Capacitor notch/home-indicator padding.
 
+## Layout
+
+| Token | Usage |
+|---|---|
+| `--pp-layout-max-card` | Max width for swipe cards |
+| `--pp-layout-max-nav` | Max width for bottom nav dock |
+| `--pp-layout-nav-clearance` | Bottom padding for content above fixed nav |
+
 ## Legacy bridge
 
 Unmigrated pages may still reference `--theme-*` variables in `index.css`. Those alias to `--pp-*` tokens and will be removed as pages migrate.
