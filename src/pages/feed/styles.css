@@ -8,7 +8,7 @@
   overflow: hidden;
   overscroll-behavior: none;
   padding-top: 4.5rem;
-  padding-bottom: calc(5rem + var(--pp-safe-bottom, 0px));
+  padding-bottom: calc(72px + var(--pp-safe-bottom, 0px));
 
   .helpTooltip {
     color: white!important;
@@ -48,7 +48,7 @@
     overscroll-behavior: auto;
     align-items: start;
     justify-items: center;
-    padding-bottom: calc(6.5rem + var(--pp-safe-bottom, 0px));
+    padding-bottom: calc(72px + var(--pp-safe-bottom, 0px));
 
     .helpTooltip {
       color: white!important;

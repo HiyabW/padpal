@@ -39,7 +39,7 @@ function App() {
   const hideNav = location.pathname === '/' || location.pathname === '/survey';
 
   return (
-    <div className={hideNav ? 'App' : 'App App--with-bottom-nav'}>
+    <div className="App">
       {!hideNav && <BottomNavBar />}
       <Suspense fallback={
         <div className="centeredDiv gradient-background2" style={{ minHeight: '100dvh' }}>
