@@ -1,6 +1,6 @@
 import './App.css';
 import { Routes, Route, useLocation, useNavigate } from 'react-router-dom';
-import NavBar from './components/navBar';
+import { BottomNavBar } from './components/nav';
 import React, { Suspense, useEffect } from 'react';
 import CircularProgress from '@mui/material/CircularProgress';
 import { apiFetch } from './api/client';
@@ -13,6 +13,7 @@ const ViewProfile = React.lazy(() => import('./pages/viewProfile'));
 const EditProfile = React.lazy(() => import('./pages/editProfile'));
 const Survey = React.lazy(() => import('./pages/survey'));
 const SignIn = React.lazy(() => import('./pages/signIn'));
+const Rooms = React.lazy(() => import('./pages/rooms'));
 
 function App() {
   const location = useLocation();
@@ -35,12 +36,11 @@ function App() {
     return () => clearInterval(timer);
   }, [user, location.pathname]);
 
+  const hideNav = location.pathname === '/' || location.pathname === '/survey';
+
   return (
-    <div className="App">
-      {
-        (location.pathname !== '/' && location.pathname !== '/survey') &&
-        <NavBar />
-      }
+    <div className={hideNav ? 'App' : 'App App--with-bottom-nav'}>
+      {!hideNav && <BottomNavBar />}
       <Suspense fallback={
         <div className="centeredDiv gradient-background2" style={{ minHeight: '100dvh' }}>
           <CircularProgress color="inherit" />
@@ -53,6 +53,7 @@ function App() {
           <Route exact path='/chat' element={<Chat />} />
           <Route exact path='/viewProfile' element={<ViewProfile />} />
           <Route exact path='/editProfile' element={<EditProfile />} />
+          <Route exact path='/rooms' element={<Rooms />} />
         </Routes>
       </Suspense>
     </div>

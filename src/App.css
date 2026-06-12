@@ -1,3 +1,7 @@
+.App--with-bottom-nav {
+  padding-bottom: calc(72px + var(--pp-safe-bottom));
+}
+
 .App{
   position: relative;
   height: 100%;
