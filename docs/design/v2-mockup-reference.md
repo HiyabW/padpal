@@ -129,7 +129,7 @@ Source: mobile splash + landing/sign-in mockup (June 2026).
 #### Landing
 
 - **Background:** solid black — no gradient
-- **Hero:** scattered `GlassBubble` avatars (ported from landing page) in upper ~60% of viewport
+- **Hero:** scattered `GlassBubble` avatars — same component + fixed-px slot CSS as `MatchOverlay`; positions from landing-page Hero scatter
 - **Bottom sheet:** frosted glass panel anchored to bottom; rounded top corners; backdrop blur
   - House icon centered at top of sheet
   - Headline: **"Create a home you love"** — Inter Black, white

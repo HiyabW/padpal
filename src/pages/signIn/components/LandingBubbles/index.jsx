@@ -10,12 +10,16 @@ function LandingBubbles() {
         <div
           key={`${bubble.src}-${index}`}
           className="pp-sign-in-bubbles__item"
-          style={{ top: bubble.top, left: bubble.left }}
+          style={{
+            top: bubble.top,
+            left: bubble.left,
+            width: bubble.size,
+          }}
         >
           <GlassBubble
-            size={bubble.size}
             imageSrc={bubble.src}
             floatVariant={bubble.floatVariant}
+            style={{ position: "relative", width: "100%" }}
           />
         </div>
       ))}

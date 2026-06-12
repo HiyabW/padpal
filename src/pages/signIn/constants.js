@@ -9,14 +9,53 @@ export const SIGN_IN_BUBBLE_IMAGES = {
   card2: `${base}/card-2.jpeg`,
 };
 
-/** Scattered bubble layout for the landing hero (mobile mockup). */
+/**
+ * Scattered glass bubbles — same GlassBubble component + rim treatment as MatchOverlay,
+ * with Hero scatter positions from padpal-landing-page (fixed px wrapper per bubble).
+ */
 export const LANDING_BUBBLES = [
-  { src: SIGN_IN_BUBBLE_IMAGES.bubble1, top: "6%", left: "12%", size: "lg", floatVariant: 0 },
-  { src: SIGN_IN_BUBBLE_IMAGES.card0, top: "4%", left: "62%", size: "md", floatVariant: 1 },
-  { src: SIGN_IN_BUBBLE_IMAGES.bubble2, top: "20%", left: "72%", size: "md", floatVariant: 2 },
-  { src: SIGN_IN_BUBBLE_IMAGES.card1, top: "32%", left: "6%", size: "sm", floatVariant: 0 },
-  { src: SIGN_IN_BUBBLE_IMAGES.bubble3, top: "26%", left: "42%", size: "sm", floatVariant: 1 },
-  { src: SIGN_IN_BUBBLE_IMAGES.card2, top: "14%", left: "28%", size: "md", floatVariant: 2 },
+  {
+    src: SIGN_IN_BUBBLE_IMAGES.bubble1,
+    size: "clamp(72px, 11vw, 150px)",
+    top: "16%",
+    left: "9%",
+    floatVariant: 0,
+  },
+  {
+    src: SIGN_IN_BUBBLE_IMAGES.card0,
+    size: "clamp(48px, 7vw, 92px)",
+    top: "12%",
+    left: "72%",
+    floatVariant: 1,
+  },
+  {
+    src: SIGN_IN_BUBBLE_IMAGES.bubble2,
+    size: "clamp(80px, 10vw, 136px)",
+    top: "62%",
+    left: "84%",
+    floatVariant: 2,
+  },
+  {
+    src: SIGN_IN_BUBBLE_IMAGES.card1,
+    size: "clamp(52px, 6vw, 84px)",
+    top: "68%",
+    left: "7%",
+    floatVariant: 0,
+  },
+  {
+    src: SIGN_IN_BUBBLE_IMAGES.bubble3,
+    size: "clamp(64px, 8vw, 96px)",
+    top: "38%",
+    left: "88%",
+    floatVariant: 1,
+  },
+  {
+    src: SIGN_IN_BUBBLE_IMAGES.card2,
+    size: "clamp(72px, 9vw, 108px)",
+    top: "76%",
+    left: "26%",
+    floatVariant: 2,
+  },
 ];
 
 export const SPLASH_DURATION_MS = 2000;
