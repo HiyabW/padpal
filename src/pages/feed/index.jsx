@@ -7,6 +7,8 @@ import UserCard from "./components/UserCard";
 import { FeedStack } from "../../components/feed";
 import "./styles.css";
 import { styled } from '@mui/material/styles';
+import CircularProgress from "@mui/material/CircularProgress";
+import { motion } from "framer-motion";
 import Onboarding from "./components/onboarding";
 import HelpOutlineOutlinedIcon from '@mui/icons-material/HelpOutlineOutlined';
 import Tooltip, { tooltipClasses } from '@mui/material/Tooltip';
@@ -180,6 +182,23 @@ const Feed = () => {
             items={userCards}
             isLoading={!loaded}
             isEmpty={loaded && userCards.length === 0}
+            loadingSlot={
+              <motion.div
+                initial={{ opacity: 0, y: 50 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, ease: "easeInOut" }}
+                style={{ textAlign: "center" }}
+              >
+                <CircularProgress
+                  size="10rem"
+                  style={{ color: "white", marginBottom: "2rem" }}
+                  sx={{
+                    "--CircularProgress-thickness": "24px",
+                  }}
+                />
+                <h1>Gathering Candidates...</h1>
+              </motion.div>
+            }
             renderCard={(item, meta) => (
               <UserCard
                 key={item.key}
