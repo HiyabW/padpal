@@ -1,0 +1,24 @@
+.pp-app-shell {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  min-height: 100dvh;
+  height: 100%;
+  background-color: var(--pp-color-bg-app);
+  padding-top: var(--pp-safe-top);
+  padding-left: var(--pp-safe-left);
+  padding-right: var(--pp-safe-right);
+}
+
+.pp-app-shell__main {
+  flex: 1;
+  min-height: 0;
+  width: 100%;
+  padding-bottom: var(--pp-layout-nav-clearance);
+}
+
+@media screen and (min-width: 769px) {
+  .pp-app-shell__main {
+    padding-bottom: var(--pp-space-8);
+  }
+}

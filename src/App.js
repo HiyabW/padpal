@@ -1,11 +1,11 @@
 import './App.css';
 import { Routes, Route, useLocation, useNavigate } from 'react-router-dom';
-import { BottomNavBar } from './components/nav';
 import React, { Suspense, useEffect } from 'react';
 import CircularProgress from '@mui/material/CircularProgress';
 import { apiFetch } from './api/client';
 import { useAuth } from './context/AuthContext';
-import { setAppNavigate } from './navigation';
+import { setAppNavigate, ROUTES } from './navigation';
+import { AppShell } from './layouts';
 
 const Feed = React.lazy(() => import('./pages/feed'));
 const Chat = React.lazy(() => import('./pages/chat'));
@@ -36,24 +36,23 @@ function App() {
     return () => clearInterval(timer);
   }, [user, location.pathname]);
 
-  const hideNav = location.pathname === '/' || location.pathname === '/survey';
-
   return (
     <div className="App">
-      {!hideNav && <BottomNavBar />}
       <Suspense fallback={
         <div className="centeredDiv gradient-background2" style={{ minHeight: '100dvh' }}>
           <CircularProgress color="inherit" />
         </div>
       }>
         <Routes>
-          <Route exact path='/' element={<SignIn />} />
-          <Route exact path='/survey' element={<Survey />} />
-          <Route exact path='/feed' element={<Feed />} />
-          <Route exact path='/chat' element={<Chat />} />
-          <Route exact path='/viewProfile' element={<ViewProfile />} />
-          <Route exact path='/editProfile' element={<EditProfile />} />
-          <Route exact path='/rooms' element={<Rooms />} />
+          <Route exact path={ROUTES.SIGN_IN} element={<SignIn />} />
+          <Route exact path={ROUTES.SURVEY} element={<Survey />} />
+          <Route element={<AppShell />}>
+            <Route path={ROUTES.FEED} element={<Feed />} />
+            <Route path={ROUTES.CHAT} element={<Chat />} />
+            <Route path={ROUTES.VIEW_PROFILE} element={<ViewProfile />} />
+            <Route path={ROUTES.EDIT_PROFILE} element={<EditProfile />} />
+            <Route path={ROUTES.ROOMS} element={<Rooms />} />
+          </Route>
         </Routes>
       </Suspense>
     </div>

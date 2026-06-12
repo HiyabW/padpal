@@ -16,7 +16,8 @@
   }
 }
 
-.App:has(.feed) {
+.App:has(.feed),
+.pp-app-shell:has(.feed) {
   overflow: hidden;
 }
 
@@ -34,7 +35,8 @@
     min-height: 100dvh;
   }
 
-  .App:has(.feed) {
+  .App:has(.feed),
+  .pp-app-shell:has(.feed) {
     height: auto;
     min-height: 100dvh;
     overflow: visible;

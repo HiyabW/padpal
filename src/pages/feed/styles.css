@@ -8,7 +8,6 @@
   overflow: hidden;
   overscroll-behavior: none;
   padding-top: 4.5rem;
-  padding-bottom: calc(72px + var(--pp-safe-bottom, 0px));
 
   .helpTooltip {
     color: white!important;
@@ -36,10 +35,6 @@
   }
 
 
-  @media screen and (min-width: 769px) {
-    padding-bottom: 2rem;
-  }
-
   @media screen and (max-width: 768px) {
     height: auto;
     min-height: 100dvh;
@@ -47,7 +42,6 @@
     overflow: visible;
     overscroll-behavior: auto;
     align-items: stretch;
-    padding-bottom: calc(72px + var(--pp-safe-bottom, 0px));
 
     .helpTooltip {
       color: white!important;
