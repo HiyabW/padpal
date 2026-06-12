@@ -1,0 +1,129 @@
+.pp-sign-in-sheet {
+  position: relative;
+  margin-top: auto;
+  width: 100%;
+  max-width: var(--pp-layout-max-card);
+  margin-inline: auto;
+}
+
+.pp-sign-in-sheet__photo {
+  position: absolute;
+  inset: 20% 0 0;
+  background-size: cover;
+  background-position: center top;
+  opacity: 0.35;
+  mask-image: linear-gradient(to bottom, transparent 0%, black 40%);
+  pointer-events: none;
+}
+
+.pp-sign-in-sheet__glass {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: var(--pp-space-8) var(--pp-space-6) calc(var(--pp-space-8) + var(--pp-safe-bottom));
+  border-radius: var(--pp-radius-xl) var(--pp-radius-xl) 0 0;
+  border: 0.5px solid rgba(255, 255, 255, 0.14);
+  border-bottom: none;
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.1) 0%,
+    rgba(255, 255, 255, 0.04) 100%
+  );
+  -webkit-backdrop-filter: blur(28px) saturate(1.5);
+  backdrop-filter: blur(28px) saturate(1.5);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.2),
+    0 -12px 48px rgba(0, 0, 0, 0.35);
+}
+
+.pp-sign-in-sheet__icon {
+  margin-bottom: var(--pp-space-4);
+}
+
+.pp-sign-in-sheet__headline {
+  margin: 0 0 var(--pp-space-6);
+  font-family: var(--pp-font-body);
+  font-size: var(--pp-text-2xl);
+  font-weight: var(--pp-font-black);
+  line-height: var(--pp-leading-tight);
+  color: var(--pp-color-text-primary);
+  text-align: center;
+}
+
+.pp-sign-in-sheet__cta {
+  width: 100%;
+  min-height: 52px;
+  margin-bottom: var(--pp-space-4);
+  padding: var(--pp-space-3) var(--pp-space-6);
+  border: 0.5px solid rgba(255, 255, 255, 0.28);
+  border-radius: var(--pp-radius-full);
+  background: linear-gradient(
+    165deg,
+    rgba(255, 255, 255, 0.12) 0%,
+    rgba(255, 255, 255, 0.06) 100%
+  );
+  color: var(--pp-color-text-primary);
+  font-family: var(--pp-font-body);
+  font-size: var(--pp-text-base);
+  font-weight: var(--pp-font-semibold);
+  cursor: pointer;
+  -webkit-backdrop-filter: blur(16px);
+  backdrop-filter: blur(16px);
+  box-shadow:
+    inset 0 0.5px 0 rgba(255, 255, 255, 0.4),
+    0 4px 16px rgba(0, 0, 0, 0.2);
+  transition: background 0.2s ease, transform 0.2s ease;
+}
+
+.pp-sign-in-sheet__cta:hover {
+  background: linear-gradient(
+    165deg,
+    rgba(255, 255, 255, 0.18) 0%,
+    rgba(255, 255, 255, 0.08) 100%
+  );
+}
+
+.pp-sign-in-sheet__cta:active {
+  transform: scale(0.98);
+}
+
+.pp-sign-in-sheet__link {
+  margin: 0 0 var(--pp-space-6);
+  padding: var(--pp-space-2);
+  border: none;
+  background: transparent;
+  color: var(--pp-color-text-primary);
+  font-family: var(--pp-font-body);
+  font-size: var(--pp-text-base);
+  font-weight: var(--pp-font-medium);
+  cursor: pointer;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.pp-sign-in-sheet__legal {
+  margin: 0;
+  max-width: 320px;
+  font-family: var(--pp-font-body);
+  font-size: var(--pp-text-xs);
+  line-height: var(--pp-leading-relaxed);
+  color: var(--pp-color-text-subtle);
+  text-align: center;
+}
+
+.pp-sign-in-sheet__legal-link {
+  color: var(--pp-color-text-primary);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.pp-sign-in-sheet__legal-link:hover {
+  color: var(--pp-color-accent);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pp-sign-in-sheet__cta:active {
+    transform: none;
+  }
+}

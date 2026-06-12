@@ -1,0 +1,108 @@
+.pp-sign-in-form {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: var(--pp-layout-max-card);
+  margin-inline: auto;
+  padding: calc(var(--pp-safe-top) + var(--pp-space-4)) var(--pp-space-6)
+    calc(var(--pp-safe-bottom) + var(--pp-space-8));
+  box-sizing: border-box;
+}
+
+.pp-sign-in-form__back {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  margin-bottom: var(--pp-space-4);
+  padding: 0;
+  border: none;
+  border-radius: var(--pp-radius-full);
+  background: var(--pp-color-bg-elevated);
+  color: var(--pp-color-text-primary);
+  cursor: pointer;
+}
+
+.pp-sign-in-form__content {
+  flex: 1;
+}
+
+.pp-sign-in-form__title {
+  margin: 0 0 var(--pp-space-2);
+  font-family: var(--pp-font-body);
+  font-size: var(--pp-text-3xl);
+  font-weight: var(--pp-font-black);
+  color: var(--pp-color-text-primary);
+}
+
+.pp-sign-in-form__subtitle {
+  margin: 0 0 var(--pp-space-6);
+  font-family: var(--pp-font-body);
+  font-size: var(--pp-text-sm);
+  color: var(--pp-color-text-subtle);
+}
+
+.pp-sign-in-form__error-banner {
+  margin: 0 0 var(--pp-space-4);
+  padding: var(--pp-space-3) var(--pp-space-4);
+  border-radius: var(--pp-radius-md);
+  background: rgba(220, 38, 38, 0.15);
+  color: var(--pp-color-danger);
+  font-size: var(--pp-text-sm);
+}
+
+.pp-sign-in-form__fields {
+  display: flex;
+  flex-direction: column;
+  gap: var(--pp-space-4);
+}
+
+.pp-sign-in-form__password-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--pp-space-1);
+  border: none;
+  background: transparent;
+  color: var(--pp-color-text-subtle);
+  cursor: pointer;
+}
+
+.pp-sign-in-form__password-toggle:hover {
+  color: var(--pp-color-text-primary);
+}
+
+.pp-sign-in-form__toggle {
+  margin: var(--pp-space-6) 0 0;
+  font-family: var(--pp-font-body);
+  font-size: var(--pp-text-sm);
+  color: var(--pp-color-text-subtle);
+  text-align: center;
+}
+
+.pp-sign-in-form__toggle-btn {
+  padding: 0;
+  border: none;
+  background: transparent;
+  color: var(--pp-color-text-primary);
+  font: inherit;
+  font-weight: var(--pp-font-semibold);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  cursor: pointer;
+}
+
+.pp-sign-in-form__legal {
+  margin: var(--pp-space-4) 0 0;
+  font-size: var(--pp-text-xs);
+  line-height: var(--pp-leading-relaxed);
+  color: var(--pp-color-text-subtle);
+  text-align: center;
+}
+
+.pp-sign-in-form__legal-link {
+  color: var(--pp-color-text-primary);
+  text-decoration: underline;
+}

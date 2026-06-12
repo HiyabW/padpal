@@ -1,0 +1,16 @@
+.pp-sign-in-bubbles {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.pp-sign-in-bubbles__item {
+  position: absolute;
+  width: clamp(64px, 18vw, 120px);
+}
+
+.pp-sign-in-bubbles__item .feature-glass-bubble-float {
+  position: relative;
+  pointer-events: none;
+}
