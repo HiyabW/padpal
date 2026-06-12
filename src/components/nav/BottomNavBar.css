@@ -1,0 +1,105 @@
+.pp-bottom-nav-wrap {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  justify-content: center;
+  padding: 0 var(--pp-space-4) calc(var(--pp-space-4) + var(--pp-safe-bottom));
+  z-index: var(--pp-z-nav);
+  pointer-events: none;
+}
+
+.pp-bottom-nav {
+  --pp-nav-tab-size: 52px;
+  pointer-events: auto;
+  position: relative;
+  display: flex;
+  align-items: stretch;
+  gap: 2px;
+  padding: 4px;
+  height: 52px;
+  max-width: var(--pp-layout-max-nav);
+  width: 100%;
+  overflow: hidden;
+  border-radius: var(--pp-radius-full);
+  background: var(--pp-color-nav-glass);
+  backdrop-filter: blur(40px) saturate(190%);
+  -webkit-backdrop-filter: blur(40px) saturate(190%);
+  border: 1px solid var(--pp-color-nav-border);
+  box-shadow:
+    var(--pp-shadow-nav),
+    inset 0 0.5px 0 rgba(255, 255, 255, 0.12);
+  transform-origin: center center;
+}
+
+.pp-bottom-nav.is-bouncing {
+  animation: pp-nav-spring 0.36s cubic-bezier(0.34, 1.2, 0.64, 1) forwards;
+}
+
+@keyframes pp-nav-spring {
+  0%   { transform: scale(1); }
+  40%  { transform: scale(1.022); }
+  70%  { transform: scale(0.992); }
+  100% { transform: scale(1); }
+}
+
+.pp-bottom-nav__indicator {
+  position: absolute;
+  top: 4px;
+  bottom: 4px;
+  left: 0;
+  width: var(--pp-nav-tab-size);
+  border-radius: var(--pp-radius-full);
+  background: var(--pp-color-nav-indicator);
+  box-shadow: inset 0 0.5px 0 rgba(255, 255, 255, 0.2);
+  z-index: 0;
+  pointer-events: none;
+  transition: transform 0.34s cubic-bezier(0.32, 0.72, 0, 1);
+  will-change: transform;
+}
+
+.pp-bottom-nav__tab {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 var(--pp-nav-tab-size);
+  width: var(--pp-nav-tab-size);
+  height: 100%;
+  border: none;
+  border-radius: var(--pp-radius-full);
+  background: transparent;
+  cursor: pointer;
+  position: relative;
+  z-index: 1;
+  padding: 0;
+  color: var(--pp-color-text-primary);
+}
+
+.pp-bottom-nav__tab:focus-visible {
+  outline: 2px solid var(--pp-color-border-focus);
+  outline-offset: 2px;
+}
+
+.pp-bottom-nav__tab svg {
+  width: 24px;
+  height: 24px;
+  fill: currentColor;
+  display: block;
+  transition: transform 0.2s cubic-bezier(0.32, 0.72, 0, 1);
+}
+
+.pp-bottom-nav__tab[aria-current="page"] svg {
+  transform: scale(1.05);
+}
+
+.pp-bottom-nav__badge {
+  position: absolute;
+  bottom: 9px;
+  right: 10px;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--pp-color-accent);
+  z-index: 2;
+}
