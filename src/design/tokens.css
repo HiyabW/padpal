@@ -79,6 +79,11 @@
   --pp-shadow-card: 0 10px 30px rgba(0, 0, 0, 0.15);
   --pp-shadow-nav: 0 4px 24px rgba(0, 0, 0, 0.4);
 
+  /* Bottom nav */
+  --pp-color-nav-glass: rgba(72, 72, 74, 0.42);
+  --pp-color-nav-indicator: rgba(255, 255, 255, 0.26);
+  --pp-color-nav-border: rgba(255, 255, 255, 0.14);
+
   /* Z-index */
   --pp-z-base: 0;
   --pp-z-card: 10;
