@@ -1,17 +1,15 @@
 .pp-feed-stack {
   display: grid;
-  place-items: center;
+  place-items: start center;
   width: 100%;
-  max-width: var(--pp-layout-max-card);
   margin: 0 auto;
-  min-height: min(80vh, calc(100dvh - 4.5rem - 72px - var(--pp-safe-bottom, 0px)));
 }
 
 .pp-feed-stack__cards {
   display: grid;
   grid-template-columns: 1fr;
   grid-template-rows: 1fr;
-  width: min(92vw, var(--pp-layout-max-card));
+  width: min(95vw, var(--pp-layout-max-card));
 }
 
 .pp-feed-stack__cards > * {
@@ -23,7 +21,10 @@
   pointer-events: none;
 }
 
-.pp-feed-stack__loading,
+.pp-feed-stack__cards > .userFeedCardDiv--front {
+  z-index: var(--pp-z-card);
+}
+
 .pp-feed-stack__empty {
   display: flex;
   flex-direction: column;
@@ -34,7 +35,6 @@
   padding: var(--pp-space-8);
 }
 
-.pp-feed-stack__loading-title,
 .pp-feed-stack__empty-title {
   font-family: var(--pp-font-body);
   font-size: var(--pp-text-2xl);
@@ -43,27 +43,8 @@
   margin: var(--pp-space-6) 0 0;
 }
 
-.pp-feed-stack__spinner {
-  width: 10rem;
-  height: 10rem;
-  border: 24px solid rgba(255, 255, 255, 0.15);
-  border-top-color: var(--pp-color-accent);
-  border-radius: 50%;
-  animation: pp-feed-stack-spin 0.8s linear infinite;
-}
-
-@keyframes pp-feed-stack-spin {
-  to {
-    transform: rotate(360deg);
-  }
-}
-
 @media screen and (max-width: 768px) {
-  .pp-feed-stack {
-    min-height: auto;
-  }
-
   .pp-feed-stack__cards {
-    width: 85vw;
+    width: 95vw;
   }
 }

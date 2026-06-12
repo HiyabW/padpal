@@ -46,7 +46,7 @@
     max-height: none;
     overflow: visible;
     overscroll-behavior: auto;
-    align-items: center;
+    align-items: stretch;
     padding-bottom: calc(72px + var(--pp-safe-bottom, 0px));
 
     .helpTooltip {
