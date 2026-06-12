@@ -21,7 +21,7 @@ Scratch notes for downstream design-system and feed tickets. Permanent values li
 | PromptCard | SCRUM-86 | Icon + title + answer |
 | SwipeCard | SCRUM-76 | Drag shell, direction lock, PASS/MATCH corner stamps |
 | ActionBar | SCRUM-76 | Reject/Match ovals, Share/Report full-width — Share/Report wired in SCRUM-86 |
-| BottomNavBar | SCRUM-79 | Glass pill, lime active Home tab |
+| BottomNavBar | SCRUM-79 | iOS glass pill; white icons; light-grey active pill; lime unread dot on Chat |
 | PrimaryButton | SCRUM-75 | Pill CTA; see onboarding patterns below |
 | FormField | SCRUM-75 | Label + subtitle + error/helper wrapper |
 | TextInput | SCRUM-75 | Dark pill input on black shell |
@@ -176,3 +176,6 @@ Source: `docs/design/assets/feed-card-mobile.png`
 - SCRUM-77: FeedStack only; SCRUM-86: v2 profile content + page chrome + Share/Report wiring
 - MatchOverlay (SCRUM-78): glass bubble collision layout; photo-only color; white CTAs; port GlassBubble from landing page; confetti deferred for perf
 - MatchOverlay feed wiring (SCRUM-78): replaces legacy `matchedScreen`; chat CTA navigates to `/chat`
+- BottomNavBar (SCRUM-79): iOS glassmorphism dock; icon-only tabs; MUI Home/Groups/ChatBubble/Person (outlined→filled on active); light-grey active pill (`rgba(255,255,255,0.26)`); sliding indicator (no overshoot) + subtle dock bounce; lime unread dot on Chat (no border); `overflow:hidden` on dock; fixed 52px tabs; desktop max-width `--pp-layout-max-nav` centered floating
+- BottomNavBar routes: Home→`/feed`, Rooms→`/rooms` (placeholder), Chat→`/chat`, Profile→`/viewProfile`; logout removed from nav (profile/settings later)
+- AppShell layout wrapper deferred to SCRUM-83; SCRUM-79 swaps legacy top `NavBar` for `BottomNavBar` in `App.js`

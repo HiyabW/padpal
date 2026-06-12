@@ -56,6 +56,14 @@ Apply the `.pp-logo` class for the PadPal wordmark (Inter Black / weight 900):
 
 Tag pill colors: `--pp-color-tag-purple` through `--pp-color-tag-teal`.
 
+## Nav
+
+| Token | Usage |
+|---|---|
+| `--pp-color-nav-glass` | Bottom nav dock background |
+| `--pp-color-nav-indicator` | Active tab pill |
+| `--pp-color-nav-border` | Dock border highlight |
+
 ## Spacing, radii, shadows
 
 - Spacing: `--pp-space-1` (4px) through `--pp-space-12` (48px)
