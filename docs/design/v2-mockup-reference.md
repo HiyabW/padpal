@@ -117,9 +117,32 @@ Onboarding mockup uses **selection pills** and a **circular FAB** for navigation
 - Bottom nav on roommate screen (SCRUM-79)
 - Onboarding step layout shell (SCRUM-85)
 
-### Sign-in mockup
+### Sign-in mockup (SCRUM-84)
 
-**Not yet provided.** SCRUM-84 sign-in redesign may differ (roadmap mentions gradient). Form primitives should work on both black onboarding and sign-in page chrome.
+Source: mobile splash + landing/sign-in mockup (June 2026).
+
+#### Splash
+
+- **Background:** solid black (`--pp-color-bg-app`)
+- **Center:** animated glass house icon (`homeIcon.json` via Lordicon)
+
+#### Landing
+
+- **Background:** solid black — no gradient
+- **Hero:** scattered `GlassBubble` avatars — same component + fixed-px slot CSS as `MatchOverlay`; positions from landing-page Hero scatter
+- **Bottom sheet:** frosted glass panel anchored to bottom; rounded top corners; backdrop blur
+  - House icon centered at top of sheet
+  - Headline: **"Create a home you love"** — Inter Black, white
+  - **Sign Up:** glass pill CTA (translucent white, not lime)
+  - **Log In:** underlined text link below CTA
+  - Legal: terms + privacy links → `/terms` (placeholder until SCRUM-88)
+  - Background photo bleeds through sheet (group candid shot)
+
+#### Auth form (Sign Up / Log In)
+
+- Black shell; back chevron returns to landing
+- `FormField` + `TextInput` + lime `PrimaryButton` for submit
+- Password visibility toggle via `TextInput` `endAdornment` (no MUI)
 
 ## Feed card patterns (SCRUM-76 / SCRUM-86)
 
@@ -167,7 +190,8 @@ Source: `docs/design/assets/feed-card-mobile.png`
 - Palette: black shell, white cards, lime accent — canonical via `--pp-*` tokens
 - Onboarding inputs: dark pill on black shell; selected option = inverted white pill (not lime)
 - Onboarding page background: solid black (not legacy `gradient-background2`)
-- Form primitive visual authority: onboarding mockup strip + token sheet (sign-in mockup TBD)
+- Form primitive visual authority: onboarding mockup strip + sign-in mockup (SCRUM-84)
+- Sign-in page background: solid black (not legacy `gradient-background2`); splash → landing → auth form flow
 - Form primitive implementation: native HTML + co-located CSS (`src/components/ui/`); no MUI in new components
 - SwipeCard scope (SCRUM-76): SwipeCard + useSwipeGesture + ActionBar; wire live feed with legacy UserCardContent; remove Lottie overlays
 - Swipe vs scroll: direction lock on first 10px pointer movement

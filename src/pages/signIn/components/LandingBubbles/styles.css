@@ -1,0 +1,23 @@
+.pp-sign-in-bubbles {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.pp-sign-in-bubbles__item {
+  position: absolute;
+}
+
+/*
+ * Match MatchOverlay bubble slots: fixed square wrapper, glass rim at full diameter.
+ * Overrides GlassBubble's default %-of-parent width (which shrinks inside small slots).
+ */
+.pp-sign-in-bubbles__item .feature-glass-bubble-float {
+  position: relative;
+  width: 100% !important;
+  aspect-ratio: 1 / 1;
+  flex-shrink: 0;
+  pointer-events: none;
+  cursor: default;
+}

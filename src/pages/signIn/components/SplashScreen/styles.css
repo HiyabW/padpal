@@ -1,0 +1,11 @@
+.pp-sign-in-splash {
+  position: fixed;
+  inset: 0;
+  z-index: var(--pp-z-overlay);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--pp-color-bg-app);
+  padding-top: var(--pp-safe-top);
+  padding-bottom: var(--pp-safe-bottom);
+}
